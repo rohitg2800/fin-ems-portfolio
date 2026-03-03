@@ -1,23 +1,8 @@
 services:
-  # Backend API Service
+  # Node.js Backend Service
   - type: web
     name: fin-ems-backend
     env: node
     buildCommand: npm install
     startCommand: node server.js
-    rootDir: portfolio/ems-store/ems-frontend
-    plan: free
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
-
-  # Frontend Static Site
-  - type: web
-    name: fin-ems-frontend
-    env: static
-    buildCommand: ""
-    staticPublishPath: .
-    rootDir: portfolio/ems-store/ems-frontend
-    plan: free-static
+    rootDir: portfolio/ems-store/ems
