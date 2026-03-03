@@ -20,4 +20,4 @@ services:
     buildCommand: ""
     staticPublishPath: .
     rootDir: portfolio/ems-store/ems-frontend
-    plan: free
+    plan: free-static
