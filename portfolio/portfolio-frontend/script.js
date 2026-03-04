@@ -54,6 +54,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Theme toggle functionality
+// Theme toggle functionality
 const themeToggle = document.getElementById('theme-toggle');
 const setTheme = (mode) => {
   document.body.classList.remove('light-mode', 'dark-mode');
@@ -73,6 +74,7 @@ themeToggle?.addEventListener('click', () => {
 'dark-mode';
   setTheme(next);
 });
+
 
 // Navbar styling and active section highlighting
 const navbar = document.getElementById('navbar');

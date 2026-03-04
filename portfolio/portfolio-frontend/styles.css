@@ -1319,99 +1319,77 @@ transparent 65%),
     transform: translateY(0);
 }
 
-body.dark-mode .nav-container {
-    background: rgba(20, 20, 20, 0.95);
+body.dark-mode {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #e6e6e6; /* Light gray text instead of pure white */
 }
 
-body.dark-mode .hero {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4 {
+  color: #f8f9fa; /* Slightly off-white for headings */
 }
 
-body.dark-mode .project-card {
-    background: #2a2a2a;
-    color: #F5F5F5;
-}
-
-body.dark-mode .project-card h3 {
-    color: #D2B48C;
-}
-
-body.dark-mode .skill-bar-item {
-    background: #2a2a2a;
-    color: #F5F5F5;
-}
-
-body.dark-mode .skill-bar {
-    background: #1a1a1a;
-}
-
-body.dark-mode .skill-label {
-    color: #F5F5F5;
-}
-
-body.dark-mode .skills {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
-}
-
-body.dark-mode .skill-card {
-    background: #2a2a2a;
-    color: #F5F5F5;
-    border-left-color: #D2B48C;
-}
-
-body.dark-mode .skill-card h4 {
-    color: #D2B48C;
-}
-
-body.dark-mode .devops-item {
-    background: #2a2a2a;
-    color: #F5F5F5;
-    border-left-color: #D2B48C;
-}
-
-body.dark-mode .devops-item h4 {
-    color: #D2B48C;
-}
-
-body.dark-mode .contact {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-}
-
-body.dark-mode .contact-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-body.dark-mode .contact-item a {
-    color: #D2B48C;
-}
-
-body.dark-mode .form-group input,
-body.dark-mode .form-group textarea {
-    background: #3a3a3a;
-    color: #F5F5F5;
-    border: 1px solid #5a5a5a;
+body.dark-mode .hero h1 {
+  background: linear-gradient(45deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 body.dark-mode .section-title {
-    color: #F5F5F5;
+  color: #ffd700; /* Gold color for section titles */
 }
 
-body.dark-mode .category-title {
-    color: #D2B48C;
+body.dark-mode .project-card {
+  background: rgba(30, 30, 46, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-body.dark-mode .skill-list li {
-    color: #E0E0E0;
-    border-bottom-color: #444;
+body.dark-mode .skill-bar-item {
+  background: rgba(30, 30, 46, 0.9);
+  color: #e6e6e6;
 }
 
-body.dark-mode .devops-section {
-    background: #1a1a1a;
+body.dark-mode .skill-bar {
+  background: #2d2d2d;
 }
 
-body.dark-mode .devops-grid {
-    background: #1a1a1a;
+body.dark-mode .nav-links a {
+  color: #e6e6e6;
+}
+
+body.dark-mode .nav-links a:hover {
+  color: #ffd700;
+}
+
+body.dark-mode .glass-card {
+  background: rgba(30, 30, 46, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure text remains readable */
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode span {
+  color: #d4d4d4; /* Soft light gray for body text */
+}
+
+body.dark-mode .skill-label {
+  color: #d4d4d4;
+}
+
+body.dark-mode .tech-tag {
+  color: #ffffff;
+  background: linear-gradient(45deg, #0ea5e9, #fbbf24);
+}
+
+/* Chart.js dark mode colors */
+body.dark-mode .chart-container {
+  color: #e6e6e6;
+}
+ackground: #1a1a1a;
 }
 
 .cart-count { 
