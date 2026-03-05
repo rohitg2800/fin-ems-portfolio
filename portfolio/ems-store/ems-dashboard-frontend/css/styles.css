@@ -34,10 +34,9 @@ a{ color: inherit; }
 
 /* Topbar */
 .topbar{
-  position: sticky;   /* was: position: flex-direction; */
+  position: flex-direction;
   top: 0;
-  height: var(--topbar-h);
-  /* z-index: 1000; */
+  z-index: 50;
   backdrop-filter: blur(14px);
   background: rgba(12,6,3,0.70);
   border-bottom: 1px solid var(--line);
@@ -45,7 +44,6 @@ a{ color: inherit; }
 .topbar-inner{
   display:inline-flex;
   align-items:center;
-  height: 100%;
   justify-content: space-between;
   gap: 12px;
   padding: 14px 0;
@@ -578,156 +576,4 @@ footer{
   .fine {
     font-size: 0.65rem;
   }
-}
-
-:root{
-  --topbar-h: 76px; /* adjust to your actual topbar height */
-}
-/* =============================
-APPLE STYLE GLASS NAVBAR
-============================= */
-
-.topbar{
-position:sticky;
-top:0;
-z-index:1000;
-
-background:rgba(20,12,6,0.6);
-backdrop-filter: blur(14px);
--webkit-backdrop-filter: blur(14px);
-
-border-bottom:1px solid rgba(255,255,255,0.08);
-box-shadow:0 6px 20px rgba(0,0,0,0.35);
-}
-
-
-/* =============================
-PRODUCT IMAGE
-============================= */
-
-.product-img{
-width:100%;
-height:150px;
-object-fit:cover;
-transition:transform .35s ease;
-}
-
-.card:hover .product-img{
-transform:scale(1.08);
-}
-
-
-/* =============================
-CART BADGE ANIMATION
-============================= */
-
-.badge.bump{
-animation:cart-bump .35s ease;
-}
-
-@keyframes cart-bump{
-0%{transform:scale(1)}
-40%{transform:scale(1.35)}
-100%{transform:scale(1)}
-}
-
-
-/* =============================
-QUICK VIEW MODAL
-============================= */
-
-.modal-backdrop{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.65);
-backdrop-filter:blur(4px);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:3000;
-}
-
-.modal-backdrop.open{
-display:flex;
-}
-
-.modal{
-background:#1a0f08;
-border-radius:16px;
-max-width:600px;
-width:92%;
-padding:24px;
-box-shadow:0 25px 80px rgba(0,0,0,0.65);
-border:1px solid rgba(255,255,255,0.08);
-}
-
-.modal img{
-width:100%;
-border-radius:12px;
-margin-bottom:12px;
-}
-
-.modal-title{
-font-size:22px;
-font-weight:800;
-margin-bottom:8px;
-color:var(--gold2);
-}
-
-.modal-desc{
-color:var(--muted);
-margin-bottom:10px;
-}
-
-.modal-actions{
-margin-top:14px;
-display:flex;
-gap:10px;
-}
-
-
-/* =============================
-IMAGE LAZY FADE
-============================= */
-
-img{
-opacity:0;
-transition:opacity .4s ease;
-}
-
-img.loaded{
-opacity:1;
-}
-html{
-  scroll-padding-top: var(--topbar-h);
-}
-
-section[id]{
-  scroll-margin-top: var(--topbar-h);
-}
-h2[id], h3[id]{
-  scroll-margin-top: var(--topbar-h);
-}
-
-.cart-drawer{
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 380px;
-  height: 100vh;
-  background: #fff;
-
-  z-index: 2000;   /* higher than navbar */
-}.cart-header{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
-.cart-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(4px);
-  z-index: 1500;
 }
