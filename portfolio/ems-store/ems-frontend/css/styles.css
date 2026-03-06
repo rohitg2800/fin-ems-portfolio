@@ -4,49 +4,52 @@
    ========================================= */
 
 /* ----------  COLOR TOKENS  ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+/* ----------  COLOR TOKENS  ---------- */
 :root {
-  --primary:        #3d2317;
-  --primary-light:  #5d3a2b;
-  --secondary:      #6b4423;
-  --accent:         #d4af37;
-  --accent-hover:   #f4cf57;
-  --bg-color:       #f5ebe0;
-  --bg-gradient:    linear-gradient(135deg,#f5ebe0 0%,#e8d5c4 100%);
-  --text-color:     #3d2317;
+  --primary:        #584827;   /* dark gold-brown */
+  --primary-light:  #786437;
+  --secondary:      #a88c4a;
+  --accent:         #f2d27a;   /* light gold */
+  --accent-hover:   #ffe395;
+  --bg-color:       #fdf8ec;
+  --bg-gradient:    linear-gradient(135deg,#fffdf6 0%,#f7ebd1 100%);
+  --text-color:     #3f331c;
   --card-bg:        #ffffff;
-  --header-bg:      linear-gradient(135deg,#3d2317 0%,#5d3a2b 100%);
-  --header-text:    #f5ebe0;
-  --gray:           #8b7355;
-  --border-color:   #d4c5b0;
-  --shadow:         0 4px 20px rgba(61,35,23,.15);
-  --shadow-hover:   0 8px 30px rgba(61,35,23,.25);
-  --danger:         #e53e3e;
-  --success:        #48bb78;
+  --header-bg:      linear-gradient(135deg,#584827 0%,#786437 100%);
+  --header-text:    #fffef8;
+  --gray:           #8c7c5d;
+  --border-color:   #e7dbb9;
+  --shadow:         0 4px 20px rgba(88,72,39,.15);
+  --shadow-hover:   0 8px 30px rgba(88,72,39,.25);
+  --danger:         #df4c4c;
+  --success:        #56c37d;
 }
 
 [data-theme="dark"] {
-  --primary:      #1a0f0a;
-  --primary-light:#2d1810;
-  --secondary:    #3d2317;
-  --accent:       #ffd700;
-  --accent-hover: #ffed4a;
-  --bg-color:     #0d0806;
-  --bg-gradient:  linear-gradient(135deg,#0d0806 0%,#1a0f0a 100%);
-  --text-color:   #f5ebe0;
-  --card-bg:      #1a0f0a;
-  --header-bg:    linear-gradient(135deg,#0d0806 0%,#1a0f0a 100%);
-  --header-text:  #ffd700;
-  --gray:         #a08060;
-  --border-color: #3d2317;
-  --shadow:       0 4px 20px rgba(255,215,0,.12);
-  --shadow-hover: 0 8px 30px rgba(255,215,0,.25);
+  --primary:      #302615;
+  --primary-light:#4a3a1f;
+  --secondary:    #6a582e;
+  --accent:       #ffd86b;
+  --accent-hover: #ffea9a;
+  --bg-color:     #120f0a;
+  --bg-gradient:  linear-gradient(135deg,#120f0a 0%,#302615 100%);
+  --text-color:   #f7f2e4;
+  --card-bg:      #1c1811;
+  --header-bg:    linear-gradient(135deg,#1c1811 0%,#302615 100%);
+  --header-text:  #ffeaa0;
+  --gray:         #9a8d6b;
+  --border-color: #4a3a1f;
+  --shadow:       0 4px 20px rgba(255,216,107,.10);
+  --shadow-hover: 0 8px 30px rgba(255,216,107,.20);
 }
 
 /* ----------  RESET / BASE  ---------- */
-* {margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Comic Neue','Cinzel',cursive,sans-serif;
+  font-family:'Poppins',sans-serif;
   background:var(--bg-gradient);
   color:var(--text-color);
   line-height:1.6;
