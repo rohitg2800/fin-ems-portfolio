@@ -4,89 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stethoscopes — EMS Luxe Supply</title>
-  
-  <!-- Fonts -->
+
+  <meta name="description" content="Explore professional acoustic and electronic stethoscopes for EMT students, paramedics, and emergency medical professionals.">
+  <meta name="keywords" content="stethoscope, EMS stethoscope, electronic stethoscope, acoustic stethoscope, paramedic gear, EMT diagnostics">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
-  
-  <!-- CSS -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <!-- ========== HEADER ========== -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <!-- Mobile Menu Toggle -->
       <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
-      
-      <!-- Brand -->
-      <a class="brand" href="index.html">
-        <div class="brand-mark">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+
+      <a class="brand" href="index.html" aria-label="EMS Luxe Supply home">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
         <div>
           <div class="brand-title">EMS LUXE</div>
           <div class="fine">STETHOSCOPES</div>
         </div>
       </a>
-      
-      <!-- Navigation -->
-      <nav class="nav">
-        <a href="index.html">
-          <i class="fa-solid fa-house-chimney"></i>
-          <span>Home</span>
-        </a>
-        <a href="shop.html">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span>Shop</span>
-        </a>
-        <a href="stethoscopes.html">
-          <i class="fa-solid fa-stethoscope"></i>
-          <span>Stethoscopes</span>
-        </a>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="index.html"><i class="fa-solid fa-house-chimney"></i><span>Home</span></a>
+        <a href="shop.html"><i class="fa-solid fa-bag-shopping"></i><span>Shop</span></a>
+        <a href="stethoscopes.html" aria-current="page"><i class="fa-solid fa-stethoscope"></i><span>Stethoscopes</span></a>
       </nav>
-      
-      <!-- Theme Toggle Button - DAY/NIGHT MODE -->
+
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
         <span id="themeText">Night Mode</span>
       </button>
-      
-      <!-- Cart Button -->
-      <button id="cartBtn" class="icon-btn" aria-label="View Cart">
+
+      <button id="cartBtn" class="icon-btn" aria-label="View cart">
         <i class="fa-solid fa-cart-shopping"></i>
         <span id="cartBadge" class="badge">0</span>
       </button>
     </div>
   </header>
 
-  <!-- ========== MAIN CONTENT ========== -->
   <main>
-    <!-- Hero Section -->
     <section class="hero hero-compact">
       <div class="container">
-        <h1 class="hero-title">Best Stethoscopes for EMTs</h1>
-        <p class="hero-sub">Professional-grade acoustic and electronic options.</p>
+        <div class="hero-card">
+          <h1 class="hero-title">Best Stethoscopes for EMTs</h1>
+          <p class="hero-sub">
+            Professional acoustic and electronic diagnostic options selected for training, field response, and critical care use.
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- Products Section -->
     <section>
       <div class="container">
         <h2 class="section-title">Shop Stethoscopes</h2>
-        <p class="section-sub">Choose the perfect stethoscope for your needs</p>
+        <p class="section-sub">Choose a model built for clarity, durability, and emergency workflow performance.</p>
         <div id="productGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <section class="trust-section">
+      <div class="container">
+        <div class="trust-grid">
+          <article class="trust-card">
+            <i class="fa-solid fa-wave-square"></i>
+            <h3>Acoustic Clarity</h3>
+            <p>Reliable sound pickup for training, routine assessment, and field decision-making.</p>
+          </article>
+          <article class="trust-card">
+            <i class="fa-solid fa-bolt"></i>
+            <h3>Critical Care Ready</h3>
+            <p>Electronic options engineered for louder environments and advanced listening support.</p>
+          </article>
+          <article class="trust-card">
+            <i class="fa-solid fa-briefcase-medical"></i>
+            <h3>Duty Focused</h3>
+            <p>Products selected around responder use cases, portability, and long-shift durability.</p>
+          </article>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- ========== FOOTER ========== -->
   <footer>
     <div class="container">
       <div style="text-align:center;color:var(--gray);font-size:14px;">
@@ -95,14 +98,13 @@
     </div>
   </footer>
 
-  <!-- ========== CART DRAWER ========== -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
-  <aside id="cartDrawer" class="drawer">
+  <aside id="cartDrawer" class="drawer" aria-label="Shopping cart">
     <div class="drawer-header">
       <div class="drawer-title">
         <i class="fa-solid fa-cart-shopping"></i> Your Cart
       </div>
-      <button id="cartClose" class="modal-close">
+      <button id="cartClose" class="modal-close" aria-label="Close cart">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
@@ -118,32 +120,35 @@
     </div>
   </aside>
 
-  <!-- ========== PRODUCT DETAILS MODAL ========== -->
   <div id="modalBackdrop" class="modal-backdrop">
-    <div class="modal" id="productModal">
+    <div class="modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
       <div class="modal-header">
         <h2 class="modal-title" id="modalProductName">Product Name</h2>
-        <button class="modal-close" id="modalClose">
+        <button class="modal-close" id="modalClose" aria-label="Close product details">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
         <div class="modal-product">
-          <img id="modalProductImage" src="" alt="Product Image">
+          <img id="modalProductImage" src="" alt="" title="">
           <div class="modal-product-info">
             <div class="pill" id="modalProductBadge"></div>
             <div class="price" id="modalProductPrice">$0.00</div>
             <div class="sku" id="modalProductSku">SKU: ---</div>
-            <p class="description" id="modalProductDescription">Product description...</p>
+            <p class="description" id="modalProductDescription"></p>
+
+            <div id="modalProductKeywords" class="modal-keywords"></div>
+
             <div class="features">
               <h4><i class="fa-solid fa-star"></i> Key Features</h4>
               <ul id="modalProductFeatures"></ul>
             </div>
+
             <div class="modal-product-actions">
-              <button class="btn secondary" onclick="closeProductModal()">
+              <button class="btn secondary" type="button" onclick="closeProductModal()">
                 <i class="fa-solid fa-arrow-left"></i> Continue
               </button>
-              <button class="btn" id="modalAddToCart">
+              <button class="btn" id="modalAddToCart" type="button">
                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
               </button>
             </div>
@@ -153,7 +158,6 @@
     </div>
   </div>
 
-  <!-- ========== JAVASCRIPT ========== -->
   <script src="js/script.js" defer></script>
 </body>
 </html>
