@@ -1,11 +1,12 @@
 /* =========================================
-   EMS Luxe Supply – Premium script.js
+   EMS Luxe Supply – Complete script.js
+   All Pages Working
    ========================================= */
 
 const STORAGE_KEY = 'ems_store_cart_v1';
 const THEME_KEY = 'ems_theme_preference';
 
-/* -------- AUTHENTIC PRODUCT DATA -------- */
+/* -------- PRODUCT DATA -------- */
 const PRODUCTS = [
   {
     id: 'steth-littmann-classic',
@@ -14,7 +15,7 @@ const PRODUCTS = [
     sku: 'EMS-STETH-CLASSIC',
     price: 109,
     badge: 'Best for Students',
-    description: 'The Classic III delivers exceptional acoustic performance for general physical assessment. Trusted by medical students and professionals worldwide for its reliability and durability during demanding shifts.',
+    description: 'The Classic III delivers exceptional acoustic performance for general physical assessment. Trusted by medical students and professionals worldwide.',
     bullets: [
       'Dual-head chestpiece with tunable diaphragm',
       'Latex-free tubing for allergy safety',
@@ -31,7 +32,7 @@ const PRODUCTS = [
     sku: 'EMS-STETH-ELECTRO',
     price: 289,
     badge: 'Critical Care',
-    description: 'Engineered for loud environments with active ambient noise reduction. Amplifies heart and lung sounds up to 40x while filtering out background noise. Perfect for emergency response and critical care units.',
+    description: 'Engineered for loud environments with active ambient noise reduction. Amplifies heart and lung sounds up to 40x.',
     bullets: [
       'Active ambient noise reduction technology',
       '4 adjustable volume settings',
@@ -48,7 +49,7 @@ const PRODUCTS = [
     sku: 'EMS-PANTS-5IN1',
     price: 79,
     badge: 'New Arrival',
-    description: 'Professional-grade tactical pants designed specifically for EMS professionals. Features reinforced stress points, multiple utility pockets, and moisture-wicking fabric for all-day comfort during demanding shifts.',
+    description: 'Professional-grade tactical pants designed specifically for EMS professionals. Features reinforced stress points.',
     bullets: [
       'Ripstop DWR water-resistant coating',
       'Reinforced knees and seat panels',
@@ -65,7 +66,7 @@ const PRODUCTS = [
     sku: 'EMS-KIT-STUDENT',
     price: 59,
     badge: 'Student Bundle',
-    description: 'Complete starter kit aligned with NREMT coursework requirements. Includes all essential tools needed for skills labs, clinical rotations, and certification exams. Perfect gift for aspiring medics.',
+    description: 'Complete starter kit aligned with NREMT coursework requirements. Includes all essential tools needed.',
     bullets: [
       'Premium leather glove pouch',
       'High-intensity LED penlight',
@@ -82,7 +83,7 @@ const PRODUCTS = [
     sku: 'EMS-KIT-LOWSIG',
     price: 49,
     badge: 'Tactical Grade',
-    description: 'Military-specification trauma pouch with silent operation hardware. Designed for tactical medical operations where noise discipline is critical. MOLLE compatible for versatile attachment options.',
+    description: 'Military-specification trauma pouch with silent operation hardware. Designed for tactical medical operations.',
     bullets: [
       'Low-profile stealth design',
       'Silent zipper pulls and hardware',
@@ -99,7 +100,7 @@ const PRODUCTS = [
     sku: 'EMS-TOOL-SHEARS',
     price: 19,
     badge: 'Essential Tool',
-    description: 'Professional trauma shears with tungsten carbide cutting edge. Capable of cutting through denim, leather, seatbelts, and layered clothing. Safety blunt tip protects patients during emergency use.',
+    description: 'Professional trauma shears with tungsten carbide cutting edge. Capable of cutting through denim and leather.',
     bullets: [
       'Tungsten carbide serrated edge',
       'Blunt safety tip design',
@@ -125,23 +126,19 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem(THEME_KEY, newTheme);
   updateThemeIcon(newTheme);
-  
-  // Add animation effect
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.style.animation = 'none';
-    themeBtn.offsetHeight; /* trigger reflow */
-    themeBtn.style.animation = 'rotate 0.5s ease';
-  }
 }
 
 function updateThemeIcon(theme) {
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
+  const themeIcon = document.getElementById('themeIcon');
+  const themeText = document.getElementById('themeText');
+  
+  if (themeIcon) {
     if (theme === 'dark') {
-      themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> Day Mode';
+      themeIcon.className = 'fa-solid fa-sun';
+      if (themeText) themeText.textContent = 'Day Mode';
     } else {
-      themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> Night Mode';
+      themeIcon.className = 'fa-solid fa-moon';
+      if (themeText) themeText.textContent = 'Night Mode';
     }
   }
 }
@@ -156,36 +153,39 @@ function loadCart() {
 }
 
 const saveCart = (cart) => localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-
 const cartCount = (cart) => Object.values(cart).reduce((sum, qty) => sum + (parseInt(qty) || 0), 0);
-
 const cartTotal = (cart) => Object.entries(cart).reduce((total, [id, qty]) => {
   const product = PRODUCTS.find(p => p.id === id);
   return product ? total + (product.price * qty) : total;
 }, 0);
+const money = (n) => (parseFloat(n) || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
 
-const money = (n) => (parseFloat(n) || 0).toLocaleString('en-US', { 
-  style: 'currency', 
-  currency: 'USD',
-  minimumFractionDigits: 2
-});
-
-/* ---------- NOTIFICATION BOX ---------- */
+/* ---------- NOTIFICATION ---------- */
 function showNotification(message, type = 'success') {
   const existing = document.querySelectorAll('.notification');
   existing.forEach(n => n.remove());
   
-  const icons = {
-    success: 'fa-check-circle',
-    error: 'fa-exclamation-circle',
-    info: 'fa-info-circle'
-  };
+  const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
   
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
-  notification.innerHTML = `
-    <i class="fa-solid ${icons[type]}"></i>
-    <span>${message}</span>
+  notification.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${message}</span>`;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    z-index: 1000;
+    animation: slideIn 0.4s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    font-weight: 600;
+    border: 2px solid var(--accent);
+    background: ${type === 'success' ? '#48bb78' : type === 'error' ? '#e53e3e' : 'var(--primary)'};
+    color: white;
   `;
   
   document.body.appendChild(notification);
@@ -202,7 +202,7 @@ function addToCart(productId, quantity = 1) {
   cart[productId] = (parseInt(cart[productId]) || 0) + quantity;
   saveCart(cart);
   updateCartBadge();
-  showNotification('✓ Added to cart successfully!', 'success');
+  showNotification('✓ Added to cart!', 'success');
 }
 
 function removeFromCart(productId) {
@@ -211,16 +211,14 @@ function removeFromCart(productId) {
   saveCart(cart);
   updateCartBadge();
   renderCart();
-  showNotification('Item removed from cart', 'info');
+  showNotification('Item removed', 'info');
 }
 
 function updateQuantity(productId, change) {
   const cart = loadCart();
   if (cart[productId]) {
     cart[productId] = Math.max(0, parseInt(cart[productId]) + change);
-    if (cart[productId] === 0) {
-      delete cart[productId];
-    }
+    if (cart[productId] === 0) delete cart[productId];
     saveCart(cart);
     updateCartBadge();
     renderCart();
@@ -234,13 +232,6 @@ function updateCartBadge() {
     const count = cartCount(cart);
     badge.textContent = count;
     badge.style.display = count > 0 ? 'block' : 'none';
-    
-    // Add pulse animation when items added
-    if (count > 0) {
-      badge.style.animation = 'none';
-      badge.offsetHeight;
-      badge.style.animation = 'pulse 0.5s ease';
-    }
   }
 }
 
@@ -274,13 +265,7 @@ function renderCart() {
   const entries = Object.entries(cart);
   
   if (entries.length === 0) {
-    cartItems.innerHTML = `
-      <div style="text-align: center; padding: 60px 20px; color: var(--gray);">
-        <i class="fa-solid fa-cart-arrow-down" style="font-size: 60px; margin-bottom: 20px; opacity: 0.5;"></i>
-        <p style="font-size: 18px;">Your cart is empty</p>
-        <p style="font-size: 14px; margin-top: 10px;">Add some premium gear to get started!</p>
-      </div>
-    `;
+    cartItems.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--gray);"><i class="fa-solid fa-cart-arrow-down" style="font-size:60px;margin-bottom:20px;opacity:0.5;"></i><p>Your cart is empty</p></div>';
     if (cartTotalEl) cartTotalEl.textContent = money(0);
     return;
   }
@@ -288,7 +273,6 @@ function renderCart() {
   cartItems.innerHTML = entries.map(([id, qty]) => {
     const product = PRODUCTS.find(p => p.id === id);
     if (!product) return '';
-    
     return `
       <div class="cart-item">
         <img src="${product.img}" alt="${product.name}">
@@ -296,10 +280,10 @@ function renderCart() {
           <div class="cart-item-title">${product.name}</div>
           <div class="cart-item-price">${money(product.price)}</div>
           <div class="cart-item-quantity">
-            <button onclick="updateQuantity('${product.id}', -1)">-</button>
-            <span style="font-weight: 700; color: var(--text-color);">${qty}</span>
-            <button onclick="updateQuantity('${product.id}', 1)">+</button>
-            <button class="cart-item-remove" onclick="removeFromCart('${product.id}')" title="Remove">
+            <button onclick="updateQuantity('${product.id}',-1)">-</button>
+            <span>${qty}</span>
+            <button onclick="updateQuantity('${product.id}',1)">+</button>
+            <button class="cart-item-remove" onclick="removeFromCart('${product.id}')">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -308,12 +292,10 @@ function renderCart() {
     `;
   }).join('');
   
-  if (cartTotalEl) {
-    cartTotalEl.textContent = money(cartTotal(cart));
-  }
+  if (cartTotalEl) cartTotalEl.textContent = money(cartTotal(cart));
 }
 
-/* ---------- PRODUCT DETAILS MODAL ---------- */
+/* ---------- PRODUCT MODAL ---------- */
 function openProductModal(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
@@ -321,40 +303,40 @@ function openProductModal(productId) {
   const backdrop = document.getElementById('modalBackdrop');
   const modal = document.getElementById('productModal');
   
-  if (!backdrop || !modal) return;
+  if (!backdrop || !modal) {
+    console.error('Modal elements not found!');
+    return;
+  }
   
-  // Populate modal content
   document.getElementById('modalProductImage').src = product.img;
-  document.getElementById('modalProductImage').alt = product.name;
   document.getElementById('modalProductName').textContent = product.name;
   document.getElementById('modalProductPrice').textContent = money(product.price);
   document.getElementById('modalProductSku').textContent = `SKU: ${product.sku}`;
   document.getElementById('modalProductDescription').textContent = product.description;
-  document.getElementById('modalProductBadge').textContent = product.badge || '';
-  document.getElementById('modalProductBadge').style.display = product.badge ? 'inline-block' : 'none';
   
-  // Features list
-  const featuresList = document.getElementById('modalProductFeatures');
-  if (product.bullets && product.bullets.length > 0) {
-    featuresList.innerHTML = product.bullets.map(f => `<li>${f}</li>`).join('');
-    featuresList.parentElement.style.display = 'block';
-  } else {
-    featuresList.parentElement.style.display = 'none';
+  const badge = document.getElementById('modalProductBadge');
+  if (badge) {
+    badge.textContent = product.badge || '';
+    badge.style.display = product.badge ? 'inline-block' : 'none';
   }
   
-  // Store current product ID for add to cart
-  modal.dataset.productId = productId;
+  const featuresList = document.getElementById('modalProductFeatures');
+  if (featuresList) {
+    if (product.bullets && product.bullets.length > 0) {
+      featuresList.innerHTML = product.bullets.map(f => `<li>${f}</li>`).join('');
+      featuresList.parentElement.style.display = 'block';
+    } else {
+      featuresList.parentElement.style.display = 'none';
+    }
+  }
   
-  // Show modal with animation
+  modal.dataset.productId = productId;
   backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
-  
-  showNotification('Product details loaded', 'info');
 }
 
 function closeProductModal() {
   const backdrop = document.getElementById('modalBackdrop');
-  
   if (backdrop) {
     backdrop.classList.remove('active');
     document.body.style.overflow = 'auto';
@@ -364,7 +346,6 @@ function closeProductModal() {
 function addProductFromModal() {
   const modal = document.getElementById('productModal');
   const productId = modal.dataset.productId;
-  
   if (productId) {
     addToCart(productId, 1);
     closeProductModal();
@@ -375,9 +356,7 @@ function addProductFromModal() {
 /* ---------- PRODUCT RENDERER ---------- */
 function renderProductsInto(mount, category) {
   if (!mount) return;
-  
   const list = category ? PRODUCTS.filter(p => p.category === category) : PRODUCTS;
-  
   mount.innerHTML = list.map(p => `
     <article class="card">
       <div class="card-top">
@@ -387,8 +366,8 @@ function renderProductsInto(mount, category) {
       <div class="card-inner">
         <h3 class="card-title">${p.name}</h3>
         <p class="card-text">${p.description.substring(0, 120)}...</p>
-        <ul class="small" style="margin: 15px 0; padding-left: 20px;">
-          ${p.bullets ? p.bullets.slice(0, 3).map(b => `<li>${b}</li>`).join('') : ''}
+        <ul class="small" style="margin:15px 0;padding-left:20px;">
+          ${p.bullets ? p.bullets.slice(0,3).map(b => `<li>${b}</li>`).join('') : ''}
         </ul>
         <div class="price-row">
           <div>
@@ -398,10 +377,10 @@ function renderProductsInto(mount, category) {
           ${p.badge ? `<div class="pill">${p.badge}</div>` : '<div></div>'}
         </div>
         <div class="card-actions">
-          <button class="btn secondary" onclick="openProductModal('${p.id}')" title="View Details">
+          <button class="btn secondary" onclick="openProductModal('${p.id}')">
             <i class="fa-solid fa-eye"></i> Details
           </button>
-          <button class="btn" onclick="addToCart('${p.id}', 1)" title="Add to Cart">
+          <button class="btn" onclick="addToCart('${p.id}',1)">
             <i class="fa-solid fa-cart-plus"></i> Add
           </button>
         </div>
@@ -417,11 +396,11 @@ function renderAll() {
   const gridApparel = document.getElementById('gridApparel');
   const gridTools = document.getElementById('gridTools');
   
-  renderProductsInto(productGrid, null);
-  renderProductsInto(gridStethoscopes, 'Stethoscopes');
-  renderProductsInto(gridKits, 'Kits');
-  renderProductsInto(gridApparel, 'Apparel');
-  renderProductsInto(gridTools, 'Tools');
+  if (productGrid) renderProductsInto(productGrid, null);
+  if (gridStethoscopes) renderProductsInto(gridStethoscopes, 'Stethoscopes');
+  if (gridKits) renderProductsInto(gridKits, 'Kits');
+  if (gridApparel) renderProductsInto(gridApparel, 'Apparel');
+  if (gridTools) renderProductsInto(gridTools, 'Tools');
 }
 
 /* ---------- MOBILE NAV ---------- */
@@ -440,19 +419,25 @@ function initMobileNav() {
       nav.style.right = '0';
       nav.style.background = 'var(--header-bg)';
       nav.style.padding = '20px';
-      nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+      nav.style.zIndex = '99';
     });
   }
 }
 
 /* ---------- INITIALIZATION ---------- */
 function main() {
+  console.log('🏥 EMS Luxe Store initializing...');
+  
   // Initialize theme
   initTheme();
   
   // Render products
   renderAll();
+  
+  // Update cart badge
   updateCartBadge();
+  
+  // Initialize mobile nav
   initMobileNav();
   
   // Cart button events
@@ -461,34 +446,56 @@ function main() {
   const cartBackdrop = document.getElementById('cartBackdrop');
   const checkoutBtn = document.getElementById('checkoutBtn');
   
-  if (cartBtn) cartBtn.addEventListener('click', openCart);
-  if (cartClose) cartClose.addEventListener('click', closeCart);
-  if (cartBackdrop) cartBackdrop.addEventListener('click', closeCart);
-  if (checkoutBtn) checkoutBtn.addEventListener('click', () => {
-    const cart = loadCart();
-    if (Object.keys(cart).length === 0) {
-      showNotification('⚠ Your cart is empty!', 'error');
-    } else {
-      showNotification(`✓ Proceeding to checkout - ${money(cartTotal(cart))}`, 'success');
-    }
-  });
+  if (cartBtn) {
+    cartBtn.addEventListener('click', openCart);
+    console.log('✓ Cart button initialized');
+  }
+  
+  if (cartClose) {
+    cartClose.addEventListener('click', closeCart);
+  }
+  
+  if (cartBackdrop) {
+    cartBackdrop.addEventListener('click', closeCart);
+  }
+  
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+      const cart = loadCart();
+      if (Object.keys(cart).length === 0) {
+        showNotification('⚠ Cart is empty!', 'error');
+      } else {
+        showNotification(`✓ Checkout - ${money(cartTotal(cart))}`, 'success');
+      }
+    });
+  }
   
   // Theme toggle
   const themeToggle = document.getElementById('themeToggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', toggleTheme);
+    console.log('✓ Theme toggle initialized');
   }
   
-  // Modal close events
+  // Modal events
   const modalBackdrop = document.getElementById('modalBackdrop');
   const modalClose = document.getElementById('modalClose');
   const modalAddToCart = document.getElementById('modalAddToCart');
   
-  if (modalBackdrop) modalBackdrop.addEventListener('click', closeProductModal);
-  if (modalClose) modalClose.addEventListener('click', closeProductModal);
-  if (modalAddToCart) modalAddToCart.addEventListener('click', addProductFromModal);
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener('click', closeProductModal);
+  }
   
-  // Close modal on Escape key
+  if (modalClose) {
+    modalClose.addEventListener('click', closeProductModal);
+  }
+  
+  if (modalAddToCart) {
+    modalAddToCart.addEventListener('click', addProductFromModal);
+    console.log('✓ Modal add to cart initialized');
+  }
+  
+  // Escape key to close modals
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeProductModal();
@@ -496,23 +503,12 @@ function main() {
     }
   });
   
-  // Add pulse animation keyframe
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
-    }
-  `;
-  document.head.appendChild(style);
-  
-  console.log('🏥 EMS Luxe Store initialized successfully!');
+  console.log('✅ EMS Luxe Store initialized successfully!');
   console.log('🌙 Theme:', localStorage.getItem(THEME_KEY) || 'light');
   console.log('🛒 Cart items:', cartCount(loadCart()));
 }
 
-/* Bootstrap */
+// Bootstrap
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', main);
 } else {
