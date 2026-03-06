@@ -1,121 +1,141 @@
 <!doctype html>
 <html lang="en" data-page="shop">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shop — EMS Luxe Supply</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop — EMS Luxe Supply</title>
 
-  <!-- fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Comic+Neue:wght@700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- CSS (one level up from /html) -->
-  <link rel="stylesheet" href="../css/styles.css" />
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-</head>
+    <!-- CSS  ( / css lives one level UP from /html ) -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
 
-<body>
+  <body>
+    <!-- ===============  NAVBAR  =============== -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <button
+          id="menuToggle"
+          class="menu-toggle"
+          aria-label="Open menu"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
 
-<!-- ===== NAVBAR ===== -->
-<header class="topbar">
-  <div class="container topbar-inner">
+        <!-- brand -->
+        <a class="brand" href="../index.html">
+          <div class="brand-mark"><i class="fa-solid fa-shield"></i></div>
+          <div class="brand-title">EMS Luxe Supply</div>
+        </a>
 
-    <button id="menuToggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+        <!-- primary nav  (all files are *also* in /html) -->
+        <nav class="nav">
+          <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
+          <a href="stethoscopes.html"
+            ><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a
+          >
+        </nav>
 
-    <a class="brand" href="../index.html">
-      <div class="brand-mark"><i class="fa-solid fa-shield"></i></div>
-      <div class="brand-title">EMS Luxe Supply</div>
-    </a>
+        <!-- cart button -->
+        <button id="cartBtn" class="icon-btn" aria-label="Cart">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="cartBadge" class="badge">0</span>
+        </button>
+      </div>
+    </header>
 
-    <nav class="nav">
-      <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
-      <a href="../html/stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-    </nav>
+    <!-- ===============  MAIN  =============== -->
+    <main>
+      <!-- hero -->
+      <section class="hero hero-compact">
+        <div class="container">
+          <h1 class="hero-title">Shop</h1>
+          <p class="hero-sub">
+            Field-tested kits, stethoscopes, apparel, and tools.
+          </p>
+        </div>
+      </section>
 
-    <button id="cartBtn" class="icon-btn" aria-label="Cart">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <span id="cartBadge" class="badge">0</span>
-    </button>
+      <!-- category grids (mount points; JS fills them) -->
+      <section id="stethoscopes">
+        <div class="container">
+          <h2 class="section-title">Stethoscopes</h2>
+          <div id="gridStethoscopes" class="grid"></div>
+        </div>
+      </section>
 
-  </div>
-</header>
+      <section id="kits">
+        <div class="container">
+          <h2 class="section-title">Kits</h2>
+          <div id="gridKits" class="grid"></div>
+        </div>
+      </section>
 
+      <section id="apparel">
+        <div class="container">
+          <h2 class="section-title">Apparel</h2>
+          <div id="gridApparel" class="grid"></div>
+        </div>
+      </section>
 
-<!-- ===== MAIN ===== -->
-<main>
+      <section id="tools">
+        <div class="container">
+          <h2 class="section-title">Tools</h2>
+          <div id="gridTools" class="grid"></div>
+        </div>
+      </section>
+    </main>
 
-  <!-- hero -->
-  <section class="hero hero-compact">
-    <div class="container">
-      <h1 class="hero-title">Shop</h1>
-      <p class="hero-sub">Field-tested kits, stethoscopes, apparel, and tools.</p>
-    </div>
-  </section>
+    <!-- ===============  FOOTER  =============== -->
+    <footer>
+      <div class="container fine">
+        © 2026 EMS Luxe Supply — demo store
+      </div>
+    </footer>
 
-  <!-- category grids -->
-  <section id="stethoscopes">
-    <div class="container">
-      <h2 class="section-title">Stethoscopes</h2>
-      <div id="gridStethoscopes" class="grid"></div>
-    </div>
-  </section>
+    <!-- ===============  CART DRAWER  =============== -->
+    <div id="cartBackdrop" class="drawer-backdrop"></div>
 
-  <section id="kits">
-    <div class="container">
-      <h2 class="section-title">Kits</h2>
-      <div id="gridKits" class="grid"></div>
-    </div>
-  </section>
+    <aside
+      id="cartDrawer"
+      class="drawer"
+      aria-label="Cart"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <i class="fa-solid fa-cart-shopping"></i> Cart
+        </div>
+        <button id="cartClose" class="icon-btn" aria-label="Close cart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
 
-  <section id="apparel">
-    <div class="container">
-      <h2 class="section-title">Apparel</h2>
-      <div id="gridApparel" class="grid"></div>
-    </div>
-  </section>
+      <div id="cartItems" class="drawer-body"></div>
 
-  <section id="tools">
-    <div class="container">
-      <h2 class="section-title">Tools</h2>
-      <div id="gridTools" class="grid"></div>
-    </div>
-  </section>
+      <div class="drawer-footer">
+        <div class="total-row">
+          <span>Total</span><span id="cartTotal">$0.00</span>
+        </div>
+        <button id="checkoutBtn" class="btn">Checkout (demo)</button>
+      </div>
+    </aside>
 
-</main>
-
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="container fine">© 2026 EMS Luxe Supply — demo store</div>
-</footer>
-
-
-<!-- ===== CART DRAWER & BACKDROP ===== -->
-<div id="cartBackdrop" class="drawer-backdrop"></div>
-
-<aside id="cartDrawer" class="drawer" aria-label="Cart" role="dialog">
-  <div class="drawer-header">
-    <div class="drawer-title"><i class="fa-solid fa-cart-shopping"></i> Cart</div>
-    <button id="cartClose" class="icon-btn" aria-label="Close cart">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-
-  <div class="drawer-body" id="cartItems"></div>
-
-  <div class="drawer-footer">
-    <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-    <button id="checkoutBtn" class="btn">Checkout&nbsp;(demo)</button>
-  </div>
-</aside>
-
-
-<!-- JS (one level up) -->
-<script src="../js/script.js" defer></script>
-</body>
+    <!-- JS  (one level up) -->
+    <script src="../js/script.js" defer></script>
+  </body>
 </html>

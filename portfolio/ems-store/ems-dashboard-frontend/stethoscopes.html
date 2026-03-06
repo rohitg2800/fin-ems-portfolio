@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" data-page="stethoscopes" data-category="Stethoscopes">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#3A2010" />
+    <title>Best Stethoscope for EMTs & Paramedics — EMS Luxe Supply</title>
+    <meta name="description" content="Compare the best stethoscope for EMTs: acoustic vs electronic, rig-noise tradeoffs, and top picks. Shop field-tested stethoscopes." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="index.html" aria-label="EMS Luxe Supply home">
+          <div class="brand-mark" aria-hidden="true">⛑</div>
+          <div>
+            <div class="brand-title">EMS Luxe Supply</div>
+            <div class="fine">Stethoscopes</div>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="shop.html">Shop</a>
+          <a href="stethoscopes.html">Stethoscopes</a>
+          <a href="index.html#trust">Trust</a>
+          <a href="index.html#guides">Guides</a>
+        </nav>
+
+        <div class="right-actions">
+          <a class="btn secondary" href="../index.html">Portfolio</a>
+          <button id="cartBtn" class="icon-btn" type="button" aria-label="Open cart">
+            🛒
+            <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top:22px;">
+        <div class="container">
+          <div class="hero-card hero-main">
+            <h1 class="hero-title" style="margin-bottom:6px;">Best stethoscope for EMTs</h1>
+            <p class="hero-sub">
+              EMS rigs are loud. The “best” stethoscope depends on environment, patient mix, and budget.
+              Below is a practical guide, followed by field‑tested picks you can add to cart.
+            </p>
+            <div class="hero-pills">
+              <span class="pill">Acoustic vs electronic</span>
+              <span class="pill">Noise trade‑offs</span>
+              <span class="pill">Student‑friendly picks</span>
+              <a class="pill" href="#shop">Shop stethoscopes</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2 class="section-title">Quick guide</h2>
+          <p class="section-sub">
+            Looking for the <strong>best stethoscope for EMTs</strong>? We curate rugged, field‑tested options—from classic acoustic models
+            to advanced electronic units—so you can choose the right <strong>paramedic stethoscope</strong> for cardiac, respiratory, and pediatric assessments.
+            Compare popular <strong>Littmann stethoscope</strong>‑style acoustics with lightweight everyday picks and noise‑reducing electronic units.
+          </p>
+
+          <div class="grid">
+            <article class="card">
+              <div class="card-top"><div class="tag">Acoustic</div></div>
+              <div class="card-inner">
+                <h3 class="card-title">Best for students + everyday rigs</h3>
+                <p class="card-text">Durable, reliable, and low maintenance. Great if you’re training and need consistent basics.</p>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top"><div class="tag">Electronic</div></div>
+              <div class="card-inner">
+                <h3 class="card-title">Best for loud environments</h3>
+                <p class="card-text">If road noise and sirens kill your assessments, electronic amplification can help—at a higher cost.</p>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-top"><div class="tag">Fit</div></div>
+              <div class="card-inner">
+                <h3 class="card-title">Comfort matters</h3>
+                <p class="card-text">Choose ear tips that seal well and tubing that survives daily abuse. Small upgrades compound over shifts.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="shop">
+        <div class="container">
+          <h2 class="section-title">Shop stethoscopes</h2>
+          <p class="section-sub">Two solid tiers: a student‑friendly acoustic and a noise‑reducing electronic model.</p>
+          <div id="productGrid" class="grid" aria-label="Stethoscopes"></div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="btn secondary" href="shop.html#stethoscopes">View in full shop</a>
+            <a class="btn" href="shop.html">Shop all</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+          <div><strong>EMS Luxe Supply</strong></div>
+          <div class="fine">Demo store</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cartBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+    <aside id="cartDrawer" class="drawer" aria-label="Cart">
+      <div class="drawer-header">
+        <div class="drawer-title">Cart</div>
+        <button id="cartClose" class="icon-btn" type="button" aria-label="Close cart">✕</button>
+      </div>
+      <div class="drawer-body" id="cartItems"></div>
+      <div class="drawer-footer">
+        <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+        <button id="checkoutBtn" class="btn" type="button" style="width:100%;">Checkout (demo)</button>
+      </div>
+    </aside>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
