@@ -1,154 +1,42 @@
-  <!doctype html>
-  <html lang="en" data-page="stethoscopes" data-category="Stethoscopes">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Best Stethoscope for EMTs & Paramedics — EMS Luxe Supply</title>
-
-    <!-- fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet" />
-
-    <!-- correct relative paths (one folder up) -->
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  </head>
-
-  <body>
-
-  <!-- ===== Navbar ===== -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stethoscopes — EMS Luxe Supply</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
   <header class="topbar">
     <div class="container topbar-inner">
-
-      <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-
-      <!-- back to root index -->
-      <a class="brand" href="../index.html">
-        <div class="brand-mark"><i class="fa-solid fa-shield"></i></div>
-        <div><div class="brand-title">EMS Luxe Supply</div><div class="fine">Stethoscopes</div></div>
-      </a>
-
+      <button id="menuToggle" class="menu-toggle"><span></span><span></span><span></span></button>
+      <a class="brand" href="index.html"><div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div><div><div class="brand-title">EMS LUXE</div><div class="fine">STETHOSCOPES</div></div></a>
       <nav class="nav">
-        <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="../html/shop.html"><i class="fa-solid fa-store"></i> Shop</a>
-        <a href="../html/stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-        <a href="../index.html#guides"><i class="fa-solid fa-book-open"></i> Guides</a>
+        <a href="index.html"><i class="fa-solid fa-house-chimney"></i><span>Home</span></a>
+        <a href="shop.html"><i class="fa-solid fa-bag-shopping"></i><span>Shop</span></a>
+        <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i><span>Stethoscopes</span></a>
       </nav>
-
-      <div class="right-actions">
-        <a class="btn secondary" href="../index.html"><i class="fa-solid fa-briefcase"></i> Portfolio</a>
-
-        <button id="cartBtn" class="icon-btn" aria-label="Cart">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span id="cartBadge" class="badge">0</span>
-        </button>
-      </div>
-
+      <button id="themeToggle" class="theme-toggle"><i class="fa-solid fa-moon" id="themeIcon"></i><span id="themeText">Night Mode</span></button>
+      <button id="cartBtn" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="badge">0</span></button>
     </div>
   </header>
 
-
-  <!-- ===== Hero ===== -->
   <main>
-    <section class="hero hero-compact">
-      <div class="container">
-        <div class="hero-card hero-main">
-          <h1 class="hero-title">Best stethoscope for EMTs</h1>
-          <p class="hero-sub">Rig noise, patient mix, and budget drive the choice. Guide first, shop picks after.</p>
-
-          <div class="hero-pills">
-            <span class="pill"><i class="fa-solid fa-wave-square"></i> Acoustic vs electronic</span>
-            <span class="pill"><i class="fa-solid fa-volume-high"></i> Noise trade-offs</span>
-            <span class="pill"><i class="fa-solid fa-graduation-cap"></i> Student picks</span>
-            <a class="pill" href="#shop"><i class="fa-solid fa-cart-plus"></i> Shop stethoscopes</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- quick guide cards -->
-    <section>
-      <div class="container">
-        <h2 class="section-title">Quick guide</h2>
-        <p class="section-sub">Acoustic = simple & durable; electronic = loud-rig hero but higher cost.</p>
-
-        <div class="grid">
-          <article class="card">
-            <div class="card-top" data-img="https://images.unsplash.com/photo-1QcLbPi3S7Y?auto=format&fit=crop&w=1200&q=80">
-              <div class="tag"><i class="fa-solid fa-stethoscope"></i> Acoustic</div>
-            </div>
-            <div class="card-inner">
-              <h3 class="card-title">Students & everyday rigs</h3>
-              <p class="card-text">Durable, no batteries, low cost.</p>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-top" data-img="https://images.unsplash.com/photo-nGfxoclUgSI?auto=format&fit=crop&w=1200&q=80">
-              <div class="tag"><i class="fa-solid fa-microchip"></i> Electronic</div>
-            </div>
-            <div class="card-inner">
-              <h3 class="card-title">Overcome sirens / road noise</h3>
-              <p class="card-text">Amplified sound, but needs charging.</p>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-top" data-img="https://images.unsplash.com/photo-MaKsx8JNbiI?auto=format&fit=crop&w=1200&q=80">
-              <div class="tag"><i class="fa-solid fa-ear-listen"></i> Fit</div>
-            </div>
-            <div class="card-inner">
-              <h3 class="card-title">Comfort is safety</h3>
-              <p class="card-text">Good seal & soft tips reduce fatigue.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- shop grid -->
-    <section id="shop">
-      <div class="container">
-        <h2 class="section-title">Shop stethoscopes</h2>
-        <p class="section-sub">Field-tested picks you can add to cart.</p>
-
-        <div id="productGrid" class="grid"></div>
-
-        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
-          <a class="btn secondary" href="../html/shop.html#stethoscopes"><i class="fa-solid fa-up-right-from-square"></i> Full shop view</a>
-          <a class="btn" href="../html/shop.html"><i class="fa-solid fa-store"></i> Shop all</a>
-        </div>
-      </div>
-    </section>
+    <section class="hero hero-compact"><div class="container"><h1 class="hero-title">Best Stethoscopes for EMTs</h1><p class="hero-sub">Professional-grade acoustic and electronic options.</p></div></section>
+    <section><div class="container"><h2 class="section-title">Shop Stethoscopes</h2><div id="productGrid" class="grid"></div></div></section>
   </main>
 
+  <footer><div class="container"><div style="text-align:center;color:var(--gray);font-size:14px;">© 2026 EMS Luxe Supply</div></div></footer>
 
-  <!-- ===== Footer ===== -->
-  <footer>
-    <div class="container fine">© 2026 EMS Luxe Supply — demo store</div>
-  </footer>
-
-
-  <!-- ===== Cart Drawer ===== -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
-  <aside id="cartDrawer" class="drawer" aria-label="Cart" role="dialog">
-    <div class="drawer-header">
-      <div class="drawer-title"><i class="fa-solid fa-cart-shopping"></i> Cart</div>
-      <button id="cartClose" class="icon-btn" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="drawer-body" id="cartItems"></div>
-    <div class="drawer-footer">
-      <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-      <button id="checkoutBtn" class="btn">Checkout (demo)</button>
-    </div>
-  </aside>
+  <aside id="cartDrawer" class="drawer"><div class="drawer-header"><div class="drawer-title">Your Cart</div><button id="cartClose" class="modal-close"><i class="fa-solid fa-xmark"></i></button></div><div class="drawer-body" id="cartItems"></div><div class="drawer-footer"><div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div><button id="checkoutBtn" class="btn" style="width:100%;">Checkout</button></div></aside>
 
+  <div id="modalBackdrop" class="modal-backdrop"><div class="modal" id="productModal"><div class="modal-header"><h2 class="modal-title" id="modalProductName">Product</h2><button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-body"><div class="modal-product"><img id="modalProductImage" src="" alt="Product"><div class="modal-product-info"><div class="pill" id="modalProductBadge"></div><div class="price" id="modalProductPrice">$0.00</div><div class="sku" id="modalProductSku">SKU: ---</div><p class="description" id="modalProductDescription"></p><div class="features"><h4>Key Features</h4><ul id="modalProductFeatures"></ul></div><div class="modal-product-actions"><button class="btn secondary" onclick="closeProductModal()">Continue</button><button class="btn" id="modalAddToCart">Add to Cart</button></div></div></div></div></div></div>
 
-  <!-- correct JS path (one folder up) -->
-  <script src="../js/script.js" defer></script>
-  </body>
-  </html>
+  <script src="js/script.js" defer></script>
+</body>
+</html>

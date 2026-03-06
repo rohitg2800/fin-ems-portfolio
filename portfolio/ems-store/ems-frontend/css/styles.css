@@ -1,5 +1,6 @@
 /* =========================================
    EMS Luxe Supply – Premium styles.css
+   Mobile Optimized
    ========================================= */
 
 :root {
@@ -79,7 +80,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   flex-wrap: wrap;
 }
 
@@ -173,7 +174,7 @@ body {
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
-/* Theme Toggle Button - Premium Style */
+/* Theme Toggle Button - Desktop */
 .theme-toggle {
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
   border: none;
@@ -195,10 +196,6 @@ body {
 .theme-toggle:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 25px rgba(212, 175, 55, 0.6);
-}
-
-.theme-toggle:active {
-  transform: translateY(-1px) scale(1.02);
 }
 
 .theme-toggle i {
@@ -481,7 +478,7 @@ body {
   font-size: 14px;
 }
 
-/* ========== MODAL (Details Box) ========== */
+/* ========== MODAL ========== */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -904,43 +901,52 @@ footer a:hover {
   border-radius: 2px;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-  }
-  
-  .menu-toggle {
-    display: block;
-  }
-  
-  .hero-title {
-    font-size: 2rem;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .drawer {
-    width: 100%;
-    right: -100%;
-  }
-  
-  .modal-product-actions {
-    flex-direction: column;
-  }
-  
-  .topbar-inner {
-    flex-wrap: wrap;
-  }
-  
-  .theme-toggle {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    margin-top: 10px;
-  }
+/* ========== TRUST BADGES ========== */
+.trust-section {
+  background: var(--bg-color);
+  padding: 60px 0;
+  margin-top: 40px;
+  border-top: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.trust-card {
+  text-align: center;
+  padding: 30px;
+  background: var(--card-bg);
+  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  transition: all 0.4s;
+}
+
+.trust-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+
+.trust-card i {
+  font-size: 50px;
+  color: var(--accent);
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+
+.trust-card h3 {
+  color: var(--text-color);
+  margin-bottom: 10px;
+  font-family: 'Cinzel', serif;
+}
+
+.trust-card p {
+  color: var(--gray);
+  font-size: 14px;
 }
 
 /* ========== LOADING ========== */
@@ -1019,88 +1025,280 @@ footer a:hover {
   }
 }
 
-/* ========== TRUST BADGES ========== */
-.trust-section {
-  background: var(--bg-color);
-  padding: 60px 0;
-  margin-top: 40px;
-  border-top: 2px solid var(--border-color);
-  border-bottom: 2px solid var(--border-color);
+/* ========================================
+   MOBILE RESPONSIVE STYLES
+   ======================================== */
+@media (max-width: 768px) {
+  /* Topbar - Mobile */
+  .topbar-inner {
+    padding: 10px 15px;
+    gap: 12px;
+  }
+  
+  /* Brand - Smaller on mobile */
+  .brand-mark {
+    font-size: 22px;
+  }
+  
+  .brand-title {
+    font-size: 16px;
+  }
+  
+  .brand .fine {
+    font-size: 9px;
+  }
+  
+  /* Menu Toggle - Mobile */
+  .menu-toggle {
+    display: block;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  
+  .menu-toggle span {
+    width: 22px;
+    height: 2.5px;
+    margin: 4px 0;
+    border-radius: 2px;
+  }
+  
+  /* Navigation - Mobile */
+  .nav {
+    display: none;
+    gap: 0;
+    padding: 10px 0;
+    width: 100%;
+    order: 4;
+  }
+  
+  .nav a {
+    padding: 12px 15px;
+    font-size: 14px;
+    gap: 10px;
+    border-radius: 8px;
+    margin: 5px 0;
+    justify-content: flex-start;
+  }
+  
+  .nav a i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Theme Toggle - Mobile (Icon Only) */
+  .theme-toggle {
+    padding: 10px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    justify-content: center;
+    align-items: center;
+    order: 2;
+  }
+  
+  .theme-toggle span {
+    display: none;
+  }
+  
+  .theme-toggle i {
+    font-size: 20px;
+    margin: 0;
+  }
+  
+  /* Cart Button - Mobile */
+  .icon-btn {
+    padding: 10px;
+    font-size: 18px;
+    width: 42px;
+    height: 42px;
+    order: 3;
+  }
+  
+  .badge {
+    font-size: 10px;
+    padding: 3px 6px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Hero - Mobile */
+  .hero {
+    padding: 40px 0;
+  }
+  
+  .hero-title {
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+  }
+  
+  .hero-sub {
+    font-size: 1rem;
+  }
+  
+  .hero-card {
+    padding: 25px 20px;
+  }
+  
+  /* Section Titles - Mobile */
+  .section-title {
+    font-size: 1.8rem;
+    margin: 40px 0 15px;
+  }
+  
+  /* Product Grid - Mobile */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* Product Cards - Mobile */
+  .card-top {
+    height: 180px;
+  }
+  
+  .card-inner {
+    padding: 15px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+  }
+  
+  .card-text {
+    font-size: 13px;
+  }
+  
+  .price {
+    font-size: 20px;
+  }
+  
+  .card-actions .btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  /* Trust Cards - Mobile */
+  .trust-card {
+    padding: 20px 15px;
+  }
+  
+  .trust-card i {
+    font-size: 40px;
+  }
+  
+  .trust-card h3 {
+    font-size: 16px;
+  }
+  
+  .trust-card p {
+    font-size: 13px;
+  }
+  
+  /* Footer - Mobile */
+  footer {
+    padding: 30px 0 20px;
+  }
+  
+  footer h4 {
+    font-size: 16px;
+  }
+  
+  footer p {
+    font-size: 13px;
+  }
+  
+  /* Cart Drawer - Mobile */
+  .drawer {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .drawer-header {
+    padding: 15px 20px;
+  }
+  
+  .drawer-title {
+    font-size: 16px;
+  }
+  
+  /* Modal - Mobile */
+  .modal {
+    margin: 10px;
+    max-height: 85vh;
+  }
+  
+  .modal-header {
+    padding: 15px 20px;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-product img {
+    height: 250px;
+  }
+  
+  .modal-product-info h3 {
+    font-size: 20px;
+  }
+  
+  .modal-product-info .price {
+    font-size: 24px;
+  }
+  
+  .modal-product-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Notification - Mobile */
+  .notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
 }
 
-.trust-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-}
-
-.trust-card {
-  text-align: center;
-  padding: 30px;
-  background: var(--card-bg);
-  border-radius: 15px;
-  border: 1px solid var(--border-color);
-  transition: all 0.4s;
-}
-
-.trust-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--accent);
-}
-
-.trust-card i {
-  font-size: 50px;
-  color: var(--accent);
-  margin-bottom: 20px;
-  filter: drop-shadow(0 0 10px var(--accent));
-}
-
-.trust-card h3 {
-  color: var(--text-color);
-  margin-bottom: 10px;
-  font-family: 'Cinzel', serif;
-}
-
-.trust-card p {
-  color: var(--gray);
-  font-size: 14px;
-}
-
-/* ========== COMPARISON TABLE ========== */
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--card-bg);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--border-color);
-}
-
-.comparison-table thead {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  color: var(--accent);
-}
-
-.comparison-table th {
-  padding: 20px;
-  text-align: left;
-  font-family: 'Cinzel', serif;
-  font-size: 16px;
-  border-bottom: 2px solid var(--accent);
-}
-
-.comparison-table td {
-  padding: 18px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-color);
-}
-
-.comparison-table tr:hover {
-  background: var(--bg-color);
-}
-
-.comparison-table tr:last-child td {
-  border-bottom: none;
+/* Extra Small Mobile */
+@media (max-width: 375px) {
+  .brand-title {
+    font-size: 14px;
+  }
+  
+  .hero-title {
+    font-size: 1.4rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+  
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+  
+  .menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
 }
