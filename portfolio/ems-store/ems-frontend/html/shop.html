@@ -11,36 +11,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <!-- NAV -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+      <button id="menuToggle" class="menu-toggle"><span></span><span></span><span></span></button>
       <a class="brand" href="index.html">
         <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
-        <div>
-          <div class="brand-title">EMS LUXE</div>
-          <div class="fine">PREMIUM GEAR</div>
-        </div>
+        <div><div class="brand-title">EMS LUXE</div><div class="fine">PREMIUM GEAR</div></div>
       </a>
       <nav class="nav">
         <a href="index.html"><i class="fa-solid fa-house-chimney"></i><span>Home</span></a>
         <a href="shop.html"><i class="fa-solid fa-bag-shopping"></i><span>Shop</span></a>
         <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i><span>Stethoscopes</span></a>
       </nav>
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <i class="fa-solid fa-moon" id="themeIcon"></i>
-        <span id="themeText">Night Mode</span>
-      </button>
-      <button id="cartBtn" class="icon-btn" aria-label="View Cart">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span id="cartBadge" class="badge">0</span>
-      </button>
+      <button id="themeToggle" class="theme-toggle"><i class="fa-solid fa-moon" id="themeIcon"></i><span id="themeText">Night Mode</span></button>
+      <button id="cartBtn" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="badge">0</span></button>
     </div>
   </header>
 
-  <!-- MAIN -->
   <main>
     <section class="hero hero-compact">
       <div class="container">
@@ -49,65 +36,24 @@
       </div>
     </section>
 
-    <section id="stethoscopes">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</h2>
-        <div id="gridStethoscopes" class="grid"></div>
-      </div>
-    </section>
-
-    <section id="kits">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-kit-medical"></i> Kits</h2>
-        <div id="gridKits" class="grid"></div>
-      </div>
-    </section>
-
-    <section id="apparel">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-shirt"></i> Apparel</h2>
-        <div id="gridApparel" class="grid"></div>
-      </div>
-    </section>
-
-    <section id="tools">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Tools</h2>
-        <div id="gridTools" class="grid"></div>
-      </div>
-    </section>
+    <section id="stethoscopes"><div class="container"><h2 class="section-title"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</h2><div id="gridStethoscopes" class="grid"></div></div></section>
+    <section id="kits"><div class="container"><h2 class="section-title"><i class="fa-solid fa-kit-medical"></i> Kits</h2><div id="gridKits" class="grid"></div></div></section>
+    <section id="apparel"><div class="container"><h2 class="section-title"><i class="fa-solid fa-shirt"></i> Apparel</h2><div id="gridApparel" class="grid"></div></div></section>
+    <section id="tools"><div class="container"><h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Tools</h2><div id="gridTools" class="grid"></div></div></section>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div style="text-align:center;color:var(--gray);font-size:14px;">
-        © 2026 EMS Luxe Supply. All rights reserved.
-      </div>
-    </div>
-  </footer>
+  <footer><div class="container"><div style="text-align:center;color:var(--gray);font-size:14px;">© 2026 EMS Luxe Supply. All rights reserved.</div></div></footer>
 
-  <!-- CART -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
   <aside id="cartDrawer" class="drawer">
-    <div class="drawer-header">
-      <div class="drawer-title"><i class="fa-solid fa-cart-shopping"></i> Your Cart</div>
-      <button id="cartClose" class="modal-close"><i class="fa-solid fa-xmark"></i></button>
-    </div>
+    <div class="drawer-header"><div class="drawer-title"><i class="fa-solid fa-cart-shopping"></i> Your Cart</div><button id="cartClose" class="modal-close"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="drawer-body" id="cartItems"></div>
-    <div class="drawer-footer">
-      <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-      <button id="checkoutBtn" class="btn" style="width:100%;">Checkout</button>
-    </div>
+    <div class="drawer-footer"><div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div><button id="checkoutBtn" class="btn" style="width:100%;">Checkout</button></div>
   </aside>
 
-  <!-- MODAL -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div class="modal" id="productModal">
-      <div class="modal-header">
-        <h2 class="modal-title" id="modalProductName">Product</h2>
-        <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
-      </div>
+      <div class="modal-header"><h2 class="modal-title" id="modalProductName">Product</h2><button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="modal-body">
         <div class="modal-product">
           <img id="modalProductImage" src="" alt="Product">
@@ -116,25 +62,14 @@
             <div class="price" id="modalProductPrice">$0.00</div>
             <div class="sku" id="modalProductSku">SKU: ---</div>
             <p class="description" id="modalProductDescription"></p>
-            <div class="features">
-              <h4><i class="fa-solid fa-star"></i> Key Features</h4>
-              <ul id="modalProductFeatures"></ul>
-            </div>
-            <div class="modal-product-actions">
-              <button class="btn secondary" onclick="closeProductModal()">
-                <i class="fa-solid fa-arrow-left"></i> Continue
-              </button>
-              <button class="btn" id="modalAddToCart">
-                <i class="fa-solid fa-cart-plus"></i> Add to Cart
-              </button>
-            </div>
+            <div class="features"><h4><i class="fa-solid fa-star"></i> Key Features</h4><ul id="modalProductFeatures"></ul></div>
+            <div class="modal-product-actions"><button class="btn secondary" onclick="closeProductModal()"><i class="fa-solid fa-arrow-left"></i> Continue</button><button class="btn" id="modalAddToCart"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- JAVASCRIPT -->
   <script src="js/script.js" defer></script>
 </body>
 </html>
