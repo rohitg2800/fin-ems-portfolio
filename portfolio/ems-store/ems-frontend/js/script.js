@@ -16,7 +16,7 @@ const PRODUCTS = [
     badge: 'Best for Students',
     description: 'The Classic III delivers exceptional acoustic performance for general physical assessment. Trusted by medical students and professionals worldwide.',
     bullets: ['Dual-head chestpiece with tunable diaphragm', 'Latex-free tubing for allergy safety', 'Comfort seal soft-sealing ear tips', 'Next-generation tubing for longer life', '5-year manufacturer warranty included'],
-    img: 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=600&h=400&fit=crop&q=80'
+    img: 'https://images.unsplash.com/photo-1655313719493-16ebe4906441?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RldGhvc2NvcGV8ZW58MHx8MHx8fDA%3D'
   },
   {
     id: 'steth-electronic',
