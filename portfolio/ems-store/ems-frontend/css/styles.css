@@ -7,44 +7,60 @@
 /* =========================================
    THEME TOKENS – dark palette used for ALL
    ========================================= */
+/* =========================================
+   DAY THEME – bright, clean, professional
+   ========================================= */
 :root {
-  /* use the dark-mode palette as the only source of truth */
-  --primary:        #592fd5;
-  --primary-light:  #192962;
-  --secondary:      #6a582e;
-  --accent:         #ffd86b;
-  --accent-hover:   #ffea9a;
-  --bg-color:       #120f0a;
-  --bg-gradient:    linear-gradient(135deg, #120f0a 0%, #302615 100%);
-  --text-color:     #f7f2e4;
-  --card-bg:        #1c1811;
-  --header-bg:      linear-gradient(135deg, #1c1811 0%, #302615 100%);
-  --header-text:    #ffeaa0;
-  --gray:           #9a8d6b;
-  --border-color:   #4a3a1f;
-  --shadow:         0 4px 20px rgba(255, 216, 107, 0.10);
-  --shadow-hover:   0 8px 30px rgba(255, 216, 107, 0.20);
+  /* Brand + accents */
+  --primary:        #3944ff; /* royal blue, strong but modern */
+  --primary-light:  #dde3ff; /* pale blue for subtle fills */
+  --secondary:      #1f2937; /* deep neutral for headings */
+  --accent:         #f5b622; /* warm gold for CTAs / highlights */
+  --accent-hover:   #ffd86b; /* lighter gold on hover */
+
+  /* Surfaces & backgrounds */
+  --bg-color:       #f5f6fb; /* page background */
+  --bg-gradient:    linear-gradient(135deg, #f9fafb 0%, #e5edff 100%);
+  --card-bg:        #ffffff;
+  --header-bg:      linear-gradient(135deg, #ffffff 0%, #e5edff 100%);
+
+  /* Text */
+  --text-color:     #111827; /* primary text */
+  --header-text:    #111827;
+  --gray:           #6b7280; /* muted / secondary text */
+
+  /* Borders & shadows */
+  --border-color:   #d1d5db;
+  --shadow:         0 6px 24px rgba(15, 23, 42, 0.08);
+  --shadow-hover:   0 12px 40px rgba(15, 23, 42, 0.16);
 }
 
-/* keep this block ONLY to avoid surprises;
-   it re-applies the same values, so "dark" and "light"
-   look identical */
+/* =========================================
+   DARK THEME – warm, golden, “lit” highlights
+   ========================================= */
 [data-theme="dark"] {
-  --primary:        #302615;
-  --primary-light:  #4a3a1f;
-  --secondary:      #6a582e;
-  --accent:         #ffd86b;
-  --accent-hover:   #ffea9a;
-  --bg-color:       #211a10;
-  --bg-gradient:    linear-gradient(135deg, #120f0a 0%, #302615 100%);
-  --text-color:     #f2c959;
-  --card-bg:        #1c1811;
-  --header-bg:      linear-gradient(135deg, #1c1811 0%, #302615 100%);
-  --header-text:    #cbbe90;
-  --gray:           #9a8d6b;
-  --border-color:   #4a3a1f;
-  --shadow:         0 4px 20px rgba(255, 216, 107, 0.10);
-  --shadow-hover:   0 8px 30px rgba(255, 216, 107, 0.20);
+  /* Brand + accents */
+  --primary:        #f5b622; /* gold as primary in dark */
+  --primary-light:  #7c5b1a; /* deeper gold-brown for subtle fills */
+  --secondary:      #f97316; /* optional warm accent for icons/badges */
+  --accent:         #ffd977; /* bright gold for CTAs / highlights */
+  --accent-hover:   #ffeaa8;
+
+  /* Surfaces & backgrounds */
+  --bg-color:       #090806;
+  --bg-gradient:    linear-gradient(135deg, #050307 0%, #20140a 50%, #362417 100%);
+  --card-bg:        #171210;
+  --header-bg:      linear-gradient(135deg, #171210 0%, #2b1b10 60%, #3d2717 100%);
+
+  /* Text */
+  --text-color:     #f9efe1;  /* main copy */
+  --header-text:    #ffe9a8;  /* hero / section headings */
+  --gray:           #b0a28b;  /* muted text */
+
+  /* Borders & shadows */
+  --border-color:   #3f2a18;
+  --shadow:         0 8px 28px rgba(0, 0, 0, 0.6);
+  --shadow-hover:   0 14px 40px rgba(0, 0, 0, 0.85);
 }
 
 /* ----------  RESET / BASE  ---------- */
