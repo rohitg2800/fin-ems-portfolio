@@ -509,6 +509,14 @@ function main() {
   updateCartBadge();
   initMobileNav();
 
+    // ---- FORCE-RENAME "Portfolio" BUTTON TO "Main page" ----
+  document.querySelectorAll("a, button").forEach((el) => {
+    const text = el.textContent.trim();
+    if (text === "Portfolio") {
+      el.textContent = "Main page";
+    }
+  });
+  
   const themeToggle   = $("#themeToggle");
   const cartBtn       = $("#cartBtn");
   const cartClose     = $("#cartClose");
