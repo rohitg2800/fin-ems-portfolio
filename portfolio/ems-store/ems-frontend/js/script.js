@@ -159,7 +159,7 @@ const money = (n) =>
   });
 
 /* ---------- THEME (DAY / NIGHT) ---------- */
-/* CSS uses same dark-gold palette for both states; this just flips icon/text + stores choice */
+/* CSS uses the same dark-gold tokens; this mainly switches icon/text + stores choice */
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || "light";
@@ -329,9 +329,22 @@ function closeCart() {
 
 /* ---------- PRODUCT MODAL ---------- */
 
+/* SAFE: only opens if modal + backdrop exist on the page */
 function openProductModal(productId) {
   const p = PRODUCT_MAP[productId];
-  if (!p) return;
+  if (!p) {
+    showNotification("Product details not found.", "error");
+    return;
+  }
+
+  const modal    = $("#productModal");
+  const backdrop = $("#modalBackdrop");
+
+  // If the template isn't present on this page, don't lock scroll
+  if (!modal || !backdrop) {
+    showNotification("Detailed view isn’t available on this page yet.", "info");
+    return;
+  }
 
   const imgEl   = $("#modalProductImage");
   const nameEl  = $("#modalProductName");
@@ -375,20 +388,19 @@ function openProductModal(productId) {
       .join("");
   }
 
-  const modal = $("#productModal");
-  if (modal) modal.dataset.productId = productId;
-
-  $("#modalBackdrop")?.classList.add("active");
+  modal.dataset.productId = productId;
+  backdrop.classList.add("active");
   document.body.classList.add("no-scroll");
 }
 
-/* Backwards compatibility if some old HTML calls openModal(id) */
+/* Backwards compatibility for any old HTML calling openModal(id) */
 function openModal(productId) {
   openProductModal(productId);
 }
 
 function closeProductModal() {
-  $("#modalBackdrop")?.classList.remove("active");
+  const backdrop = $("#modalBackdrop");
+  if (backdrop) backdrop.classList.remove("active");
   document.body.classList.remove("no-scroll");
 }
 
@@ -493,15 +505,15 @@ function initMobileNav() {
 
 function main() {
   initTheme();
-  renderAllGrids();        // harmless if page has no product grid
+  renderAllGrids();        // harmless if a page has no product grid
   updateCartBadge();
   initMobileNav();
 
-  const themeToggle  = $("#themeToggle");
-  const cartBtn      = $("#cartBtn");
-  const cartClose    = $("#cartClose");
-  const cartBackdrop = $("#cartBackdrop");
-  const checkoutBtn  = $("#checkoutBtn");
+  const themeToggle   = $("#themeToggle");
+  const cartBtn       = $("#cartBtn");
+  const cartClose     = $("#cartClose");
+  const cartBackdrop  = $("#cartBackdrop");
+  const checkoutBtn   = $("#checkoutBtn");
   const modalBackdrop = $("#modalBackdrop");
   const modalClose    = $("#modalClose");
   const modalAdd      = $("#modalAddToCart");
