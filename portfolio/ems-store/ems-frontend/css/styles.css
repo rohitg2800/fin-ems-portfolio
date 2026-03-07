@@ -281,6 +281,35 @@ img{max-width:100%;display:block}
 .empty-cart{text-align:center;color:var(--gray);padding:60px 20px}
 .empty-cart i{font-size:60px;opacity:.45;margin-bottom:20px}
 
+
+/* Base chip style (already used for tags/pills) */
+.keyword-chip,
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* In light mode – subtle */
+.keyword-chip,
+.pill {
+  background: rgba(245, 182, 34, 0.08);
+  color: var(--secondary);
+  border: 1px solid rgba(245, 182, 34, 0.25);
+}
+
+/* In dark mode – shiny golden */
+[data-theme="dark"] .keyword-chip,
+[data-theme="dark"] .pill {
+  background: radial-gradient(circle at 0 0, #fff7db 0%, #f5b622 35%, #7c5b1a 100%);
+  color: #281708;
+  box-shadow: 0 0 0 1px rgba(255, 217, 119, 0.6),
+              0 0 14px rgba(255, 217, 119, 0.5);
+}
 /* ----------  NOTIFICATION  ---------- */
 @keyframes slideIn{from{opacity:0;transform:translateX(140px)}to{opacity:1;transform:none}}
 @keyframes slideOut{to{opacity:0;transform:translateX(120px)}}
@@ -302,47 +331,7 @@ img{max-width:100%;display:block}
 }
 
 /* ----------  RESPONSIVE  ---------- */
-/* ===== PRE-FOOTER BENEFITS STRIP ===== */
-.prefooter-benefits {
-  background: var(--bg-color);
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-  padding: 40px 0;
-}
-
-.benefit-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 30px;
-}
-
-.benefit-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  color: var(--text-color);
-}
-
-.benefit-item i {
-  font-size: 26px;
-  margin-top: 2px;
-  color: var(--primary);
-}
-
-.benefit-item h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.benefit-item p {
-  font-size: 14px;
-  color: var(--gray);
-}
-
-/* responsive layout */
-
-/* ===== PRE-FOOTER BENEFITS (BOXES) ===== */
+/* PRE-FOOTER BENEFITS (BOXES) */
 .prefooter-benefits {
   padding: 50px 0;
   background: var(--bg-color);
@@ -359,7 +348,7 @@ img{max-width:100%;display:block}
   background: var(--card-bg);
   border-radius: 16px;
   padding: 22px 20px;
-  border: 2px solid rgba(255, 216, 107, 0.65); /* gold highlight */
+  border: 2px solid rgba(255, 216, 107, 0.65);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -396,6 +385,18 @@ img{max-width:100%;display:block}
   font-size: 14px;
   color: var(--gray);
   line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+  .benefit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .benefit-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* responsive layout for smaller screens */
@@ -441,4 +442,57 @@ img{max-width:100%;display:block}
   .theme-toggle{width:40px;height:40px}
   .icon-btn{width:38px;height:38px;font-size:16px}
   .menu-toggle{width:36px;height:36px}
+}
+
+/* Best stethoscopes for EMTs strip */
+.emt-steth-cta {
+  padding: 32px 0 16px;
+}
+
+.emt-steth-head h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-color);
+}
+
+.emt-steth-head p {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+
+.emt-steth-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill-btn {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+  background: rgba(255, 217, 119, 0.06);
+  color: var(--text-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.pill-btn:hover {
+  background: var(--accent);
+  color: #1b1207;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .emt-steth-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
