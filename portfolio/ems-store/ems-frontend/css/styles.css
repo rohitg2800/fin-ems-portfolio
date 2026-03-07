@@ -12,14 +12,14 @@
    ========================================= */
 :root {
   /* Brand + accents */
-  --primary:        #3944ff; /* royal blue, strong but modern */
-  --primary-light:  #dde3ff; /* pale blue for subtle fills */
+  --primary:        #572403; /* royal blue, strong but modern */
+  --primary-light:  #a77b45; /* pale blue for subtle fills */
   --secondary:      #1f2937; /* deep neutral for headings */
-  --accent:         #f5b622; /* warm gold for CTAs / highlights */
+  --accent:         #bc9437; /* warm gold for CTAs / highlights */
   --accent-hover:   #ffd86b; /* lighter gold on hover */
 
   /* Surfaces & backgrounds */
-  --bg-color:       #f5f6fb; /* page background */
+  --bg-color:       #88556f; /* page background */
   --bg-gradient:    linear-gradient(135deg, #f9fafb 0%, #e5edff 100%);
   --card-bg:        #ffffff;
   --header-bg:      linear-gradient(135deg, #ffffff 0%, #e5edff 100%);
