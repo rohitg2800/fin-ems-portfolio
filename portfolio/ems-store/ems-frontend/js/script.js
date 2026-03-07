@@ -1,16 +1,15 @@
 /* =========================================
-   EMS Luxe Supply – script.js
-   Unified: Theme + Cart + Modals + Grids
+   EMS Luxe Supply – unified script.js
+   Works for: index, shop, stethoscopes, trust
    ========================================= */
 
 "use strict";
 
-/* ----------------- CONSTANTS ----------------- */
+/* ---------- CONSTANTS ---------- */
 const STORAGE_KEY = "ems_store_cart_v1";
 const THEME_KEY   = "ems_theme_preference";
 
-/* ----------------- PRODUCT DATA ----------------- */
-/* Extend or edit products as you like – structure must stay the same */
+/* ---------- PRODUCT DATA ---------- */
 const PRODUCTS = [
   {
     id: "steth-littmann-classic",
@@ -122,34 +121,33 @@ const PRODUCTS = [
       keywords: ["jump bag", "trauma pack"]
     }
   },
-  {
-    id: "tool-shears-ballistic",
-    name: "Ballistic-Rated Trauma Shears",
-    category: "Tools",
-    sku: "EMS-TOOL-SHEARS",
-    price: 19,
-    badge: "Essential Tool",
-    description:
-      "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
-    bullets: [
-      "Tungsten-carbide serrated edge",
-      "Blunt safety tip",
-      "Non-slip grip handles",
-      "Lifetime replacement warranty"
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1582719478250-b999f9f3030e?w=1200&auto=format&fit=crop&q=80",
-      alt: "Black trauma shears on a surface",
-      title: "Ballistic-rated trauma shears",
-      keywords: ["trauma shears", "cutting tool"]
-    }
+{
+  id: "tool-shears-ballistic",
+  name: "Ballistic-Rated Trauma Shears",
+  category: "Tools",
+  sku: "EMS-TOOL-SHEARS",
+  price: 19,
+  badge: "Essential Tool",
+  description:
+    "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
+  bullets: [
+    "Tungsten-carbide serrated edge",
+    "Blunt safety tip for patient protection",
+    "Non-slip grip handles",
+    "Lifetime replacement warranty"
+  ],
+  image: {
+    src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
+    alt: "Black and teal trauma shears on an orange background",
+    title: "Ballistic-rated trauma shears",
+    keywords: ["trauma shears", "cut clothing", "field tool"]
   }
+}
 ];
 
-/* Quick lookup by id */
 const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
 
-/* ----------------- HELPERS ----------------- */
+/* ---------- HELPERS ---------- */
 const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -160,8 +158,8 @@ const money = (n) =>
     minimumFractionDigits: 2
   });
 
-/* ----------------- THEME (DAY / NIGHT) ----------------- */
-/* CSS has unified tokens so visuals are identical in both states */
+/* ---------- THEME (DAY / NIGHT) ---------- */
+/* CSS uses same dark-gold palette for both states; this is just for icon/text + persistence */
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || "light";
@@ -180,16 +178,11 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-
-  if (icon) {
-    icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
-  }
-  if (text) {
-    text.textContent = theme === "dark" ? "Day Mode" : "Night Mode";
-  }
+  if (icon) icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+  if (text) text.textContent = theme === "dark" ? "Day Mode" : "Night Mode";
 }
 
-/* ----------------- CART STORAGE ----------------- */
+/* ---------- CART STORAGE ---------- */
 
 function loadCart() {
   try {
@@ -214,7 +207,7 @@ function cartTotal(cart) {
   }, 0);
 }
 
-/* ----------------- NOTIFICATION TOAST ----------------- */
+/* ---------- NOTIFICATIONS ---------- */
 
 function showNotification(message, type = "success") {
   $$(".notification").forEach(n => n.remove());
@@ -236,7 +229,7 @@ function showNotification(message, type = "success") {
   }, 2800);
 }
 
-/* ----------------- CART OPERATIONS ----------------- */
+/* ---------- CART OPERATIONS ---------- */
 
 function updateCartBadge() {
   const badge = $("#cartBadge");
@@ -273,7 +266,7 @@ function changeCartQty(productId, delta) {
   renderCart();
 }
 
-/* ----------------- CART DRAWER ----------------- */
+/* ---------- CART DRAWER ---------- */
 
 function renderCart() {
   const body = $("#cartItems");
@@ -334,7 +327,7 @@ function closeCart() {
   document.body.classList.remove("no-scroll");
 }
 
-/* ----------------- PRODUCT MODAL ----------------- */
+/* ---------- PRODUCT MODAL ---------- */
 
 function openProductModal(productId) {
   const p = PRODUCT_MAP[productId];
@@ -389,12 +382,17 @@ function openProductModal(productId) {
   document.body.classList.add("no-scroll");
 }
 
+/* backwards compatibility for old HTML using openModal(id) */
+function openModal(productId) {
+  openProductModal(productId);
+}
+
 function closeProductModal() {
   $("#modalBackdrop")?.classList.remove("active");
   document.body.classList.remove("no-scroll");
 }
 
-/* ----------------- PRODUCT GRID RENDER ----------------- */
+/* ---------- PRODUCT GRIDS ---------- */
 
 function productCardHTML(p) {
   const shortDesc =
@@ -456,14 +454,14 @@ function renderProductsInto(container, category = null) {
 }
 
 function renderAllGrids() {
-  renderProductsInto($("#productGrid"));                // generic grid
+  renderProductsInto($("#productGrid"));                 // generic grid (index / stethoscopes)
   renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
   renderProductsInto($("#gridKits"),          "Kits");
   renderProductsInto($("#gridApparel"),       "Apparel");
   renderProductsInto($("#gridTools"),         "Tools");
 }
 
-/* ----------------- MOBILE NAV ----------------- */
+/* ---------- MOBILE NAV ---------- */
 
 function initMobileNav() {
   const toggle = $("#menuToggle");
@@ -490,11 +488,11 @@ function initMobileNav() {
   });
 }
 
-/* ----------------- INIT ----------------- */
+/* ---------- INIT ---------- */
 
 function main() {
   initTheme();
-  renderAllGrids();      // harmless on pages without grids
+  renderAllGrids();          // safe on pages without grids
   updateCartBadge();
   initMobileNav();
 
@@ -502,7 +500,7 @@ function main() {
   const themeToggle = $("#themeToggle");
   if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
 
-  /* Cart buttons */
+  /* Cart */
   const cartBtn      = $("#cartBtn");
   const cartClose    = $("#cartClose");
   const cartBackdrop = $("#cartBackdrop");
@@ -522,7 +520,7 @@ function main() {
     }
   });
 
-  /* Modal buttons */
+  /* Modal */
   const modalBackdrop = $("#modalBackdrop");
   const modalClose    = $("#modalClose");
   const modalAdd      = $("#modalAddToCart");
