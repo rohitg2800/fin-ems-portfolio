@@ -26,13 +26,13 @@
 
   /* Text */
   --text-color:     #111827; /* primary text */
-  --header-text:    #111827;
+  --header-text:    #652e72;
   --gray:           #6b7280; /* muted / secondary text */
 
   /* Borders & shadows */
   --border-color:   #d1d5db;
-  --shadow:         0 6px 24px rgba(15, 23, 42, 0.08);
-  --shadow-hover:   0 12px 40px rgba(15, 23, 42, 0.16);
+  --shadow:         0 6px 24px rgb(158, 154, 25);
+  --shadow-hover:   0 12px 40px rgb(77, 30, 93);
 }
 
 /* =========================================
