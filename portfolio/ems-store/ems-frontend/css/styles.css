@@ -25,12 +25,12 @@
   --header-bg:      linear-gradient(135deg, #ffffff 0%, #e5edff 100%);
 
   /* Text */
-  --text-color:     #111827; /* primary text */
+  --text-color:     #7f8dac; /* primary text */
   --header-text:    #652e72;
   --gray:           #6b7280; /* muted / secondary text */
 
   /* Borders & shadows */
-  --border-color:   #a94080;
+  --border-color:   #d6c080;
   --shadow:         0 6px 24px rgb(158, 154, 25);
   --shadow-hover:   0 12px 40px rgb(77, 30, 93);
 }
