@@ -1,335 +1,557 @@
 /* =========================================
-   EMS Luxe Supply — full script.js
-   Refreshed March 2026
+   EMS Luxe Supply – script.js
+   Unified: Theme + Cart + Modals + Grids
    ========================================= */
 
-const STORAGE_KEY = 'ems_store_cart_v1';
-const THEME_KEY   = 'ems_theme_preference';
+"use strict";
 
-/* ----------  PRODUCT DATA  ---------- */
+/* ----------------- CONSTANTS ----------------- */
+const STORAGE_KEY = "ems_store_cart_v1";
+const THEME_KEY   = "ems_theme_preference";
+
+/* ----------------- PRODUCT DATA ----------------- */
+/* Extend or edit products as you like – structure must stay the same */
 const PRODUCTS = [
   {
-    id: 'steth-littmann-classic',
-    name: 'Classic Acoustic Stethoscope',
-    category: 'Stethoscopes',
-    sku: 'EMS-STETH-CLASSIC',
+    id: "steth-littmann-classic",
+    name: "Classic Acoustic Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-CLASSIC",
     price: 109,
-    badge: 'Best for Students',
+    badge: "Best for Students",
     description:
-      'The Classic III delivers exceptional acoustic performance for general physical assessment. Trusted worldwide.',
+      "Everyday acoustic performance for EMTs and students. Tunable diaphragm, reliable build, and field-ready comfort.",
     bullets: [
-      'Dual-head chestpiece with tunable diaphragm',
-      'Latex-free, next-gen tubing',
-      'Comfort-seal ear tips',
-      '5-year manufacturer warranty'
+      "Dual-head chestpiece with tunable diaphragm",
+      "Latex-free, durable tubing",
+      "Soft-seal ear tips for comfort",
+      "5-year manufacturer warranty"
     ],
     image: {
-      src: 'https://images.unsplash.com/photo-1655313719493-16ebe4906441?w=1200&auto=format&fit=crop&q=80',
-      alt: 'Classic acoustic stethoscope for EMT students and paramedics',
-      title: 'Professional EMS acoustic stethoscope',
-      keywords: ['stethoscope', 'EMS equipment', 'paramedic gear', 'medical diagnostics']
+      src: "https://images.unsplash.com/photo-1655313719493-16ebe4906441?w=1200&auto=format&fit=crop&q=80",
+      alt: "Classic acoustic stethoscope on a clinical desk",
+      title: "Classic acoustic stethoscope",
+      keywords: ["stethoscope", "EMT gear", "student ready"]
     }
   },
   {
-    id: 'steth-electronic',
-    name: 'Electronic Noise-Reducing Stethoscope',
-    category: 'Stethoscopes',
-    sku: 'EMS-STETH-ELECTRO',
+    id: "steth-electronic",
+    name: "Electronic Noise-Reducing Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-ELECTRO",
     price: 289,
-    badge: 'Critical Care',
+    badge: "Critical Care",
     description:
-      'Active noise reduction amplifies heart and lung sounds up to 40× — perfect for loud environments.',
+      "Electronic stethoscope with active noise reduction to cut through sirens and engine noise in the field.",
     bullets: [
-      'Active ambient-noise suppression',
-      '4 volume settings',
-      '50 h battery on one charge',
-      'Field case included'
+      "Active ambient-noise suppression",
+      "Up to 40× sound amplification",
+      "4 volume profiles",
+      "Protective field case included"
     ],
     image: {
-      src: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&auto=format&fit=crop&q=80',
-      alt: 'Electronic stethoscope for critical-care EMS diagnostics',
-      title: 'Noise-reducing electronic stethoscope',
-      keywords: ['electronic stethoscope', 'critical care tools', 'ems diagnostics']
+      src: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&auto=format&fit=crop&q=80",
+      alt: "Electronic stethoscope on a desk",
+      title: "Electronic critical-care stethoscope",
+      keywords: ["electronic stethoscope", "critical care", "noise cancel"]
     }
   },
-  /* …additional products here (unchanged structure)… */
+  {
+    id: "kit-student-starter",
+    name: "EMT / Paramedic Student Starter Kit",
+    category: "Kits",
+    sku: "EMS-KIT-STUDENT",
+    price: 59,
+    badge: "Student Bundle",
+    description:
+      "Starter kit aligned with EMT / paramedic coursework: shears, penlight, tape, pupil gauge, and pocket tools.",
+    bullets: [
+      "Built around NREMT skills checklists",
+      "Includes trauma shears and penlight",
+      "Compact belt-ready pouch",
+      "Ideal for labs and ride-alongs"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&auto=format&fit=crop&q=80",
+      alt: "Compact EMS student starter kit",
+      title: "Student starter trauma kit",
+      keywords: ["student kit", "emt starter", "training gear"]
+    }
+  },
+  {
+    id: "pants-5in1-tactical",
+    name: "5-in-1 Tactical EMS Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-5IN1",
+    price: 79,
+    badge: "New Arrival",
+    description:
+      "Reinforced tactical pants with shears, radio, and glove pockets. Built for long shifts and rough calls.",
+    bullets: [
+      "Ripstop fabric with DWR coating",
+      "Reinforced knees and seat",
+      "Dedicated shears & radio pockets",
+      "Wrinkle-resistant, machine washable"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=1200&auto=format&fit=crop&q=80",
+      alt: "Tactical EMS pants hanging on a rack",
+      title: "5-in-1 tactical EMS pants",
+      keywords: ["tactical pants", "ems apparel"]
+    }
+  },
+  {
+    id: "pack-response-backpack",
+    name: "Rapid Response Jump Backpack",
+    category: "Kits",
+    sku: "EMS-PACK-JUMP",
+    price: 189,
+    badge: "Agency Favorite",
+    description:
+      "Modular EMS backpack with internal organizers for airways, IV, and trauma gear. Built for first-due rigs.",
+    bullets: [
+      "High-visibility reflective trim",
+      "MOLLE webbing and side handles",
+      "Internal color-coded dividers",
+      "Abrasion-resistant base panel"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=1200&auto=format&fit=crop&q=80",
+      alt: "Red EMS trauma backpack on the floor",
+      title: "Rapid response EMS backpack",
+      keywords: ["jump bag", "trauma pack"]
+    }
+  },
+  {
+    id: "tool-shears-ballistic",
+    name: "Ballistic-Rated Trauma Shears",
+    category: "Tools",
+    sku: "EMS-TOOL-SHEARS",
+    price: 19,
+    badge: "Essential Tool",
+    description:
+      "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
+    bullets: [
+      "Tungsten-carbide serrated edge",
+      "Blunt safety tip",
+      "Non-slip grip handles",
+      "Lifetime replacement warranty"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1582719478250-b999f9f3030e?w=1200&auto=format&fit=crop&q=80",
+      alt: "Black trauma shears on a surface",
+      title: "Ballistic-rated trauma shears",
+      keywords: ["trauma shears", "cutting tool"]
+    }
+  }
 ];
 
-/* ----------  QUICK LOOKUP MAP  ---------- */
-const PRODUCT_MAP = Object.fromEntries(
-  PRODUCTS.map(p => [p.id, p])
-);
+/* Quick lookup by id */
+const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
 
-/* ----------  UTILITY  ---------- */
-const $ = selector => document.querySelector(selector);
-const money = n =>
-  (parseFloat(n) || 0).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
+/* ----------------- HELPERS ----------------- */
+const $  = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+const money = (n) =>
+  (parseFloat(n) || 0).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: 2
   });
 
-/* ----------  THEME  ---------- */
+/* ----------------- THEME (DAY / NIGHT) ----------------- */
+/* CSS has unified tokens so visuals are identical in both states */
+
 function initTheme() {
-  const saved = localStorage.getItem(THEME_KEY) || 'light';
-  document.documentElement.dataset.theme = saved;
+  const saved = localStorage.getItem(THEME_KEY) || "light";
+  document.documentElement.setAttribute("data-theme", saved);
   updateThemeUI(saved);
 }
 
 function toggleTheme() {
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem(THEME_KEY, next);
   updateThemeUI(next);
 }
 
 function updateThemeUI(theme) {
-  $('#themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-  $('#themeText').textContent = theme === 'dark' ? 'Day Mode' : 'Night Mode';
+  const icon = $("#themeIcon");
+  const text = $("#themeText");
+
+  if (icon) {
+    icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+  }
+  if (text) {
+    text.textContent = theme === "dark" ? "Day Mode" : "Night Mode";
+  }
 }
 
-/* ----------  CART HELPERS  ---------- */
-const loadCart   = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-const saveCart   = cart => localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-const cartCount  = cart => Object.values(cart).reduce((n, q) => n + q, 0);
-const cartTotal  = cart =>
-  Object.entries(cart).reduce((t, [id, q]) => t + (PRODUCT_MAP[id]?.price || 0) * q, 0);
+/* ----------------- CART STORAGE ----------------- */
 
-function updateCartBadge() {
-  const c = cartCount(loadCart());
-  const badge = $('#cartBadge');
-  badge.textContent = c;
-  badge.style.display = c ? 'flex' : 'none';
+function loadCart() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch {
+    return {};
+  }
 }
 
-/* ----------  NOTIFY  ---------- */
-function notify(msg, type = 'success') {
-  document.querySelectorAll('.notification').forEach(n => n.remove());
-  const box = document.createElement('div');
-  box.className = `notification ${type}`;
-  box.innerHTML = `<i class="fa-solid ${{
-    success: 'fa-check-circle',
-    error:   'fa-exclamation-circle',
-    info:    'fa-info-circle'
-  }[type] || 'fa-info-circle'}"></i><span>${msg}</span>`;
-  document.body.append(box);
+function saveCart(cart) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+}
+
+function cartCount(cart) {
+  return Object.values(cart).reduce((sum, q) => sum + (parseInt(q, 10) || 0), 0);
+}
+
+function cartTotal(cart) {
+  return Object.entries(cart).reduce((total, [id, qty]) => {
+    const p = PRODUCT_MAP[id];
+    return p ? total + p.price * (parseInt(qty, 10) || 0) : total;
+  }, 0);
+}
+
+/* ----------------- NOTIFICATION TOAST ----------------- */
+
+function showNotification(message, type = "success") {
+  $$(".notification").forEach(n => n.remove());
+
+  const icons = {
+    success: "fa-check-circle",
+    error: "fa-exclamation-circle",
+    info: "fa-info-circle"
+  };
+
+  const n = document.createElement("div");
+  n.className = `notification ${type}`;
+  n.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
+  document.body.appendChild(n);
+
   setTimeout(() => {
-    box.style.animation = 'slideOut .3s forwards';
-    setTimeout(() => box.remove(), 290);
+    n.style.animation = "slideOut 0.3s forwards";
+    setTimeout(() => n.remove(), 260);
   }, 2800);
 }
 
-/* ----------  CART ACTIONS  ---------- */
-function addToCart(id, qty = 1) {
-  const cart = loadCart();
-  cart[id] = (cart[id] || 0) + qty;
-  saveCart(cart);
-  updateCartBadge();
-  notify('Added to cart', 'success');
+/* ----------------- CART OPERATIONS ----------------- */
+
+function updateCartBadge() {
+  const badge = $("#cartBadge");
+  if (!badge) return;
+  const count = cartCount(loadCart());
+  badge.textContent = count;
+  badge.style.display = count ? "flex" : "none";
 }
 
-function updateQty(id, delta) {
+function addToCart(productId, quantity = 1) {
   const cart = loadCart();
-  if (!cart[id]) return;
-  cart[id] += delta;
-  if (cart[id] <= 0) delete cart[id];
+  cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
+  saveCart(cart);
+  updateCartBadge();
+  showNotification("Added to cart", "success");
+}
+
+function removeFromCart(productId) {
+  const cart = loadCart();
+  delete cart[productId];
+  saveCart(cart);
+  updateCartBadge();
+  renderCart();
+  showNotification("Item removed", "info");
+}
+
+function changeCartQty(productId, delta) {
+  const cart = loadCart();
+  if (!cart[productId]) return;
+  cart[productId] += delta;
+  if (cart[productId] <= 0) delete cart[productId];
   saveCart(cart);
   updateCartBadge();
   renderCart();
 }
 
-function removeItem(id) {
-  const cart = loadCart();
-  delete cart[id];
-  saveCart(cart);
-  updateCartBadge();
-  renderCart();
-}
+/* ----------------- CART DRAWER ----------------- */
 
-/* ----------  RENDER CART  ---------- */
 function renderCart() {
-  const el  = $('#cartItems');
-  const tot = $('#cartTotal');
-  const cart = loadCart();
-  const list = Object.entries(cart);
+  const body = $("#cartItems");
+  const totalEl = $("#cartTotal");
+  if (!body || !totalEl) return;
 
-  if (!list.length) {
-    el.innerHTML = `<div class="empty-cart">
-      <i class="fa-solid fa-cart-arrow-down"></i><p>Your cart is empty</p>
-    </div>`;
-    tot.textContent = money(0);
+  const cart = loadCart();
+  const entries = Object.entries(cart);
+
+  if (!entries.length) {
+    body.innerHTML = `
+      <div class="empty-cart">
+        <i class="fa-solid fa-cart-arrow-down"></i>
+        <p>Your cart is empty</p>
+      </div>
+    `;
+    totalEl.textContent = money(0);
     return;
   }
 
-  el.innerHTML = list.map(([id, q]) => {
+  body.innerHTML = entries.map(([id, qty]) => {
     const p = PRODUCT_MAP[id];
-    return `<div class="cart-item">
-      <img src="${p.image.src}" alt="${p.image.alt}" loading="lazy">
-      <div class="cart-item-details">
-        <div class="cart-item-title">${p.name}</div>
-        <div class="cart-item-price">${money(p.price)}</div>
-        <div class="cart-item-quantity">
-          <button onclick="updateQty('${id}',-1)">−</button>
-          <span>${q}</span>
-          <button onclick="updateQty('${id}',1)">+</button>
-          <button class="cart-item-remove" onclick="removeItem('${id}')">
-            <i class="fa-solid fa-trash"></i>
+    if (!p) return "";
+    const img = p.image?.src || "";
+    const alt = p.image?.alt || p.name;
+    return `
+      <div class="cart-item">
+        <img src="${img}" alt="${alt}" loading="lazy">
+        <div class="cart-item-details">
+          <div class="cart-item-title">${p.name}</div>
+          <div class="cart-item-price">${money(p.price)}</div>
+          <div class="cart-item-quantity">
+            <button onclick="changeCartQty('${id}', -1)">−</button>
+            <span>${qty}</span>
+            <button onclick="changeCartQty('${id}', 1)">+</button>
+            <button class="cart-item-remove" onclick="removeFromCart('${id}')">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  totalEl.textContent = money(cartTotal(cart));
+}
+
+function openCart() {
+  $("#cartBackdrop")?.classList.add("active");
+  $("#cartDrawer")?.classList.add("active");
+  document.body.classList.add("no-scroll");
+  renderCart();
+}
+
+function closeCart() {
+  $("#cartBackdrop")?.classList.remove("active");
+  $("#cartDrawer")?.classList.remove("active");
+  document.body.classList.remove("no-scroll");
+}
+
+/* ----------------- PRODUCT MODAL ----------------- */
+
+function openProductModal(productId) {
+  const p = PRODUCT_MAP[productId];
+  if (!p) return;
+
+  const imgEl   = $("#modalProductImage");
+  const nameEl  = $("#modalProductName");
+  const priceEl = $("#modalProductPrice");
+  const skuEl   = $("#modalProductSku");
+  const descEl  = $("#modalProductDescription");
+  const badgeEl = $("#modalProductBadge");
+  const featsEl = $("#modalProductFeatures");
+  const kwEl    = $("#modalProductKeywords");
+
+  const imgSrc   = p.image?.src || "";
+  const imgAlt   = p.image?.alt || p.name;
+  const imgTitle = p.image?.title || p.name;
+
+  if (imgEl) {
+    imgEl.src   = imgSrc;
+    imgEl.alt   = imgAlt;
+    imgEl.title = imgTitle;
+  }
+  if (nameEl)  nameEl.textContent  = p.name;
+  if (priceEl) priceEl.textContent = money(p.price);
+  if (skuEl)   skuEl.textContent   = `SKU: ${p.sku}`;
+  if (descEl)  descEl.textContent  = p.description;
+
+  if (badgeEl) {
+    if (p.badge) {
+      badgeEl.textContent = p.badge;
+      badgeEl.style.display = "inline-block";
+    } else {
+      badgeEl.style.display = "none";
+    }
+  }
+
+  if (featsEl) {
+    featsEl.innerHTML = p.bullets.map(b => `<li>${b}</li>`).join("");
+  }
+
+  if (kwEl && p.image?.keywords) {
+    kwEl.innerHTML = p.image.keywords
+      .map(k => `<span class="keyword-chip">${k}</span>`)
+      .join("");
+  }
+
+  const modal = $("#productModal");
+  if (modal) modal.dataset.productId = productId;
+
+  $("#modalBackdrop")?.classList.add("active");
+  document.body.classList.add("no-scroll");
+}
+
+function closeProductModal() {
+  $("#modalBackdrop")?.classList.remove("active");
+  document.body.classList.remove("no-scroll");
+}
+
+/* ----------------- PRODUCT GRID RENDER ----------------- */
+
+function productCardHTML(p) {
+  const shortDesc =
+    p.description.length > 130
+      ? p.description.slice(0, 128) + "…"
+      : p.description;
+
+  const imgSrc   = p.image?.src || "";
+  const imgAlt   = p.image?.alt || p.name;
+  const imgTitle = p.image?.title || p.name;
+  const keywords = p.image?.keywords || [];
+
+  return `
+    <article class="card">
+      <div class="card-top">
+        <img src="${imgSrc}" alt="${imgAlt}" title="${imgTitle}"
+             class="product-img" loading="lazy">
+        <div class="tag">${p.category}</div>
+      </div>
+      <div class="card-inner">
+        <h3 class="card-title">${p.name}</h3>
+        <p class="card-text">${shortDesc}</p>
+        ${
+          keywords.length
+            ? `<div class="keyword-row">
+                 ${keywords.map(k => `<span class="keyword-chip">${k}</span>`).join("")}
+               </div>`
+            : ""
+        }
+        <ul class="small feature-list-compact">
+          ${p.bullets.slice(0, 3).map(b => `<li>${b}</li>`).join("")}
+        </ul>
+        <div class="price-row">
+          <div>
+            <div class="price">${money(p.price)}</div>
+            <div class="small">${p.sku}</div>
+          </div>
+          ${p.badge ? `<div class="pill">${p.badge}</div>` : "<div></div>"}
+        </div>
+        <div class="card-actions">
+          <button class="btn secondary" onclick="openProductModal('${p.id}')">
+            <i class="fa-solid fa-eye"></i> Details
+          </button>
+          <button class="btn" onclick="addToCart('${p.id}', 1)">
+            <i class="fa-solid fa-cart-plus"></i> Add
           </button>
         </div>
       </div>
-    </div>`;
-  }).join('');
-
-  tot.textContent = money(cartTotal(cart));
+    </article>
+  `;
 }
 
-/* ----------  CART DRAWER  ---------- */
-function openCart() {
-  $('#cartBackdrop').classList.add('active');
-  $('#cartDrawer').classList.add('active');
-  document.body.classList.add('no-scroll');
-  renderCart();
-}
-function closeCart() {
-  $('#cartBackdrop').classList.remove('active');
-  $('#cartDrawer').classList.remove('active');
-  document.body.classList.remove('no-scroll');
+function renderProductsInto(container, category = null) {
+  if (!container) return;
+  const list = category
+    ? PRODUCTS.filter(p => p.category === category)
+    : PRODUCTS;
+  container.innerHTML = list.map(productCardHTML).join("");
 }
 
-/* ----------  PRODUCT MODAL  ---------- */
-function openModal(id) {
-  const p   = PRODUCT_MAP[id];
-  const mod = $('#productModal');
-  mod.dataset.productId = id;
-
-  $('#modalProductImage').src   = p.image.src;
-  $('#modalProductImage').alt   = p.image.alt;
-  $('#modalProductImage').title = p.image.title;
-  $('#modalProductName').textContent  = p.name;
-  $('#modalProductPrice').textContent = money(p.price);
-  $('#modalProductSku').textContent   = `SKU: ${p.sku}`;
-  $('#modalProductDescription').textContent = p.description;
-  $('#modalProductBadge').textContent = p.badge || '';
-  $('#modalProductBadge').style.display = p.badge ? 'inline-block' : 'none';
-  $('#modalProductFeatures').innerHTML =
-    p.bullets.map(b => `<li>${b}</li>`).join('');
-  $('#modalProductKeywords').innerHTML =
-    p.image.keywords.map(k => `<span class="keyword-chip">${k}</span>`).join('');
-
-  $('#modalBackdrop').classList.add('active');
-  document.body.classList.add('no-scroll');
-}
-function closeModal() {
-  $('#modalBackdrop').classList.remove('active');
-  document.body.classList.remove('no-scroll');
+function renderAllGrids() {
+  renderProductsInto($("#productGrid"));                // generic grid
+  renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
+  renderProductsInto($("#gridKits"),          "Kits");
+  renderProductsInto($("#gridApparel"),       "Apparel");
+  renderProductsInto($("#gridTools"),         "Tools");
 }
 
-/* ----------  RENDER PRODUCTS  ---------- */
-function productCard(p) {
-  const short = p.description.length > 120 ? p.description.slice(0,118) + '…' : p.description;
-  return `<article class="card">
-    <div class="card-top">
-      <img src="${p.image.src}" alt="${p.image.alt}" title="${p.image.title}"
-           class="product-img" loading="lazy">
-      <div class="tag">${p.category}</div>
-    </div>
-    <div class="card-inner">
-      <h3 class="card-title">${p.name}</h3>
-      <p class="card-text">${short}</p>
-      <div class="keyword-row">
-        ${p.image.keywords.map(k => `<span class="keyword-chip">${k}</span>`).join('')}
-      </div>
-      <ul class="small feature-list-compact">
-        ${p.bullets.slice(0,3).map(b => `<li>${b}</li>`).join('')}
-      </ul>
-      <div class="price-row">
-        <div>
-          <div class="price">${money(p.price)}</div>
-          <div class="small">${p.sku}</div>
-        </div>
-        ${p.badge ? `<div class="pill">${p.badge}</div>` : '<div></div>'}
-      </div>
-      <div class="card-actions">
-        <button class="btn secondary" onclick="openModal('${p.id}')">
-          <i class="fa-solid fa-eye"></i> Details
-        </button>
-        <button class="btn" onclick="addToCart('${p.id}',1)">
-          <i class="fa-solid fa-cart-plus"></i> Add
-        </button>
-      </div>
-    </div>
-  </article>`;
-}
+/* ----------------- MOBILE NAV ----------------- */
 
-function renderInto(mount, cat = null) {
-  if (!mount) return;
-  const list = cat ? PRODUCTS.filter(p => p.category === cat) : PRODUCTS;
-  mount.innerHTML = list.map(productCard).join('');
-}
+function initMobileNav() {
+  const toggle = $("#menuToggle");
+  const nav    = document.querySelector(".nav");
+  if (!toggle || !nav) return;
 
-function renderAll() {
-  renderInto($('#productGrid'));
-  renderInto($('#gridStethoscopes'), 'Stethoscopes');
-  renderInto($('#gridKits'),        'Kits');
-  renderInto($('#gridApparel'),     'Apparel');
-  renderInto($('#gridTools'),       'Tools');
-}
-
-/* ----------  NAV MOBILE  ---------- */
-function initNav() {
-  const navBtn = $('#menuToggle');
-  const nav    = $('.nav');
-  if (!navBtn || !nav) return;
-
-  navBtn.addEventListener('click', () => {
-    nav.classList.toggle('nav-open');
-    navBtn.classList.toggle('active');
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("nav-open");
+    toggle.classList.toggle("active");
   });
-  nav.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      nav.classList.remove('nav-open');
-      navBtn.classList.remove('active');
-    })
-  );
-  window.addEventListener('resize', () => {
-    if (innerWidth > 768) {
-      nav.classList.remove('nav-open');
-      navBtn.classList.remove('active');
+
+  nav.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      nav.classList.remove("nav-open");
+      toggle.classList.remove("active");
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      nav.classList.remove("nav-open");
+      toggle.classList.remove("active");
     }
   });
 }
 
-/* ----------  INIT  ---------- */
-function init() {
+/* ----------------- INIT ----------------- */
+
+function main() {
   initTheme();
-  renderAll();
+  renderAllGrids();      // harmless on pages without grids
   updateCartBadge();
-  initNav();
+  initMobileNav();
 
-  /* bind buttons */
-  $('#cartBtn')     ?.addEventListener('click', openCart);
-  $('#cartClose')   ?.addEventListener('click', closeCart);
-  $('#cartBackdrop')?.addEventListener('click', e => e.target.id === 'cartBackdrop' && closeCart());
-  $('#checkoutBtn') ?.addEventListener('click', () => {
+  /* Theme button */
+  const themeToggle = $("#themeToggle");
+  if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
+
+  /* Cart buttons */
+  const cartBtn      = $("#cartBtn");
+  const cartClose    = $("#cartClose");
+  const cartBackdrop = $("#cartBackdrop");
+  const checkoutBtn  = $("#checkoutBtn");
+
+  if (cartBtn)      cartBtn.addEventListener("click", openCart);
+  if (cartClose)    cartClose.addEventListener("click", closeCart);
+  if (cartBackdrop) cartBackdrop.addEventListener("click", (e) => {
+    if (e.target === cartBackdrop) closeCart();
+  });
+  if (checkoutBtn)  checkoutBtn.addEventListener("click", () => {
     const cart = loadCart();
-    notify(Object.keys(cart).length ? `Checkout – ${money(cartTotal(cart))}` : 'Cart is empty', Object.keys(cart).length ? 'success' : 'error');
+    if (!Object.keys(cart).length) {
+      showNotification("Cart is empty", "error");
+    } else {
+      showNotification(`Checkout — ${money(cartTotal(cart))}`, "success");
+    }
   });
 
-  $('#themeToggle') ?.addEventListener('click', toggleTheme);
+  /* Modal buttons */
+  const modalBackdrop = $("#modalBackdrop");
+  const modalClose    = $("#modalClose");
+  const modalAdd      = $("#modalAddToCart");
 
-  $('#modalBackdrop')?.addEventListener('click', e => e.target.id === 'modalBackdrop' && closeModal());
-  $('#modalClose')   ?.addEventListener('click', closeModal);
-  $('#modalAddToCart')?.addEventListener('click', () => {
-    addToCart($('#productModal').dataset.productId,1);
-    closeModal();
-    setTimeout(openCart, 250);
+  if (modalBackdrop) modalBackdrop.addEventListener("click", (e) => {
+    if (e.target === modalBackdrop) closeProductModal();
+  });
+  if (modalClose) modalClose.addEventListener("click", closeProductModal);
+  if (modalAdd)   modalAdd.addEventListener("click", () => {
+    const modal = $("#productModal");
+    if (!modal) return;
+    const id = modal.dataset.productId;
+    if (!id) return;
+    addToCart(id, 1);
+    closeProductModal();
+    setTimeout(openCart, 220);
   });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeModal(); closeCart(); }
+  /* ESC key closes modal & cart */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeProductModal();
+      closeCart();
+    }
   });
 }
 
-document.readyState === 'loading'
-  ? document.addEventListener('DOMContentLoaded', init)
-  : init();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", main);
+} else {
+  main();
+}

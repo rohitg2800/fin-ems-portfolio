@@ -4,52 +4,54 @@
    ========================================= */
 
 /* ----------  COLOR TOKENS  ---------- */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
-
-/* ----------  COLOR TOKENS  ---------- */
+/* =========================================
+   THEME TOKENS – dark palette used for ALL
+   ========================================= */
 :root {
-  --primary:        #584827;   /* dark gold-brown */
-  --primary-light:  #786437;
-  --secondary:      #a88c4a;
-  --accent:         #f2d27a;   /* light gold */
-  --accent-hover:   #ffe395;
-  --bg-color:       #fdf8ec;
-  --bg-gradient:    linear-gradient(135deg,#fffdf6 0%,#f7ebd1 100%);
-  --text-color:     #3f331c;
-  --card-bg:        #ffffff;
-  --header-bg:      linear-gradient(135deg,#584827 0%,#786437 100%);
-  --header-text:    #fffef8;
-  --gray:           #8c7c5d;
-  --border-color:   #e7dbb9;
-  --shadow:         0 4px 20px rgba(88,72,39,.15);
-  --shadow-hover:   0 8px 30px rgba(88,72,39,.25);
-  --danger:         #df4c4c;
-  --success:        #56c37d;
+  /* use the dark-mode palette as the only source of truth */
+  --primary:        #592fd5;
+  --primary-light:  #192962;
+  --secondary:      #6a582e;
+  --accent:         #ffd86b;
+  --accent-hover:   #ffea9a;
+  --bg-color:       #120f0a;
+  --bg-gradient:    linear-gradient(135deg, #120f0a 0%, #302615 100%);
+  --text-color:     #f7f2e4;
+  --card-bg:        #1c1811;
+  --header-bg:      linear-gradient(135deg, #1c1811 0%, #302615 100%);
+  --header-text:    #ffeaa0;
+  --gray:           #9a8d6b;
+  --border-color:   #4a3a1f;
+  --shadow:         0 4px 20px rgba(255, 216, 107, 0.10);
+  --shadow-hover:   0 8px 30px rgba(255, 216, 107, 0.20);
 }
 
+/* keep this block ONLY to avoid surprises;
+   it re-applies the same values, so "dark" and "light"
+   look identical */
 [data-theme="dark"] {
-  --primary:      #302615;
-  --primary-light:#4a3a1f;
-  --secondary:    #6a582e;
-  --accent:       #ffd86b;
-  --accent-hover: #ffea9a;
-  --bg-color:     #120f0a;
-  --bg-gradient:  linear-gradient(135deg,#120f0a 0%,#302615 100%);
-  --text-color:   #f7f2e4;
-  --card-bg:      #1c1811;
-  --header-bg:    linear-gradient(135deg,#1c1811 0%,#302615 100%);
-  --header-text:  #ffeaa0;
-  --gray:         #9a8d6b;
-  --border-color: #4a3a1f;
-  --shadow:       0 4px 20px rgba(255,216,107,.10);
-  --shadow-hover: 0 8px 30px rgba(255,216,107,.20);
+  --primary:        #302615;
+  --primary-light:  #4a3a1f;
+  --secondary:      #6a582e;
+  --accent:         #ffd86b;
+  --accent-hover:   #ffea9a;
+  --bg-color:       #211a10;
+  --bg-gradient:    linear-gradient(135deg, #120f0a 0%, #302615 100%);
+  --text-color:     #f2c959;
+  --card-bg:        #1c1811;
+  --header-bg:      linear-gradient(135deg, #1c1811 0%, #302615 100%);
+  --header-text:    #cbbe90;
+  --gray:           #9a8d6b;
+  --border-color:   #4a3a1f;
+  --shadow:         0 4px 20px rgba(255, 216, 107, 0.10);
+  --shadow-hover:   0 8px 30px rgba(255, 216, 107, 0.20);
 }
 
 /* ----------  RESET / BASE  ---------- */
-*{margin:0;padding:0;box-sizing:border-box}
+* {margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Poppins',sans-serif;
+  font-family:'Comic Neue','Cinzel',cursive,sans-serif;
   background:var(--bg-gradient);
   color:var(--text-color);
   line-height:1.6;
@@ -284,6 +286,57 @@ img{max-width:100%;display:block}
 }
 
 /* ----------  RESPONSIVE  ---------- */
+/* ===== PRE-FOOTER BENEFITS STRIP ===== */
+.prefooter-benefits {
+  background: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 40px 0;
+}
+
+.benefit-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  color: var(--text-color);
+}
+
+.benefit-item i {
+  font-size: 26px;
+  margin-top: 2px;
+  color: var(--primary);
+}
+
+.benefit-item h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.benefit-item p {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+/* responsive layout */
+@media (max-width: 900px) {
+  .benefit-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .benefit-row {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width:768px){
   .menu-toggle{display:block;width:40px;height:40px}
   .nav{display:none;width:100%;order:4;gap:0}
