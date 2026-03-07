@@ -27,10 +27,11 @@ const PRODUCTS = [
       "5-year manufacturer warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1655313719493-16ebe4906441?auto=format&fit=crop&w=1200&q=80",
-      alt: "Classic acoustic stethoscope on a clinical desk",
-      title: "Classic acoustic stethoscope",
-      keywords: ["stethoscope", "EMT gear", "student ready"]
+      // Stethoscope + textbooks (Unsplash download endpoint)
+      src: "https://unsplash.com/photos/vT-Hkq0_FBU/download?force=true",
+      alt: "Stethoscope lying beside a stack of medical textbooks and a pencil",
+      title: "Student-ready classic stethoscope",
+      keywords: ["EMT student", "nursing textbooks", "study gear"]
     }
   },
   {
@@ -39,20 +40,21 @@ const PRODUCTS = [
     category: "Stethoscopes",
     sku: "EMS-STETH-ELECTRO",
     price: 289,
-    badge: "Critical Care",
+    badge: "Best in Loud Environments",
     description:
       "Electronic stethoscope with active noise reduction to cut through sirens and engine noise in the field.",
     bullets: [
       "Active ambient-noise suppression",
       "Up to 40× sound amplification",
-      "4 volume profiles",
+      "Four volume profiles tuned for loud rigs",
       "Protective field case included"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=80",
-      alt: "Electronic stethoscope on a desk",
-      title: "Electronic critical-care stethoscope",
-      keywords: ["electronic stethoscope", "critical care", "noise cancel"]
+      // Ambulance interior (Unsplash download endpoint)
+      src: "https://unsplash.com/photos/Gj6Vd4uYETI/download?force=true",
+      alt: "Interior of an EMS helicopter with stretcher and monitors",
+      title: "Stethoscope tuned for loud EMS environments",
+      keywords: ["ambulance", "helicopter EMS", "loud environment"]
     }
   },
   {
@@ -63,7 +65,7 @@ const PRODUCTS = [
     price: 59,
     badge: "Student Bundle",
     description:
-      "Starter kit aligned with EMT / paramedic coursework: shears, penlight, tape, pupil gauge, and pocket tools.",
+      "Starter kit aligned with EMT and paramedic coursework: shears, penlight, tape, pupil gauge, and pocket tools.",
     bullets: [
       "Built around NREMT skills checklists",
       "Includes trauma shears and penlight",
@@ -71,10 +73,11 @@ const PRODUCTS = [
       "Ideal for labs and ride-alongs"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
-      alt: "Compact EMS student starter kit",
-      title: "Student starter trauma kit",
-      keywords: ["student kit", "emt starter", "training gear"]
+      // Comfort / long-shift vibe (Unsplash download endpoint)
+      src: "https://unsplash.com/photos/E1_RW3HIbUw/download?force=true",
+      alt: "Stethoscope with glass of water, thermometer and tablets on a white desk",
+      title: "Comfort that lasts through long EMS shifts",
+      keywords: ["comfort", "long shift", "hydration", "self-care"]
     }
   },
   {
@@ -94,9 +97,9 @@ const PRODUCTS = [
     ],
     image: {
       src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
-      alt: "Tactical EMS pants hanging on a rack",
+      alt: "Dark tactical pants hanging on a clothing rack",
       title: "5-in-1 tactical EMS pants",
-      keywords: ["tactical pants", "ems apparel"]
+      keywords: ["tactical pants", "ems uniform", "duty wear"]
     }
   },
   {
@@ -116,9 +119,9 @@ const PRODUCTS = [
     ],
     image: {
       src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
-      alt: "Red EMS trauma backpack on the floor",
+      alt: "Red EMS trauma backpack on a station floor",
       title: "Rapid response EMS backpack",
-      keywords: ["jump bag", "trauma pack"]
+      keywords: ["jump bag", "trauma pack", "response bag"]
     }
   },
   {
@@ -159,7 +162,6 @@ const money = (n) =>
   });
 
 /* ---------- THEME (DAY / NIGHT) ---------- */
-/* CSS uses the same dark-gold tokens; this mainly switches icon/text + stores choice */
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || "light";
@@ -328,8 +330,7 @@ function closeCart() {
 }
 
 /* ---------- PRODUCT MODAL ---------- */
-
-/* SAFE: only opens if modal + backdrop exist on the page */
+/* Safe: only opens if modal + backdrop exist */
 function openProductModal(productId) {
   const p = PRODUCT_MAP[productId];
   if (!p) {
@@ -340,7 +341,6 @@ function openProductModal(productId) {
   const modal    = $("#productModal");
   const backdrop = $("#modalBackdrop");
 
-  // If the template isn't present on this page, don't lock scroll
   if (!modal || !backdrop) {
     showNotification("Detailed view isn’t available on this page yet.", "info");
     return;
@@ -393,7 +393,7 @@ function openProductModal(productId) {
   document.body.classList.add("no-scroll");
 }
 
-/* Backwards compatibility for any old HTML calling openModal(id) */
+/* Backwards compatibility */
 function openModal(productId) {
   openProductModal(productId);
 }
@@ -466,7 +466,6 @@ function renderProductsInto(container, category = null) {
 }
 
 function renderAllGrids() {
-  // Safe to call even if some containers don't exist on a page
   renderProductsInto($("#productGrid"));
   renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
   renderProductsInto($("#gridKits"),          "Kits");
@@ -505,18 +504,10 @@ function initMobileNav() {
 
 function main() {
   initTheme();
-  renderAllGrids();        // harmless if a page has no product grid
+  renderAllGrids();
   updateCartBadge();
   initMobileNav();
 
-    // ---- FORCE-RENAME "Portfolio" BUTTON TO "Main page" ----
-  document.querySelectorAll("a, button").forEach((el) => {
-    const text = el.textContent.trim();
-    if (text === "Portfolio") {
-      el.textContent = "Main page";
-    }
-  });
-  
   const themeToggle   = $("#themeToggle");
   const cartBtn       = $("#cartBtn");
   const cartClose     = $("#cartClose");
@@ -554,6 +545,21 @@ function main() {
     addToCart(id, 1);
     closeProductModal();
     setTimeout(openCart, 220);
+  });
+
+  // "Best stethoscopes for EMTs" pill buttons
+  $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      if (target === "students") {
+        openProductModal("steth-littmann-classic");
+      } else if (target === "loud") {
+        openProductModal("steth-electronic");
+      } else if (target === "comfort") {
+        // comfort focus – reusing classic with comfort-heavy messaging
+        openProductModal("steth-littmann-classic");
+      }
+    });
   });
 
   document.addEventListener("keydown", (e) => {
