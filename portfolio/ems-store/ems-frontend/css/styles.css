@@ -30,7 +30,7 @@
   --gray:           #6b7280; /* muted / secondary text */
 
   /* Borders & shadows */
-  --border-color:   #d1d5db;
+  --border-color:   #a94080;
   --shadow:         0 6px 24px rgb(158, 154, 25);
   --shadow-hover:   0 12px 40px rgb(77, 30, 93);
 }
@@ -53,12 +53,12 @@
   --header-bg:      linear-gradient(135deg, #171210 0%, #2b1b10 60%, #3d2717 100%);
 
   /* Text */
-  --text-color:     #f9efe1;  /* main copy */
+  --text-color:     #8b8f54;  /* main copy */
   --header-text:    #ffe9a8;  /* hero / section headings */
   --gray:           #b0a28b;  /* muted text */
 
   /* Borders & shadows */
-  --border-color:   #3f2a18;
+  --border-color:   #3f2718;
   --shadow:         0 8px 28px rgba(0, 0, 0, 0.6);
   --shadow-hover:   0 14px 40px rgba(0, 0, 0, 0.85);
 }
