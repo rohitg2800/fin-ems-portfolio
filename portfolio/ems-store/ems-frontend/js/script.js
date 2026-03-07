@@ -1,6 +1,6 @@
 /* =========================================
-   EMS Luxe Supply – unified script.js
-   Works for: index, shop, stethoscopes, trust
+   EMS Luxe Supply – Global script.js
+   Works for: index, shop, stethoscopes, trust, etc.
    ========================================= */
 
 "use strict";
@@ -27,7 +27,7 @@ const PRODUCTS = [
       "5-year manufacturer warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1655313719493-16ebe4906441?w=1200&auto=format&fit=crop&q=80",
+      src: "https://images.unsplash.com/photo-1655313719493-16ebe4906441?auto=format&fit=crop&w=1200&q=80",
       alt: "Classic acoustic stethoscope on a clinical desk",
       title: "Classic acoustic stethoscope",
       keywords: ["stethoscope", "EMT gear", "student ready"]
@@ -49,7 +49,7 @@ const PRODUCTS = [
       "Protective field case included"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&auto=format&fit=crop&q=80",
+      src: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=80",
       alt: "Electronic stethoscope on a desk",
       title: "Electronic critical-care stethoscope",
       keywords: ["electronic stethoscope", "critical care", "noise cancel"]
@@ -71,7 +71,7 @@ const PRODUCTS = [
       "Ideal for labs and ride-alongs"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&auto=format&fit=crop&q=80",
+      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
       alt: "Compact EMS student starter kit",
       title: "Student starter trauma kit",
       keywords: ["student kit", "emt starter", "training gear"]
@@ -93,7 +93,7 @@ const PRODUCTS = [
       "Wrinkle-resistant, machine washable"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=1200&auto=format&fit=crop&q=80",
+      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
       alt: "Tactical EMS pants hanging on a rack",
       title: "5-in-1 tactical EMS pants",
       keywords: ["tactical pants", "ems apparel"]
@@ -115,34 +115,34 @@ const PRODUCTS = [
       "Abrasion-resistant base panel"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=1200&auto=format&fit=crop&q=80",
+      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
       alt: "Red EMS trauma backpack on the floor",
       title: "Rapid response EMS backpack",
       keywords: ["jump bag", "trauma pack"]
     }
   },
-{
-  id: "tool-shears-ballistic",
-  name: "Ballistic-Rated Trauma Shears",
-  category: "Tools",
-  sku: "EMS-TOOL-SHEARS",
-  price: 19,
-  badge: "Essential Tool",
-  description:
-    "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
-  bullets: [
-    "Tungsten-carbide serrated edge",
-    "Blunt safety tip for patient protection",
-    "Non-slip grip handles",
-    "Lifetime replacement warranty"
-  ],
-  image: {
-    src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
-    alt: "Black and teal trauma shears on an orange background",
-    title: "Ballistic-rated trauma shears",
-    keywords: ["trauma shears", "cut clothing", "field tool"]
+  {
+    id: "tool-shears-ballistic",
+    name: "Ballistic-Rated Trauma Shears",
+    category: "Tools",
+    sku: "EMS-TOOL-SHEARS",
+    price: 19,
+    badge: "Essential Tool",
+    description:
+      "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
+    bullets: [
+      "Tungsten-carbide serrated edge",
+      "Blunt safety tip for patient protection",
+      "Non-slip grip handles",
+      "Lifetime replacement warranty"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
+      alt: "Black and teal trauma shears on an orange background",
+      title: "Ballistic-rated trauma shears",
+      keywords: ["trauma shears", "cut clothing", "field tool"]
+    }
   }
-}
 ];
 
 const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
@@ -159,7 +159,7 @@ const money = (n) =>
   });
 
 /* ---------- THEME (DAY / NIGHT) ---------- */
-/* CSS uses same dark-gold palette for both states; this is just for icon/text + persistence */
+/* CSS uses same dark-gold palette for both states; this just flips icon/text + stores choice */
 
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || "light";
@@ -214,8 +214,8 @@ function showNotification(message, type = "success") {
 
   const icons = {
     success: "fa-check-circle",
-    error: "fa-exclamation-circle",
-    info: "fa-info-circle"
+    error:   "fa-exclamation-circle",
+    info:    "fa-info-circle"
   };
 
   const n = document.createElement("div");
@@ -269,11 +269,11 @@ function changeCartQty(productId, delta) {
 /* ---------- CART DRAWER ---------- */
 
 function renderCart() {
-  const body = $("#cartItems");
+  const body    = $("#cartItems");
   const totalEl = $("#cartTotal");
   if (!body || !totalEl) return;
 
-  const cart = loadCart();
+  const cart    = loadCart();
   const entries = Object.entries(cart);
 
   if (!entries.length) {
@@ -382,7 +382,7 @@ function openProductModal(productId) {
   document.body.classList.add("no-scroll");
 }
 
-/* backwards compatibility for old HTML using openModal(id) */
+/* Backwards compatibility if some old HTML calls openModal(id) */
 function openModal(productId) {
   openProductModal(productId);
 }
@@ -392,7 +392,7 @@ function closeProductModal() {
   document.body.classList.remove("no-scroll");
 }
 
-/* ---------- PRODUCT GRIDS ---------- */
+/* ---------- PRODUCT GRID RENDERING ---------- */
 
 function productCardHTML(p) {
   const shortDesc =
@@ -454,7 +454,8 @@ function renderProductsInto(container, category = null) {
 }
 
 function renderAllGrids() {
-  renderProductsInto($("#productGrid"));                 // generic grid (index / stethoscopes)
+  // Safe to call even if some containers don't exist on a page
+  renderProductsInto($("#productGrid"));
   renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
   renderProductsInto($("#gridKits"),          "Kits");
   renderProductsInto($("#gridApparel"),       "Apparel");
@@ -492,19 +493,20 @@ function initMobileNav() {
 
 function main() {
   initTheme();
-  renderAllGrids();          // safe on pages without grids
+  renderAllGrids();        // harmless if page has no product grid
   updateCartBadge();
   initMobileNav();
 
-  /* Theme button */
-  const themeToggle = $("#themeToggle");
-  if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-
-  /* Cart */
+  const themeToggle  = $("#themeToggle");
   const cartBtn      = $("#cartBtn");
   const cartClose    = $("#cartClose");
   const cartBackdrop = $("#cartBackdrop");
   const checkoutBtn  = $("#checkoutBtn");
+  const modalBackdrop = $("#modalBackdrop");
+  const modalClose    = $("#modalClose");
+  const modalAdd      = $("#modalAddToCart");
+
+  if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
 
   if (cartBtn)      cartBtn.addEventListener("click", openCart);
   if (cartClose)    cartClose.addEventListener("click", closeCart);
@@ -520,16 +522,11 @@ function main() {
     }
   });
 
-  /* Modal */
-  const modalBackdrop = $("#modalBackdrop");
-  const modalClose    = $("#modalClose");
-  const modalAdd      = $("#modalAddToCart");
-
   if (modalBackdrop) modalBackdrop.addEventListener("click", (e) => {
     if (e.target === modalBackdrop) closeProductModal();
   });
-  if (modalClose) modalClose.addEventListener("click", closeProductModal);
-  if (modalAdd)   modalAdd.addEventListener("click", () => {
+  if (modalClose)   modalClose.addEventListener("click", closeProductModal);
+  if (modalAdd)     modalAdd.addEventListener("click", () => {
     const modal = $("#productModal");
     if (!modal) return;
     const id = modal.dataset.productId;
@@ -539,7 +536,6 @@ function main() {
     setTimeout(openCart, 220);
   });
 
-  /* ESC key closes modal & cart */
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeProductModal();
