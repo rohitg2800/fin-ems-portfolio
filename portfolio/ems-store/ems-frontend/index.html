@@ -1,67 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Page-specific title -->
-  <title>EMS Luxe Supply — Shop</title>
+  <!-- SEO Meta Tags -->
+  <title>EMS Luxe Supply — Premium Field Gear for Medical Professionals</title>
+  <meta name="description" content="Professional-grade EMS equipment trusted by paramedics worldwide. Shop tactical gear, stethoscopes, and medical supplies built by medics, for medics.">
+  <meta name="keywords" content="EMS gear, paramedic equipment, tactical medical supplies, best stethoscope for EMTs, Littmann stethoscope, medical field gear">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="EMS Luxe Supply — Premium Field Gear">
+  <meta property="og:description" content="Professional-grade equipment trusted by EMTs and paramedics worldwide.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://placehold.co/1200x630/572403/ffd977?text=EMS+Luxe+Supply">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
 
-  <!-- Unified font: Poppins (no cursive anywhere) -->
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="css/styles.css" as="style">
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
   <!-- Icons -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Site styles -->
+  <!-- Site Styles -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <!-- ========== NAV ========== -->
+
+<body data-theme="light">
+  <!-- ========== NAVIGATION ========== -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
+      <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
-      <a class="brand" href="index.html">
-        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+      <a class="brand" href="index.html" aria-label="EMS Luxe Supply Home">
+        <div class="brand-mark" aria-hidden="true">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
         <div>
           <div class="brand-title">EMS LUXE SUPPLY</div>
           <div class="fine">PREMIUM FIELD GEAR</div>
         </div>
       </a>
 
-      <nav class="nav">
+      <nav class="nav" id="mainNav" aria-label="Main navigation">
         <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
         <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
         <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust & Quality</a>
-
+        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust</a>
       </nav>
 
-      <!-- Theme Toggle Button -->
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <i class="fa-solid fa-moon" id="themeIcon"></i>
-            <span id="themeText">Night Mode</span>
+      <!-- Theme Toggle -->
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+        <span id="themeText">Dark</span>
       </button>
 
-      <button id="cartBtn" class="icon-btn" aria-label="Cart">
+      <!-- Cart Button -->
+      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart, 0 items">
         <i class="fa-solid fa-cart-shopping"></i>
-        <span id="cartBadge" class="badge">0</span>
+        <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
       </button>
     </div>
   </header>
 
-  <!-- ========== HERO ========== -->
+  <!-- ========== HERO SECTION ========== -->
   <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-card hero-main">
-          <h1 class="hero-title">Premium EMS Gear, Perfected</h1>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-card">
+          <h1 id="hero-title" class="hero-title">Premium EMS Gear, Perfected</h1>
           <p class="hero-sub">Professional-grade equipment trusted by medics worldwide. Quality that performs when it matters most.</p>
           <a class="btn" href="shop.html">
             <i class="fa-solid fa-bag-shopping"></i> Shop Essentials
@@ -70,14 +88,12 @@
       </div>
     </section>
 
-  
-
-    <!-- Product Preview Grid -->
-    <section>
+    <!-- ========== FEATURED PRODUCTS ========== -->
+    <section aria-labelledby="featured-title">
       <div class="container">
-        <h2 class="section-title">Featured Products</h2>
+        <h2 id="featured-title" class="section-title">Featured Products</h2>
         <p class="section-sub">Handpicked essentials for the modern EMS professional</p>
-        <div id="productGrid" class="grid"></div>
+        <div id="productGrid" class="grid" role="list"></div>
         <div style="text-align: center; margin-top: 30px;">
           <a class="btn" href="shop.html">
             <i class="fa-solid fa-store"></i> View Full Catalog
@@ -86,125 +102,190 @@
       </div>
     </section>
 
-    <!-- Why Choose Us Section -->
-    <section style="background: var(--bg-color); padding: 60px 0; margin-top: 60px;">
+    <!-- ========== WHY CHOOSE US ========== -->
+    <section style="background: var(--bg-color); padding: 60px 0; margin-top: 60px;" aria-labelledby="why-us-title">
       <div class="container">
-        <h2 class="section-title">Why EMS Professionals Choose Us</h2>
+        <h2 id="why-us-title" class="section-title">Why EMS Professionals Choose Us</h2>
         <p class="section-sub">Built by medics, for medics</p>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-          <div class="card" style="text-align: center; padding: 40px 30px;">
-            <i class="fa-solid fa-user-doctor" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;"></i>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+          
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-user-doctor" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
             <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">Medic-Approved</h3>
             <p style="color: var(--gray);">Every product tested and approved by working EMS professionals in real-world conditions.</p>
-          </div>
-          <div class="card" style="text-align: center; padding: 40px 30px;">
-            <i class="fa-solid fa-medal" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;"></i>
+          </article>
+
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-medal" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
             <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">Premium Quality</h3>
             <p style="color: var(--gray);">We only stock equipment that meets the highest standards for durability and performance.</p>
-          </div>
-          <div class="card" style="text-align: center; padding: 40px 30px;">
-            <i class="fa-solid fa-hand-holding-dollar" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;"></i>
+          </article>
+
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-hand-holding-dollar" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
             <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">Best Value</h3>
-            <p style="color: var(--gray);">Competitive pricing without compromising on quality. Bulk discounts available.</p>
-          </div>
+            <p style="color: var(--gray);">Competitive pricing without compromising on quality. Bulk discounts available for departments.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PRE-FOOTER BENEFITS ========== -->
+    <section class="prefooter-benefits" aria-labelledby="benefits-title">
+      <div class="container">
+        <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
+        <div class="benefit-grid">
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3>Fast Shipping</h3>
+            <p>Free shipping on orders over $50. Same-day dispatch available for in-stock items.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3>Quality Guaranteed</h3>
+            <p>All products field-tested by working EMS professionals. Lifetime warranty on select items.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <h3>24/7 Support</h3>
+            <p>Expert help whenever you need it. Live chat, phone, and email support available.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <h3>Easy Returns</h3>
+            <p>30-day hassle-free returns on non-sterile items. Your satisfaction is guaranteed.</p>
+          </article>
+
         </div>
       </div>
     </section>
   </main>
-  <!-- ===== PRE-FOOTER BENEFITS (BOXES) ===== -->
-<section class="prefooter-benefits">
-  <div class="container">
 
-    <div class="benefit-grid">
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-truck-fast"></i>
-        </div>
-        <h3>Fast Shipping</h3>
-        <p>Free shipping on orders over $50. Same-day dispatch available.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <h3>Quality Guaranteed</h3>
-        <p>All products field-tested by working EMS professionals.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h3>24/7 Support</h3>
-        <p>Expert help whenever you need it. We’re here for you.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-rotate-left"></i>
-        </div>
-        <h3>Easy Returns</h3>
-        <p>30-day hassle-free returns. Your satisfaction guaranteed.</p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<footer>
-  <!-- existing footer content -->
-</footer>
   <!-- ========== FOOTER ========== -->
-  <footer>
+  <footer style="background: var(--header-bg); padding: 60px 0 20px; border-top: 3px solid var(--accent);">
     <div class="container">
-      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px;">
+        
+        <!-- Brand Column -->
         <div style="flex: 1; min-width: 250px;">
-          <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
-          <p style="color: var(--gray); font-size: 14px; line-height: 1.8;">
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif; font-size: 18px;">
+            <i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY
+          </h4>
+          <p style="color: var(--gray); font-size: 14px; line-height: 1.8; margin-bottom: 20px;">
             Premium field-ready gear for medical professionals. 
-            Trusted by EMTs, paramedics, and first responders worldwide.
+            Trusted by EMTs, paramedics, and first responders worldwide since 2020.
           </p>
-          <div style="margin-top: 20px; display: flex; gap: 15px;">
-            <a href="#" style="font-size: 20px;"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" style="font-size: 20px;"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" style="font-size: 20px;"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" style="font-size: 20px;"><i class="fa-brands fa-linkedin"></i></a>
+          <div style="display: flex; gap: 15px;">
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Facebook">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Twitter">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="LinkedIn">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
           </div>
         </div>
+
+        <!-- Quick Links -->
         <div style="flex: 1; min-width: 200px;">
-          <h4>Quick Links</h4>
-          <p><a href="index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
-          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
-          <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> About Us</a></p>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> Contact</a></p>
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Quick Links</h4>
+          <p style="margin: 8px 0;">
+            <a href="index.html" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Home
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="shop.html" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Shop All
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="stethoscopes.html" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Stethoscopes
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="trust.html" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Trust & Quality
+            </a>
+          </p>
         </div>
+
+        <!-- Customer Service -->
         <div style="flex: 1; min-width: 200px;">
-          <h4>Customer Service</h4>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> Shipping Info</a></p>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> Returns Policy</a></p>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> Size Guide</a></p>
-          <p><a href="#"><i class="fa-solid fa-chevron-right"></i> FAQ</a></p>
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Customer Service</h4>
+          <p style="margin: 8px 0;">
+            <a href="#" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Shipping Info
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="#" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Returns Policy
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="#" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Size Guide
+            </a>
+          </p>
+          <p style="margin: 8px 0;">
+            <a href="#" style="color: var(--text-color); text-decoration: none; transition: 0.3s;">
+              <i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> FAQ
+            </a>
+          </p>
         </div>
+
+        <!-- Contact -->
         <div style="flex: 1; min-width: 250px;">
-          <h4>Contact Us</h4>
-          <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
-          <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
-          <p><i class="fa-solid fa-location-dot"></i> 1001, MLT</p>
-          <p><i class="fa-solid fa-clock"></i> Mon-Fri: 8AM-8PM EST</p>
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Contact Us</h4>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-envelope" style="color: var(--accent); width: 20px;"></i> support@emsluxe.com
+          </p>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-phone" style="color: var(--accent); width: 20px;"></i> 1-800-EMS-LUXE
+          </p>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-location-dot" style="color: var(--accent); width: 20px;"></i> 1001 Medical Lane, Trauma City
+          </p>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-clock" style="color: var(--accent); width: 20px;"></i> Mon-Fri: 8AM-8PM EST
+          </p>
         </div>
+
       </div>
-      <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; color: var(--gray); font-size: 14px;">
-        <p>© 2026 EMS Luxe Supply. All rights reserved. | Built for EMS Professionals</p>
+
+      <!-- Copyright -->
+      <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; color: var(--gray); font-size: 13px;">
+        <p>© 2026 EMS Luxe Supply. All rights reserved. | Built for EMS Professionals | 
+          <a href="#" style="color: var(--accent); text-decoration: none;">Privacy Policy</a> | 
+          <a href="#" style="color: var(--accent); text-decoration: none;">Terms of Service</a>
+        </p>
       </div>
     </div>
   </footer>
 
-  <!-- ========== CART ========== -->
+  <!-- ========== CART DRAWER ========== -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
-  <aside id="cartDrawer" class="drawer" aria-label="Cart" role="dialog">
+  <aside id="cartDrawer" class="drawer" aria-label="Shopping cart" role="dialog" aria-modal="true">
     <div class="drawer-header">
       <div class="drawer-title">
         <i class="fa-solid fa-cart-shopping"></i> Your Cart
@@ -213,7 +294,12 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <div class="drawer-body" id="cartItems"></div>
+    <div class="drawer-body" id="cartItems">
+      <div class="empty-cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Your cart is empty</p>
+      </div>
+    </div>
     <div class="drawer-footer">
       <div class="total-row">
         <span>Total</span>
@@ -225,27 +311,33 @@
     </div>
   </aside>
 
-  <!-- ========== PRODUCT DETAILS MODAL ========== -->
-  <div id="modalBackdrop" class="modal-backdrop">
+  <!-- ========== PRODUCT MODAL ========== -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
     <div class="modal" id="productModal">
       <div class="modal-header">
-        <h2 class="modal-title" id="modalProductName">Product Name</h2>
-        <button class="modal-close" id="modalClose" aria-label="Close modal">
+        <h2 class="modal-title" id="modalProductName">Product Details</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close product details">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
         <div class="modal-product">
-          <img id="modalProductImage" src="" alt="Product Image">
+          <img id="modalProductImage" src="https://placehold.co/800x600/572403/ffd977?text=Product" alt="Product image" loading="lazy">
           <div class="modal-product-info">
-            <div class="pill" id="modalProductBadge" style="display: none;"></div>
+            <div class="pill" id="modalProductBadge" style="display: none;">New</div>
             <div class="price" id="modalProductPrice">$0.00</div>
-            <div class="sku" id="modalProductSku">SKU: ---</div>
-            <p class="description" id="modalProductDescription">Product description will appear here...</p>
-            <div class="features">
-              <h4><i class="fa-solid fa-star"></i> Key Features</h4>
-              <ul id="modalProductFeatures">
-                <!-- Features will be populated by JS -->
+            <p style="font-size: 13px; color: var(--gray); margin-bottom: 15px;">
+              SKU: <span id="modalProductSku">---</span>
+            </p>
+            <p id="modalProductDescription" style="color: var(--text-color); line-height: 1.7; margin-bottom: 25px;">
+              Product description will appear here...
+            </p>
+            <div>
+              <h4 style="color: var(--accent); margin-bottom: 12px; font-family: 'Cinzel', serif;">
+                <i class="fa-solid fa-star"></i> Key Features
+              </h4>
+              <ul id="modalProductFeatures" style="color: var(--text-color); line-height: 1.8; padding-left: 20px;">
+                <!-- Features populated by JS -->
               </ul>
             </div>
             <div class="modal-product-actions">
@@ -263,11 +355,11 @@
   </div>
 
   <!-- Loading Spinner -->
-  <div id="loading">
+  <div id="loading" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; align-items: center; justify-content: center;">
     <div class="spinner"></div>
   </div>
 
   <!-- JavaScript -->
-  <script src="js/script.js" defer></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

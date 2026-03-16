@@ -1,13 +1,13 @@
 /* =========================================
    EMS Luxe Supply – Global script.js
-   Works for: index, shop, stethoscopes, trust, etc.
+   Production-ready: all pages
    ========================================= */
 
 "use strict";
 
 /* ---------- CONSTANTS ---------- */
 const STORAGE_KEY = "ems_store_cart_v1";
-const THEME_KEY   = "ems_theme_preference";
+const THEME_KEY = "ems_theme_preference";
 
 /* ---------- PRODUCT DATA ---------- */
 const PRODUCTS = [
@@ -27,9 +27,8 @@ const PRODUCTS = [
       "5-year manufacturer warranty"
     ],
     image: {
-      // Stethoscope + textbooks (Unsplash download endpoint)
-      src: "https://unsplash.com/photos/vT-Hkq0_FBU/download?force=true",
-      alt: "Stethoscope lying beside a stack of medical textbooks and a pencil",
+      src: "https://images.unsplash.com/photo-1584467541268-b040f83be3fd?auto=format&fit=crop&w=1200&q=80",
+      alt: "Stethoscope lying beside medical textbooks and study materials",
       title: "Student-ready classic stethoscope",
       keywords: ["EMT student", "nursing textbooks", "study gear"]
     }
@@ -50,9 +49,8 @@ const PRODUCTS = [
       "Protective field case included"
     ],
     image: {
-      // Ambulance interior (Unsplash download endpoint)
-      src: "https://unsplash.com/photos/Gj6Vd4uYETI/download?force=true",
-      alt: "Interior of an EMS helicopter with stretcher and monitors",
+      src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1200&q=80",
+      alt: "Interior of an EMS helicopter with medical equipment",
       title: "Stethoscope tuned for loud EMS environments",
       keywords: ["ambulance", "helicopter EMS", "loud environment"]
     }
@@ -73,11 +71,10 @@ const PRODUCTS = [
       "Ideal for labs and ride-alongs"
     ],
     image: {
-      // Comfort / long-shift vibe (Unsplash download endpoint)
-      src: "https://unsplash.com/photos/E1_RW3HIbUw/download?force=true",
-      alt: "Stethoscope with glass of water, thermometer and tablets on a white desk",
-      title: "Comfort that lasts through long EMS shifts",
-      keywords: ["comfort", "long shift", "hydration", "self-care"]
+      src: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1200&q=80",
+      alt: "Medical kit with stethoscope, scissors, and diagnostic tools",
+      title: "Complete student starter kit for EMT training",
+      keywords: ["student kit", "EMT training", "starter bundle"]
     }
   },
   {
@@ -119,7 +116,7 @@ const PRODUCTS = [
     ],
     image: {
       src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
-      alt: "Red EMS trauma backpack on a station floor",
+      alt: "Red EMS trauma backpack on station floor",
       title: "Rapid response EMS backpack",
       keywords: ["jump bag", "trauma pack", "response bag"]
     }
@@ -141,17 +138,17 @@ const PRODUCTS = [
     ],
     image: {
       src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
-      alt: "Black and teal trauma shears on an orange background",
+      alt: "Black and teal trauma shears on orange background",
       title: "Ballistic-rated trauma shears",
       keywords: ["trauma shears", "cut clothing", "field tool"]
     }
   }
 ];
 
-const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
 
 /* ---------- HELPERS ---------- */
-const $  = (sel) => document.querySelector(sel);
+const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 const money = (n) =>
@@ -164,14 +161,18 @@ const money = (n) =>
 /* ---------- THEME (DAY / NIGHT) ---------- */
 
 function initTheme() {
-  const saved = localStorage.getItem(THEME_KEY) || "light";
-  document.documentElement.setAttribute("data-theme", saved);
-  updateThemeUI(saved);
+  const saved = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = saved || (prefersDark ? "dark" : "light");
+  
+  document.documentElement.setAttribute("data-theme", theme);
+  updateThemeUI(theme);
 }
 
 function toggleTheme() {
   const current = document.documentElement.getAttribute("data-theme") || "light";
   const next = current === "dark" ? "light" : "dark";
+  
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem(THEME_KEY, next);
   updateThemeUI(next);
@@ -180,22 +181,38 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-  if (icon) icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
-  if (text) text.textContent = theme === "dark" ? "Day Mode" : "Night Mode";
+  const toggle = $("#themeToggle");
+  
+  if (icon) {
+    icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+  }
+  if (text) {
+    text.textContent = theme === "dark" ? "Light" : "Dark";
+  }
+  if (toggle) {
+    toggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`);
+  }
 }
 
 /* ---------- CART STORAGE ---------- */
 
 function loadCart() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  } catch {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : {};
+  } catch (err) {
+    console.warn("Cart load failed:", err);
     return {};
   }
 }
 
 function saveCart(cart) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+  } catch (err) {
+    console.error("Cart save failed:", err);
+    showNotification("Unable to save cart", "error");
+  }
 }
 
 function cartCount(cart) {
@@ -212,57 +229,87 @@ function cartTotal(cart) {
 /* ---------- NOTIFICATIONS ---------- */
 
 function showNotification(message, type = "success") {
-  $$(".notification").forEach(n => n.remove());
+  // Remove existing notifications
+  $$(".notification").forEach((n) => n.remove());
 
   const icons = {
     success: "fa-check-circle",
-    error:   "fa-exclamation-circle",
-    info:    "fa-info-circle"
+    error: "fa-exclamation-circle",
+    info: "fa-info-circle"
   };
 
-  const n = document.createElement("div");
-  n.className = `notification ${type}`;
-  n.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
-  document.body.appendChild(n);
+  const notification = document.createElement("div");
+  notification.className = `notification ${type}`;
+  notification.setAttribute("role", "alert");
+  notification.setAttribute("aria-live", "polite");
+  notification.innerHTML = `
+    <i class="fa-solid ${icons[type] || icons.info}" aria-hidden="true"></i>
+    <span>${message}</span>
+  `;
+  
+  document.body.appendChild(notification);
 
+  // Auto-dismiss
   setTimeout(() => {
-    n.style.animation = "slideOut 0.3s forwards";
-    setTimeout(() => n.remove(), 260);
-  }, 2800);
+    notification.style.animation = "slideOut 0.3s forwards";
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
 }
 
 /* ---------- CART OPERATIONS ---------- */
 
 function updateCartBadge() {
   const badge = $("#cartBadge");
+  const cartBtn = $("#cartBtn");
   if (!badge) return;
+  
   const count = cartCount(loadCart());
   badge.textContent = count;
-  badge.style.display = count ? "flex" : "none";
+  badge.style.display = count > 0 ? "flex" : "none";
+  
+  if (cartBtn) {
+    cartBtn.setAttribute("aria-label", `Shopping cart, ${count} item${count !== 1 ? "s" : ""}`);
+  }
 }
 
 function addToCart(productId, quantity = 1) {
+  const product = PRODUCT_MAP[productId];
+  if (!product) {
+    showNotification("Product not found", "error");
+    return;
+  }
+  
   const cart = loadCart();
   cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
   saveCart(cart);
   updateCartBadge();
-  showNotification("Added to cart", "success");
+  showNotification(`${product.name} added to cart`, "success");
 }
 
 function removeFromCart(productId) {
   const cart = loadCart();
+  const product = PRODUCT_MAP[productId];
+  
   delete cart[productId];
   saveCart(cart);
   updateCartBadge();
   renderCart();
-  showNotification("Item removed", "info");
+  
+  if (product) {
+    showNotification(`${product.name} removed`, "info");
+  }
 }
 
 function changeCartQty(productId, delta) {
   const cart = loadCart();
   if (!cart[productId]) return;
-  cart[productId] += delta;
-  if (cart[productId] <= 0) delete cart[productId];
+  
+  cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
+  
+  if (cart[productId] <= 0) {
+    delete cart[productId];
+  }
+  
   saveCart(cart);
   updateCartBadge();
   renderCart();
@@ -271,17 +318,17 @@ function changeCartQty(productId, delta) {
 /* ---------- CART DRAWER ---------- */
 
 function renderCart() {
-  const body    = $("#cartItems");
+  const body = $("#cartItems");
   const totalEl = $("#cartTotal");
   if (!body || !totalEl) return;
 
-  const cart    = loadCart();
+  const cart = loadCart();
   const entries = Object.entries(cart);
 
   if (!entries.length) {
     body.innerHTML = `
       <div class="empty-cart">
-        <i class="fa-solid fa-cart-arrow-down"></i>
+        <i class="fa-solid fa-cart-arrow-down" aria-hidden="true"></i>
         <p>Your cart is empty</p>
       </div>
     `;
@@ -289,85 +336,113 @@ function renderCart() {
     return;
   }
 
-  body.innerHTML = entries.map(([id, qty]) => {
-    const p = PRODUCT_MAP[id];
-    if (!p) return "";
-    const img = p.image?.src || "";
-    const alt = p.image?.alt || p.name;
-    return `
-      <div class="cart-item">
-        <img src="${img}" alt="${alt}" loading="lazy">
-        <div class="cart-item-details">
-          <div class="cart-item-title">${p.name}</div>
-          <div class="cart-item-price">${money(p.price)}</div>
-          <div class="cart-item-quantity">
-            <button onclick="changeCartQty('${id}', -1)">−</button>
-            <span>${qty}</span>
-            <button onclick="changeCartQty('${id}', 1)">+</button>
-            <button class="cart-item-remove" onclick="removeFromCart('${id}')">
-              <i class="fa-solid fa-trash"></i>
-            </button>
+  body.innerHTML = entries
+    .map(([id, qty]) => {
+      const p = PRODUCT_MAP[id];
+      if (!p) return "";
+      
+      const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
+      const alt = p.image?.alt || p.name;
+      
+      return `
+        <div class="cart-item">
+          <img src="${img}" alt="${alt}" loading="lazy" width="80" height="80">
+          <div class="cart-item-details">
+            <div class="cart-item-title">${p.name}</div>
+            <div class="cart-item-price">${money(p.price)}</div>
+            <div class="cart-item-quantity">
+              <button onclick="changeCartQty('${id}', -1)" aria-label="Decrease quantity">−</button>
+              <span aria-label="Quantity">${qty}</span>
+              <button onclick="changeCartQty('${id}', 1)" aria-label="Increase quantity">+</button>
+              <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${p.name}">
+                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    `;
-  }).join("");
+      `;
+    })
+    .join("");
 
   totalEl.textContent = money(cartTotal(cart));
 }
 
 function openCart() {
-  $("#cartBackdrop")?.classList.add("active");
-  $("#cartDrawer")?.classList.add("active");
+  const backdrop = $("#cartBackdrop");
+  const drawer = $("#cartDrawer");
+  
+  if (backdrop) backdrop.classList.add("active");
+  if (drawer) {
+    drawer.classList.add("active");
+    drawer.setAttribute("aria-hidden", "false");
+  }
+  
   document.body.classList.add("no-scroll");
   renderCart();
+  
+  // Focus first interactive element
+  setTimeout(() => {
+    const firstBtn = drawer?.querySelector("button");
+    if (firstBtn) firstBtn.focus();
+  }, 100);
 }
 
 function closeCart() {
-  $("#cartBackdrop")?.classList.remove("active");
-  $("#cartDrawer")?.classList.remove("active");
+  const backdrop = $("#cartBackdrop");
+  const drawer = $("#cartDrawer");
+  
+  if (backdrop) backdrop.classList.remove("active");
+  if (drawer) {
+    drawer.classList.remove("active");
+    drawer.setAttribute("aria-hidden", "true");
+  }
+  
   document.body.classList.remove("no-scroll");
+  
+  // Return focus to cart button
+  const cartBtn = $("#cartBtn");
+  if (cartBtn) cartBtn.focus();
 }
 
 /* ---------- PRODUCT MODAL ---------- */
-/* Safe: only opens if modal + backdrop exist */
+
 function openProductModal(productId) {
   const p = PRODUCT_MAP[productId];
   if (!p) {
-    showNotification("Product details not found.", "error");
+    showNotification("Product not found", "error");
     return;
   }
 
-  const modal    = $("#productModal");
+  const modal = $("#productModal");
   const backdrop = $("#modalBackdrop");
 
   if (!modal || !backdrop) {
-    showNotification("Detailed view isn’t available on this page yet.", "info");
+    showNotification("Product details not available on this page", "info");
     return;
   }
 
-  const imgEl   = $("#modalProductImage");
-  const nameEl  = $("#modalProductName");
+  // Populate modal content
+  const imgEl = $("#modalProductImage");
+  const nameEl = $("#modalProductName");
   const priceEl = $("#modalProductPrice");
-  const skuEl   = $("#modalProductSku");
-  const descEl  = $("#modalProductDescription");
+  const skuEl = $("#modalProductSku");
+  const descEl = $("#modalProductDescription");
   const badgeEl = $("#modalProductBadge");
   const featsEl = $("#modalProductFeatures");
-  const kwEl    = $("#modalProductKeywords");
 
-  const imgSrc   = p.image?.src || "";
-  const imgAlt   = p.image?.alt || p.name;
+  const imgSrc = p.image?.src || "https://placehold.co/800x600/572403/ffd977?text=EMS";
+  const imgAlt = p.image?.alt || p.name;
   const imgTitle = p.image?.title || p.name;
 
   if (imgEl) {
-    imgEl.src   = imgSrc;
-    imgEl.alt   = imgAlt;
+    imgEl.src = imgSrc;
+    imgEl.alt = imgAlt;
     imgEl.title = imgTitle;
   }
-  if (nameEl)  nameEl.textContent  = p.name;
+  if (nameEl) nameEl.textContent = p.name;
   if (priceEl) priceEl.textContent = money(p.price);
-  if (skuEl)   skuEl.textContent   = `SKU: ${p.sku}`;
-  if (descEl)  descEl.textContent  = p.description;
+  if (skuEl) skuEl.textContent = p.sku;
+  if (descEl) descEl.textContent = p.description;
 
   if (badgeEl) {
     if (p.badge) {
@@ -379,49 +454,53 @@ function openProductModal(productId) {
   }
 
   if (featsEl) {
-    featsEl.innerHTML = p.bullets.map(b => `<li>${b}</li>`).join("");
+    featsEl.innerHTML = p.bullets.map((b) => `<li>${b}</li>`).join("");
   }
 
-  if (kwEl && p.image?.keywords) {
-    kwEl.innerHTML = p.image.keywords
-      .map(k => `<span class="keyword-chip">${k}</span>`)
-      .join("");
-  }
-
+  // Store product ID for add to cart
   modal.dataset.productId = productId;
-  backdrop.classList.add("active");
-  document.body.classList.add("no-scroll");
-}
 
-/* Backwards compatibility */
-function openModal(productId) {
-  openProductModal(productId);
+  // Show modal
+  backdrop.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("no-scroll");
+
+  // Focus close button
+  setTimeout(() => {
+    const closeBtn = $("#modalClose");
+    if (closeBtn) closeBtn.focus();
+  }, 100);
 }
 
 function closeProductModal() {
   const backdrop = $("#modalBackdrop");
+  const modal = $("#productModal");
+  
   if (backdrop) backdrop.classList.remove("active");
+  if (modal) modal.setAttribute("aria-hidden", "true");
+  
   document.body.classList.remove("no-scroll");
 }
+
+/* Backward compatibility alias */
+window.openModal = openProductModal;
 
 /* ---------- PRODUCT GRID RENDERING ---------- */
 
 function productCardHTML(p) {
   const shortDesc =
-    p.description.length > 130
-      ? p.description.slice(0, 128) + "…"
-      : p.description;
+    p.description.length > 130 ? p.description.slice(0, 128) + "…" : p.description;
 
-  const imgSrc   = p.image?.src || "";
-  const imgAlt   = p.image?.alt || p.name;
+  const imgSrc = p.image?.src || "https://placehold.co/600x400/572403/ffd977?text=EMS";
+  const imgAlt = p.image?.alt || p.name;
   const imgTitle = p.image?.title || p.name;
   const keywords = p.image?.keywords || [];
 
   return `
-    <article class="card">
+    <article class="card" role="listitem">
       <div class="card-top">
         <img src="${imgSrc}" alt="${imgAlt}" title="${imgTitle}"
-             class="product-img" loading="lazy">
+             class="product-img" loading="lazy" width="600" height="400">
         <div class="tag">${p.category}</div>
       </div>
       <div class="card-inner">
@@ -430,12 +509,12 @@ function productCardHTML(p) {
         ${
           keywords.length
             ? `<div class="keyword-row">
-                 ${keywords.map(k => `<span class="keyword-chip">${k}</span>`).join("")}
+                 ${keywords.map((k) => `<span class="keyword-chip">${k}</span>`).join("")}
                </div>`
             : ""
         }
         <ul class="small feature-list-compact">
-          ${p.bullets.slice(0, 3).map(b => `<li>${b}</li>`).join("")}
+          ${p.bullets.slice(0, 3).map((b) => `<li>${b}</li>`).join("")}
         </ul>
         <div class="price-row">
           <div>
@@ -445,11 +524,11 @@ function productCardHTML(p) {
           ${p.badge ? `<div class="pill">${p.badge}</div>` : "<div></div>"}
         </div>
         <div class="card-actions">
-          <button class="btn secondary" onclick="openProductModal('${p.id}')">
-            <i class="fa-solid fa-eye"></i> Details
+          <button class="btn secondary" onclick="openProductModal('${p.id}')" aria-label="View ${p.name} details">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i> Details
           </button>
-          <button class="btn" onclick="addToCart('${p.id}', 1)">
-            <i class="fa-solid fa-cart-plus"></i> Add
+          <button class="btn" onclick="addToCart('${p.id}', 1)" aria-label="Add ${p.name} to cart">
+            <i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Add
           </button>
         </div>
       </div>
@@ -459,43 +538,50 @@ function productCardHTML(p) {
 
 function renderProductsInto(container, category = null) {
   if (!container) return;
+  
   const list = category
-    ? PRODUCTS.filter(p => p.category === category)
+    ? PRODUCTS.filter((p) => p.category === category)
     : PRODUCTS;
+  
   container.innerHTML = list.map(productCardHTML).join("");
 }
 
 function renderAllGrids() {
   renderProductsInto($("#productGrid"));
   renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
-  renderProductsInto($("#gridKits"),          "Kits");
-  renderProductsInto($("#gridApparel"),       "Apparel");
-  renderProductsInto($("#gridTools"),         "Tools");
+  renderProductsInto($("#gridKits"), "Kits");
+  renderProductsInto($("#gridApparel"), "Apparel");
+  renderProductsInto($("#gridTools"), "Tools");
 }
 
 /* ---------- MOBILE NAV ---------- */
 
 function initMobileNav() {
   const toggle = $("#menuToggle");
-  const nav    = document.querySelector(".nav");
+  const nav = $(".nav");
   if (!toggle || !nav) return;
 
   toggle.addEventListener("click", () => {
-    nav.classList.toggle("nav-open");
+    const isOpen = nav.classList.toggle("nav-open");
     toggle.classList.toggle("active");
+    toggle.setAttribute("aria-expanded", isOpen);
   });
 
-  nav.querySelectorAll("a").forEach(a => {
+  // Close on link click
+  nav.querySelectorAll("a").forEach((a) => {
     a.addEventListener("click", () => {
       nav.classList.remove("nav-open");
       toggle.classList.remove("active");
+      toggle.setAttribute("aria-expanded", "false");
     });
   });
 
+  // Close on resize to desktop
   window.addEventListener("resize", () => {
     if (window.innerWidth > 768) {
       nav.classList.remove("nav-open");
       toggle.classList.remove("active");
+      toggle.setAttribute("aria-expanded", "false");
     }
   });
 }
@@ -508,68 +594,87 @@ function main() {
   updateCartBadge();
   initMobileNav();
 
-  const themeToggle   = $("#themeToggle");
-  const cartBtn       = $("#cartBtn");
-  const cartClose     = $("#cartClose");
-  const cartBackdrop  = $("#cartBackdrop");
-  const checkoutBtn   = $("#checkoutBtn");
+  // Event listeners
+  const themeToggle = $("#themeToggle");
+  const cartBtn = $("#cartBtn");
+  const cartClose = $("#cartClose");
+  const cartBackdrop = $("#cartBackdrop");
+  const checkoutBtn = $("#checkoutBtn");
   const modalBackdrop = $("#modalBackdrop");
-  const modalClose    = $("#modalClose");
-  const modalAdd      = $("#modalAddToCart");
+  const modalClose = $("#modalClose");
+  const modalAdd = $("#modalAddToCart");
 
   if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
 
-  if (cartBtn)      cartBtn.addEventListener("click", openCart);
-  if (cartClose)    cartClose.addEventListener("click", closeCart);
-  if (cartBackdrop) cartBackdrop.addEventListener("click", (e) => {
-    if (e.target === cartBackdrop) closeCart();
-  });
-  if (checkoutBtn)  checkoutBtn.addEventListener("click", () => {
-    const cart = loadCart();
-    if (!Object.keys(cart).length) {
-      showNotification("Cart is empty", "error");
-    } else {
-      showNotification(`Checkout — ${money(cartTotal(cart))}`, "success");
-    }
-  });
+  if (cartBtn) cartBtn.addEventListener("click", openCart);
+  if (cartClose) cartClose.addEventListener("click", closeCart);
+  if (cartBackdrop) {
+    cartBackdrop.addEventListener("click", (e) => {
+      if (e.target === cartBackdrop) closeCart();
+    });
+  }
 
-  if (modalBackdrop) modalBackdrop.addEventListener("click", (e) => {
-    if (e.target === modalBackdrop) closeProductModal();
-  });
-  if (modalClose)   modalClose.addEventListener("click", closeProductModal);
-  if (modalAdd)     modalAdd.addEventListener("click", () => {
-    const modal = $("#productModal");
-    if (!modal) return;
-    const id = modal.dataset.productId;
-    if (!id) return;
-    addToCart(id, 1);
-    closeProductModal();
-    setTimeout(openCart, 220);
-  });
-
-  // "Best stethoscopes for EMTs" pill buttons
-  $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.target;
-      if (target === "students") {
-        openProductModal("steth-littmann-classic");
-      } else if (target === "loud") {
-        openProductModal("steth-electronic");
-      } else if (target === "comfort") {
-        // comfort focus – reusing classic with comfort-heavy messaging
-        openProductModal("steth-littmann-classic");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      const cart = loadCart();
+      const total = cartTotal(cart);
+      
+      if (total === 0) {
+        showNotification("Your cart is empty", "error");
+      } else {
+        showNotification(`Proceeding to checkout — ${money(total)}`, "success");
+        // In production: window.location.href = "/checkout";
       }
     });
-  });
+  }
 
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeProductModal();
+    });
+  }
+  if (modalClose) modalClose.addEventListener("click", closeProductModal);
+  
+  if (modalAdd) {
+    modalAdd.addEventListener("click", () => {
+      const modal = $("#productModal");
+      if (!modal) return;
+      
+      const productId = modal.dataset.productId;
+      if (!productId) return;
+      
+      addToCart(productId, 1);
+      closeProductModal();
+      setTimeout(openCart, 250);
+    });
+  }
+
+  // Keyboard shortcuts
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeProductModal();
       closeCart();
     }
   });
+
+  // Optional: Best stethoscopes pill buttons (if present on page)
+  $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      const productMap = {
+        students: "steth-littmann-classic",
+        loud: "steth-electronic",
+        comfort: "steth-littmann-classic"
+      };
+      
+      if (productMap[target]) {
+        openProductModal(productMap[target]);
+      }
+    });
+  });
 }
 
+// Initialize when DOM ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", main);
 } else {
