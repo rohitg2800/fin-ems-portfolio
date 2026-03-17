@@ -1,7 +1,6 @@
 /* =========================================
    EMS Luxe Supply – Global script.js
-   Production-ready: all pages
-   Fixed: Non-blocking loading, defensive queries
+   Fixed for existing HTML structure
    ========================================= */
 
 "use strict";
@@ -190,16 +189,12 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-  const toggle = $("#themeToggle");
   
   if (icon) {
     icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
   }
   if (text) {
     text.textContent = theme === "dark" ? "Light" : "Dark";
-  }
-  if (toggle) {
-    toggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`);
   }
 }
 
@@ -220,7 +215,6 @@ function saveCart(cart) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   } catch (err) {
     console.error("Cart save failed:", err);
-    showNotification("Unable to save cart", "error");
   }
 }
 
@@ -241,26 +235,19 @@ function showNotification(message, type = "success") {
   try {
     $$(".notification").forEach((n) => n.remove());
 
-    const icons = {
-      success: "fa-check-circle",
-      error: "fa-exclamation-circle",
-      info: "fa-info-circle"
-    };
-
     const notification = document.createElement("div");
     notification.className = `notification ${type}`;
     notification.setAttribute("role", "alert");
     notification.setAttribute("aria-live", "polite");
     notification.innerHTML = `
-      <i class="fa-solid ${icons[type] || icons.info}" aria-hidden="true"></i>
+      <i class="fa-solid ${type === "success" ? "fa-check-circle" : type === "error" ? "fa-exclamation-circle" : "fa-info-circle"}" aria-hidden="true"></i>
       <span>${message}</span>
     `;
     
     document.body.appendChild(notification);
 
     setTimeout(() => {
-      notification.style.animation = "slideOut 0.3s forwards";
-      setTimeout(() => notification.remove(), 300);
+      notification.remove();
     }, 3000);
   } catch (err) {
     console.error("Notification failed:", err);
@@ -272,16 +259,11 @@ function showNotification(message, type = "success") {
 function updateCartBadge() {
   try {
     const badge = $("#cartBadge");
-    const cartBtn = $("#cartBtn");
     if (!badge) return;
     
     const count = cartCount(loadCart());
     badge.textContent = count;
     badge.style.display = count > 0 ? "flex" : "none";
-    
-    if (cartBtn) {
-      cartBtn.setAttribute("aria-label", `Shopping cart, ${count} item${count !== 1 ? "s" : ""}`);
-    }
   } catch (err) {
     console.warn("Cart badge update failed:", err);
   }
@@ -343,7 +325,7 @@ function changeCartQty(productId, delta) {
   }
 }
 
-/* ---------- CART DRAWER ---------- */
+/* ---------- CART RENDERING ---------- */
 
 function renderCart() {
   try {
@@ -357,7 +339,7 @@ function renderCart() {
     if (!entries.length) {
       body.innerHTML = `
         <div class="empty-cart">
-          <i class="fa-solid fa-cart-arrow-down" aria-hidden="true"></i>
+          <i class="fa-solid fa-cart-shopping"></i>
           <p>Your cart is empty</p>
         </div>
       `;
@@ -375,16 +357,16 @@ function renderCart() {
         
         return `
           <div class="cart-item">
-            <img src="${img}" alt="${alt}" loading="lazy" width="80" height="80">
-            <div class="cart-item-details">
+            <img src="${img}" alt="${alt}" loading="lazy" width="90" height="90">
+            <div style="flex: 1;">
               <div class="cart-item-title">${p.name}</div>
               <div class="cart-item-price">${money(p.price)}</div>
               <div class="cart-item-quantity">
                 <button onclick="changeCartQty('${id}', -1)" aria-label="Decrease quantity">−</button>
-                <span aria-label="Quantity">${qty}</span>
+                <span>${qty}</span>
                 <button onclick="changeCartQty('${id}', 1)" aria-label="Increase quantity">+</button>
                 <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${p.name}">
-                  <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                  <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
             </div>
@@ -405,18 +387,10 @@ function openCart() {
     const drawer = $("#cartDrawer");
     
     if (backdrop) backdrop.classList.add("active");
-    if (drawer) {
-      drawer.classList.add("active");
-      drawer.setAttribute("aria-hidden", "false");
-    }
+    if (drawer) drawer.classList.add("active");
     
     document.body.classList.add("no-scroll");
     renderCart();
-    
-    setTimeout(() => {
-      const firstBtn = drawer?.querySelector("button");
-      if (firstBtn) firstBtn.focus();
-    }, 100);
   } catch (err) {
     console.error("Open cart failed:", err);
   }
@@ -428,15 +402,9 @@ function closeCart() {
     const drawer = $("#cartDrawer");
     
     if (backdrop) backdrop.classList.remove("active");
-    if (drawer) {
-      drawer.classList.remove("active");
-      drawer.setAttribute("aria-hidden", "true");
-    }
+    if (drawer) drawer.classList.remove("active");
     
     document.body.classList.remove("no-scroll");
-    
-    const cartBtn = $("#cartBtn");
-    if (cartBtn) cartBtn.focus();
   } catch (err) {
     console.error("Close cart failed:", err);
   }
@@ -455,10 +423,7 @@ function openProductModal(productId) {
     const modal = $("#productModal");
     const backdrop = $("#modalBackdrop");
 
-    if (!modal || !backdrop) {
-      showNotification("Product details not available on this page", "info");
-      return;
-    }
+    if (!modal || !backdrop) return;
 
     const imgEl = $("#modalProductImage");
     const nameEl = $("#modalProductName");
@@ -470,12 +435,10 @@ function openProductModal(productId) {
 
     const imgSrc = p.image?.src || "https://placehold.co/800x600/572403/ffd977?text=EMS";
     const imgAlt = p.image?.alt || p.name;
-    const imgTitle = p.image?.title || p.name;
 
     if (imgEl) {
       imgEl.src = imgSrc;
       imgEl.alt = imgAlt;
-      imgEl.title = imgTitle;
     }
     if (nameEl) nameEl.textContent = p.name;
     if (priceEl) priceEl.textContent = money(p.price);
@@ -498,13 +461,7 @@ function openProductModal(productId) {
     modal.dataset.productId = productId;
 
     backdrop.classList.add("active");
-    modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("no-scroll");
-
-    setTimeout(() => {
-      const closeBtn = $("#modalClose");
-      if (closeBtn) closeBtn.focus();
-    }, 100);
   } catch (err) {
     console.error("Open modal failed:", err);
   }
@@ -513,20 +470,14 @@ function openProductModal(productId) {
 function closeProductModal() {
   try {
     const backdrop = $("#modalBackdrop");
-    const modal = $("#productModal");
-    
     if (backdrop) backdrop.classList.remove("active");
-    if (modal) modal.setAttribute("aria-hidden", "true");
-    
     document.body.classList.remove("no-scroll");
   } catch (err) {
     console.error("Close modal failed:", err);
   }
 }
 
-window.openModal = openProductModal;
-
-/* ---------- PRODUCT GRID RENDERING ---------- */
+/* ---------- PRODUCT CARD HTML ---------- */
 
 function productCardHTML(p) {
   const shortDesc =
@@ -534,42 +485,32 @@ function productCardHTML(p) {
 
   const imgSrc = p.image?.src || "https://placehold.co/600x400/572403/ffd977?text=EMS";
   const imgAlt = p.image?.alt || p.name;
-  const imgTitle = p.image?.title || p.name;
-  const keywords = p.image?.keywords || [];
 
   return `
     <article class="card" role="listitem">
       <div class="card-top">
-        <img src="${imgSrc}" alt="${imgAlt}" title="${imgTitle}"
-             class="product-img" loading="lazy" width="600" height="400">
+        <img src="${imgSrc}" alt="${imgAlt}" class="product-img" loading="lazy" width="600" height="400">
         <div class="tag">${p.category}</div>
       </div>
       <div class="card-inner">
         <h3 class="card-title">${p.name}</h3>
         <p class="card-text">${shortDesc}</p>
-        ${
-          keywords.length
-            ? `<div class="keyword-row">
-                 ${keywords.map((k) => `<span class="keyword-chip">${k}</span>`).join("")}
-               </div>`
-            : ""
-        }
-        <ul class="small feature-list-compact">
+        <ul class="feature-list-compact">
           ${p.bullets.slice(0, 3).map((b) => `<li>${b}</li>`).join("")}
         </ul>
         <div class="price-row">
           <div>
             <div class="price">${money(p.price)}</div>
-            <div class="small">${p.sku}</div>
+            <div style="font-size: 12px; color: var(--gray);">${p.sku}</div>
           </div>
           ${p.badge ? `<div class="pill">${p.badge}</div>` : "<div></div>"}
         </div>
         <div class="card-actions">
-          <button class="btn secondary" onclick="openProductModal('${p.id}')" aria-label="View ${p.name} details">
-            <i class="fa-solid fa-eye" aria-hidden="true"></i> Details
+          <button class="btn secondary" onclick="openProductModal('${p.id}')">
+            <i class="fa-solid fa-eye"></i> Details
           </button>
-          <button class="btn" onclick="addToCart('${p.id}', 1)" aria-label="Add ${p.name} to cart">
-            <i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Add
+          <button class="btn" onclick="addToCart('${p.id}', 1)">
+            <i class="fa-solid fa-cart-plus"></i> Add
           </button>
         </div>
       </div>
@@ -577,31 +518,14 @@ function productCardHTML(p) {
   `;
 }
 
-function renderProductsInto(container, category = null) {
+function renderProducts() {
   try {
-    if (!container) return;
+    const grid = $("#productGrid");
+    if (!grid) return;
     
-    const list = category
-      ? PRODUCTS.filter((p) => p.category === category)
-      : PRODUCTS;
-    
-    container.innerHTML = list.map(productCardHTML).join("");
+    grid.innerHTML = PRODUCTS.map(productCardHTML).join("");
   } catch (err) {
     console.error("Render products failed:", err);
-  }
-}
-
-function renderAllGrids() {
-  try {
-    requestAnimationFrame(() => {
-      renderProductsInto($("#productGrid"));
-      renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
-      renderProductsInto($("#gridKits"), "Kits");
-      renderProductsInto($("#gridApparel"), "Apparel");
-      renderProductsInto($("#gridTools"), "Tools");
-    });
-  } catch (err) {
-    console.error("Render all grids failed:", err);
   }
 }
 
@@ -610,29 +534,19 @@ function renderAllGrids() {
 function initMobileNav() {
   try {
     const toggle = $("#menuToggle");
-    const nav = $(".nav");
+    const nav = $("#mainNav");
     if (!toggle || !nav) return;
 
     toggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("nav-open");
-      toggle.classList.toggle("active");
       toggle.setAttribute("aria-expanded", isOpen);
     });
 
     nav.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", () => {
         nav.classList.remove("nav-open");
-        toggle.classList.remove("active");
         toggle.setAttribute("aria-expanded", "false");
       });
-    });
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 768) {
-        nav.classList.remove("nav-open");
-        toggle.classList.remove("active");
-        toggle.setAttribute("aria-expanded", "false");
-      }
     });
   } catch (err) {
     console.warn("Mobile nav init failed:", err);
@@ -641,19 +555,24 @@ function initMobileNav() {
 
 /* ---------- INIT ---------- */
 
-function attachEventListeners() {
+function main() {
   try {
+    initTheme();
+    initMobileNav();
+    renderProducts();
+    updateCartBadge();
+
+    // Event listeners
     const themeToggle = $("#themeToggle");
     const cartBtn = $("#cartBtn");
     const cartClose = $("#cartClose");
     const cartBackdrop = $("#cartBackdrop");
-    const checkoutBtn = $("#checkoutBtn");
     const modalBackdrop = $("#modalBackdrop");
     const modalClose = $("#modalClose");
     const modalAdd = $("#modalAddToCart");
+    const checkoutBtn = $("#checkoutBtn");
 
     if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-
     if (cartBtn) cartBtn.addEventListener("click", openCart);
     if (cartClose) cartClose.addEventListener("click", closeCart);
     if (cartBackdrop) {
@@ -661,38 +580,32 @@ function attachEventListeners() {
         if (e.target === cartBackdrop) closeCart();
       });
     }
-
-    if (checkoutBtn) {
-      checkoutBtn.addEventListener("click", () => {
-        const cart = loadCart();
-        const total = cartTotal(cart);
-        
-        if (total === 0) {
-          showNotification("Your cart is empty", "error");
-        } else {
-          showNotification(`Proceeding to checkout — ${money(total)}`, "success");
-        }
-      });
-    }
-
     if (modalBackdrop) {
       modalBackdrop.addEventListener("click", (e) => {
         if (e.target === modalBackdrop) closeProductModal();
       });
     }
     if (modalClose) modalClose.addEventListener("click", closeProductModal);
-    
     if (modalAdd) {
       modalAdd.addEventListener("click", () => {
         const modal = $("#productModal");
         if (!modal) return;
-        
         const productId = modal.dataset.productId;
         if (!productId) return;
-        
         addToCart(productId, 1);
         closeProductModal();
         setTimeout(openCart, 250);
+      });
+    }
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", () => {
+        const cart = loadCart();
+        const total = cartTotal(cart);
+        if (total === 0) {
+          showNotification("Your cart is empty", "error");
+        } else {
+          showNotification(`Proceeding to checkout — ${money(total)}`, "success");
+        }
       });
     }
 
@@ -702,38 +615,18 @@ function attachEventListeners() {
         closeCart();
       }
     });
-
-    $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const target = btn.dataset.target;
-        const productMap = {
-          students: "steth-littmann-classic",
-          loud: "steth-electronic",
-          comfort: "steth-littmann-classic"
-        };
-        
-        if (productMap[target]) {
-          openProductModal(productMap[target]);
-        }
-      });
-    });
-  } catch (err) {
-    console.error("Event listener attachment failed:", err);
-  }
-}
-
-function main() {
-  try {
-    initTheme();
-    updateCartBadge();
-    initMobileNav();
-    attachEventListeners();
-    
-    // Render grids asynchronously to not block page
-    renderAllGrids();
   } catch (err) {
     console.error("Main init failed:", err);
   }
+}
+function showLoading() {
+  const el = document.getElementById("loading");
+  if (el) el.style.display = "flex";
+}
+
+function hideLoading() {
+  const el = document.getElementById("loading");
+  if (el) el.style.display = "none";
 }
 
 // Initialize when DOM ready
