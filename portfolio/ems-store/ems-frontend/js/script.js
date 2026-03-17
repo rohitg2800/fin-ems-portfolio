@@ -1012,17 +1012,19 @@ function main() {
         setTimeout(openCart, 250);
       });
     }
-    if (checkoutBtn) {
+      if (checkoutBtn) {
       checkoutBtn.addEventListener("click", () => {
         const cart = loadCart();
         const total = cartTotal(cart);
         if (total === 0) {
           showNotification("Your cart is empty", "error");
         } else {
-          showNotification(`Proceeding to checkout — ${money(total)}`, "success");
+          // Redirect to checkout page
+          window.location.href = "checkout.html";
         }
       });
     }
+
 
     // Stethoscope filter buttons
     $$(".filter-btn").forEach((btn) => {
