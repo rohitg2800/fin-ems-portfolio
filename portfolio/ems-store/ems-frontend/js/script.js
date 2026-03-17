@@ -1,6 +1,6 @@
 /* =========================================
    EMS Luxe Supply – Global script.js
-   Updated with Stethoscope Filtering & Full Features
+   Shop + Stethoscopes + Trust
    ========================================= */
 
 "use strict";
@@ -30,8 +30,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1584467541268-b040f83be3fd?auto=format&fit=crop&w=1200&q=80",
       alt: "Stethoscope lying beside medical textbooks and study materials",
-      title: "Student-ready classic stethoscope",
-      keywords: ["EMT student", "nursing textbooks", "study gear"]
+      title: "Student-ready classic stethoscope"
     }
   },
   {
@@ -53,8 +52,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1200&q=80",
       alt: "Interior of an EMS helicopter with medical equipment",
-      title: "Stethoscope tuned for loud EMS environments",
-      keywords: ["ambulance", "helicopter EMS", "loud environment"]
+      title: "Stethoscope tuned for loud EMS environments"
     }
   },
   {
@@ -76,8 +74,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
       alt: "Premium stethoscope on medical surface",
-      title: "Cardiology professional stethoscope",
-      keywords: ["cardiology", "premium stethoscope", "cardiac"]
+      title: "Cardiology professional stethoscope"
     }
   },
   {
@@ -99,8 +96,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1631217314831-e489b5cfd246?auto=format&fit=crop&w=1200&q=80",
       alt: "Professional multi-use stethoscope",
-      title: "Universal pro stethoscope",
-      keywords: ["universal", "multi-use", "professional"]
+      title: "Universal pro stethoscope"
     }
   },
   {
@@ -122,8 +118,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1200&q=80",
       alt: "Medical kit with stethoscope, scissors, and diagnostic tools",
-      title: "Complete student starter kit for EMT training",
-      keywords: ["student kit", "EMT training", "starter bundle"]
+      title: "Complete student starter kit for EMT training"
     }
   },
   {
@@ -145,8 +140,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
       alt: "Dark tactical pants hanging on a clothing rack",
-      title: "5-in-1 tactical EMS pants",
-      keywords: ["tactical pants", "ems uniform", "duty wear"]
+      title: "5-in-1 tactical EMS pants"
     }
   },
   {
@@ -168,8 +162,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
       alt: "Red EMS trauma backpack on station floor",
-      title: "Rapid response EMS backpack",
-      keywords: ["jump bag", "trauma pack", "response bag"]
+      title: "Rapid response EMS backpack"
     }
   },
   {
@@ -191,8 +184,7 @@ const PRODUCTS = [
     image: {
       src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
       alt: "Black and teal trauma shears on orange background",
-      title: "Ballistic-rated trauma shears",
-      keywords: ["trauma shears", "cut clothing", "field tool"]
+      title: "Ballistic-rated trauma shears"
     }
   }
 ];
@@ -503,7 +495,7 @@ function openProductModal(productId) {
     if (priceEl) priceEl.textContent = money(p.price);
 
     if (skuWrapper) {
-      // Some pages wrap SKU text as "SKU: ---", some have just span content
+      // Sometimes span, sometimes block "SKU: ---"
       if (skuWrapper.tagName === "SPAN") {
         skuWrapper.textContent = p.sku;
       } else {
@@ -545,7 +537,7 @@ function closeProductModal() {
   }
 }
 
-/* ---------- FILTERING (STETH PAGE) ---------- */
+/* ---------- FILTERING (Stethoscopes page) ---------- */
 
 let currentFilter = "all";
 
@@ -606,18 +598,54 @@ function productCardHTML(p) {
   `;
 }
 
+/* ---------- PRODUCT RENDERING FOR ALL PAGES ---------- */
+
 function renderProducts() {
   try {
-    // Front/home/shop pages may use #productGrid; stethoscopes page may use #stethGrid
-    const grid = $("#productGrid") || $("#stethGrid");
-    if (!grid) return;
+    const homeGrid = $("#productGrid");
+    const stethPageGrid = $("#stethGrid");
 
-    const filtered = PRODUCTS.filter((p) => {
-      if (currentFilter === "all") return true;
-      return p.filters && p.filters.includes(currentFilter);
-    });
+    const gridStethoscopes = $("#gridStethoscopes");
+    const gridKits = $("#gridKits");
+    const gridApparel = $("#gridApparel");
+    const gridTools = $("#gridTools");
 
-    grid.innerHTML = filtered.map(productCardHTML).join("");
+    // SHOP PAGE: multiple category grids
+    if (gridStethoscopes || gridKits || gridApparel || gridTools) {
+      if (gridStethoscopes) {
+        const items = PRODUCTS.filter((p) => p.category === "Stethoscopes");
+        gridStethoscopes.innerHTML = items.map(productCardHTML).join("");
+      }
+      if (gridKits) {
+        const items = PRODUCTS.filter((p) => p.category === "Kits");
+        gridKits.innerHTML = items.map(productCardHTML).join("");
+      }
+      if (gridApparel) {
+        const items = PRODUCTS.filter((p) => p.category === "Apparel");
+        gridApparel.innerHTML = items.map(productCardHTML).join("");
+      }
+      if (gridTools) {
+        const items = PRODUCTS.filter((p) => p.category === "Tools");
+        gridTools.innerHTML = items.map(productCardHTML).join("");
+      }
+      return;
+    }
+
+    // STETHOSCOPES PAGE: single grid + filter buttons
+    if (stethPageGrid) {
+      const items = PRODUCTS.filter((p) => {
+        if (p.category !== "Stethoscopes") return false;
+        if (currentFilter === "all") return true;
+        return p.filters && p.filters.includes(currentFilter);
+      });
+      stethPageGrid.innerHTML = items.map(productCardHTML).join("");
+      return;
+    }
+
+    // HOME / INDEX PAGE: generic productGrid (if present)
+    if (homeGrid) {
+      homeGrid.innerHTML = PRODUCTS.map(productCardHTML).join("");
+    }
   } catch (err) {
     console.error("Render products failed:", err);
   }
