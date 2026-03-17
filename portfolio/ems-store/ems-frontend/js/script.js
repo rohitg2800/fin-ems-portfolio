@@ -486,7 +486,7 @@ function openProductModal(productId) {
     const imgEl = $("#modalProductImage");
     const nameEl = $("#modalProductName");
     const priceEl = $("#modalProductPrice");
-    const skuText = $("#modalProductSku");
+    const skuWrapper = $("#modalProductSku");
     const descEl = $("#modalProductDescription");
     const badgeEl = $("#modalProductBadge");
     const featsEl = $("#modalProductFeatures");
@@ -501,14 +501,16 @@ function openProductModal(productId) {
     }
     if (nameEl) nameEl.textContent = p.name;
     if (priceEl) priceEl.textContent = money(p.price);
-    if (skuText) {
-      // some pages use "SKU: ---" text, some use just span
-      if (skuText.tagName === "SPAN") {
-        skuText.textContent = p.sku;
+
+    if (skuWrapper) {
+      // Some pages wrap SKU text as "SKU: ---", some have just span content
+      if (skuWrapper.tagName === "SPAN") {
+        skuWrapper.textContent = p.sku;
       } else {
-        skuText.textContent = `SKU: ${p.sku}`;
+        skuWrapper.textContent = `SKU: ${p.sku}`;
       }
     }
+
     if (descEl) descEl.textContent = p.description;
 
     if (badgeEl) {
@@ -543,7 +545,7 @@ function closeProductModal() {
   }
 }
 
-/* ---------- FILTERING ---------- */
+/* ---------- FILTERING (STETH PAGE) ---------- */
 
 let currentFilter = "all";
 
@@ -551,7 +553,6 @@ function filterProducts(filterName) {
   try {
     currentFilter = filterName;
 
-    // Update button states on stethoscopes page
     $$(".filter-btn").forEach((btn) => {
       const isActive = btn.dataset.filter === filterName;
       btn.classList.toggle("active", isActive);
@@ -607,7 +608,7 @@ function productCardHTML(p) {
 
 function renderProducts() {
   try {
-    // Front page uses #productGrid, stethoscope page uses #stethGrid
+    // Front/home/shop pages may use #productGrid; stethoscopes page may use #stethGrid
     const grid = $("#productGrid") || $("#stethGrid");
     if (!grid) return;
 
@@ -664,10 +665,6 @@ function main() {
     const modalAdd      = $("#modalAddToCart");
     const checkoutBtn   = $("#checkoutBtn");
 
-    // NEW: main-page buttons (shop + stethoscope)
-    const goHomeFromShop  = $("#goHomeFromShop");
-    const goHomeFromSteth = $("#goHomeFromSteth");
-
     if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
     if (cartBtn) cartBtn.addEventListener("click", openCart);
     if (cartClose) cartClose.addEventListener("click", closeCart);
@@ -705,18 +702,7 @@ function main() {
       });
     }
 
-    // JS navigation to main page
-    if (goHomeFromShop) {
-      goHomeFromShop.addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
-    }
-    if (goHomeFromSteth) {
-      goHomeFromSteth.addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
-    }
-
+    // Stethoscope filter buttons (only exist on that page)
     $$(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         filterProducts(btn.dataset.filter);
@@ -733,7 +719,6 @@ function main() {
     console.error("Main init failed:", err);
   }
 }
-
 
 // Initialize when DOM ready
 if (document.readyState === "loading") {
