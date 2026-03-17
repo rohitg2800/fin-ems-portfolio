@@ -655,15 +655,18 @@ function main() {
     renderProducts();
     updateCartBadge();
 
-    // Event listeners
-    const themeToggle = $("#themeToggle");
-    const cartBtn = $("#cartBtn");
-    const cartClose = $("#cartClose");
-    const cartBackdrop = $("#cartBackdrop");
+    const themeToggle   = $("#themeToggle");
+    const cartBtn       = $("#cartBtn");
+    const cartClose     = $("#cartClose");
+    const cartBackdrop  = $("#cartBackdrop");
     const modalBackdrop = $("#modalBackdrop");
-    const modalClose = $("#modalClose");
-    const modalAdd = $("#modalAddToCart");
-    const checkoutBtn = $("#checkoutBtn");
+    const modalClose    = $("#modalClose");
+    const modalAdd      = $("#modalAddToCart");
+    const checkoutBtn   = $("#checkoutBtn");
+
+    // NEW: main-page buttons (shop + stethoscope)
+    const goHomeFromShop  = $("#goHomeFromShop");
+    const goHomeFromSteth = $("#goHomeFromSteth");
 
     if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
     if (cartBtn) cartBtn.addEventListener("click", openCart);
@@ -702,7 +705,18 @@ function main() {
       });
     }
 
-    // Filter button listeners on stethoscopes page
+    // JS navigation to main page
+    if (goHomeFromShop) {
+      goHomeFromShop.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
+    if (goHomeFromSteth) {
+      goHomeFromSteth.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
+
     $$(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         filterProducts(btn.dataset.filter);
@@ -719,6 +733,7 @@ function main() {
     console.error("Main init failed:", err);
   }
 }
+
 
 // Initialize when DOM ready
 if (document.readyState === "loading") {
