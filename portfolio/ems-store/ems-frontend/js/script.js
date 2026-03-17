@@ -1166,14 +1166,14 @@ function generateOrderId() {
 
 function sendConfirmationEmail(orderData) {
   try {
-    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY_HERE"); // <---------- REPLACE THIS
+    emailjs.init("N5mzHg4TQmKz_T-1Z"); // <---------- REPLACED! THIS
 
     const itemsList = Object.entries(orderData.items).map(([id, qty]) => {
       const p = PRODUCT_MAP[id];
       return p ? `• ${p.name} (SKU: ${p.sku}) × ${qty}  =  ${money(p.price * qty)}` : "";
     }).join("\n");
 
-    emailjs.send("YOUR_EMAILJS_SERVICE_ID_HERE", "order_confirmation", {  // <----- REPLACE THESE
+    emailjs.send("service_gv3zi4q", "order_confirmation", {  // <----- REPLACED! THESE
       to_email:         orderData.email,
       customer_name:    orderData.name,
       customer_phone:   orderData.phone,
