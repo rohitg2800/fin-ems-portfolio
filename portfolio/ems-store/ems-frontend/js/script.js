@@ -1163,31 +1163,45 @@ function validateCheckoutForm() {
 function generateOrderId() {
   return "ORD#" + Math.random().toString(36).substr(2, 9).toUpperCase();
 }
+async function sendConfirmationEmail(orderData) {
+  // ← YOUR REAL VALUES HERE (check dashboard.emailjs.com)
+  const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY_HERE";    // Account → API Keys → Public Key
+  const EMAILJS_SERVICE_ID  = "service_abc123";          // Email Services → Gmail → Service ID
+  const EMAILJS_TEMPLATE_ID = "template_def456";         // Email Templates → order_confirmation → Template ID
 
-function sendConfirmationEmail(orderData) {
   try {
-    emailjs.init("N5mzHg4TQmKz_T-1Z"); // <---------- REPLACED! THIS
+    // Initialize (MUST be first)
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    
+    // Format items for email
+    const itemsList = Object.entries(orderData.items || {})
+      .map(([id, qty]) => {
+        const p = PRODUCT_MAP[id];
+        return p ? `• ${p.name} (SKU: ${p.sku}) × ${qty}\n  $${(p.price * qty).toFixed(2)}` : "";
+      }).filter(Boolean).join("\n\n") || "Order details unavailable";
 
-    const itemsList = Object.entries(orderData.items).map(([id, qty]) => {
-      const p = PRODUCT_MAP[id];
-      return p ? `• ${p.name} (SKU: ${p.sku}) × ${qty}  =  ${money(p.price * qty)}` : "";
-    }).join("\n");
+    console.log("📤 Sending email to:", orderData.email); // Debug
 
-    emailjs.send("service_gv3zi4q", "order_confirmation", {  // <----- REPLACED! THESE
-      to_email:         orderData.email,
-      customer_name:    orderData.name,
-      customer_phone:   orderData.phone,
-      customer_address: orderData.address,
-      order_id:         orderData.orderId,
-      order_date:       orderData.date,
-      order_items:      itemsList,
-      order_total:      money(orderData.total)
+    const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: orderData.email,
+      customer_name: orderData.name,
+      customer_phone: orderData.phone,
+      customer_address: orderData.address.replace(/\n/g, ', '), // Clean address
+      order_id: orderData.orderId,
+      order_date: new Date(orderData.date).toLocaleString(),
+      order_items: itemsList,
+      order_total: `$${orderData.total.toFixed(2)}`
     });
-  } catch (err) {
-    console.error("sendConfirmationEmail error:", err);
-    showNotification("Order placed but email may have failed", "info");
+
+    console.log("✅ EmailJS Success:", result);
+    showNotification("✅ Order confirmed + Email sent!", "success");
+    
+  } catch (error) {
+    console.error("❌ EmailJS Error:", error);
+    showNotification("✅ Order saved! Email failed (check console)", "warning");
   }
 }
+
 
 function processCheckout(e) {
   e.preventDefault();
