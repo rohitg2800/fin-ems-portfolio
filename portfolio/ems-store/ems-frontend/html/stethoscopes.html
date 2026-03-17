@@ -1,165 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Page-specific title -->
-  <title>EMS Luxe Supply — Shop</title>
-
-  <!-- Unified font: Poppins (no cursive anywhere) -->
+  <title>Stethoscopes — EMS Luxe Supply</title>
+  <meta name="description" content="Professional stethoscopes for EMTs, paramedics, and medical students. Littmann, electronic, and acoustic models trusted by field professionals.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-    rel="stylesheet">
-
-  <!-- Icons -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- Site styles -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body>
+<body data-theme="light">
+  
+  <!-- ========== NAVIGATION ========== -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
-        <span></span><span></span><span></span>
+      <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
-      <a class="brand" href="index.html" aria-label="EMS Luxe Supply home">
-        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+      <a class="brand" href="index.html" aria-label="EMS Luxe Supply Home">
+        <div class="brand-mark" aria-hidden="true">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
         <div>
-          <div class="brand-title">EMS LUXE</div>
-          <div class="fine">STETHOSCOPES</div>
+          <div class="brand-title">EMS LUXE SUPPLY</div>
+          <div class="fine">PREMIUM FIELD GEAR</div>
         </div>
       </a>
 
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="index.html"><i class="fa-solid fa-house-chimney"></i><span>Home</span></a>
-        <a href="shop.html"><i class="fa-solid fa-bag-shopping"></i><span>Shop</span></a>
-        <a href="stethoscopes.html" aria-current="page"><i class="fa-solid fa-stethoscope"></i><span>Stethoscopes</span></a>
+      <nav class="nav" id="mainNav" aria-label="Main navigation">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
+        <a href="stethoscopes.html" aria-current="page"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
+        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust</a>
       </nav>
 
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <i class="fa-solid fa-moon" id="themeIcon"></i>
-        <span id="themeText">Night Mode</span>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+        <span id="themeText">Dark</span>
       </button>
 
-      <button id="cartBtn" class="icon-btn" aria-label="View cart">
+      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart, 0 items">
         <i class="fa-solid fa-cart-shopping"></i>
-        <span id="cartBadge" class="badge">0</span>
+        <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
       </button>
     </div>
   </header>
 
+  <!-- ========== HERO SECTION ========== -->
   <main>
-    <section class="emt-steth-cta">
-  <div class="container">
-    <div class="emt-steth-head">
-      <h2>Best Stethoscopes for EMTs</h2>
-      <p>Pick what matters most in the field.</p>
-    </div>
-
-    <div class="emt-steth-buttons">
-      <button class="btn pill-btn" data-target="students">
-        For Students &amp; Clinicals
-      </button>
-      <button class="btn pill-btn" data-target="loud">
-        For Loud Environments
-      </button>
-      <button class="btn pill-btn" data-target="comfort">
-        Comfort Matters
-      </button>
-    </div>
-  </div>
-</section>
-
-    <section>
+    <section class="hero" aria-labelledby="steth-hero-title">
       <div class="container">
-        <h2 class="section-title">Shop Stethoscopes</h2>
-        <p class="section-sub">Choose a model built for clarity, durability, and emergency workflow performance.</p>
-        <div id="productGrid" class="grid"></div>
+        <div class="hero-card">
+          <h1 id="steth-hero-title" class="hero-title">Stethoscopes Built for the Field</h1>
+          <p class="hero-sub">From student clinicals to critical care environments. Professional-grade acoustics when every beat matters.</p>
+          <a class="btn" href="#steth-grid">
+            <i class="fa-solid fa-search"></i> Explore Models
+          </a>
+        </div>
       </div>
     </section>
 
-    <section class="trust-section">
+    <!-- ========== FILTER BUTTONS ========== -->
+    <section class="filter-section" aria-labelledby="filter-title">
       <div class="container">
-        <div class="trust-grid">
-          <article class="trust-card">
-            <i class="fa-solid fa-wave-square"></i>
-            <h3>Acoustic Clarity</h3>
-            <p>Reliable sound pickup for training, routine assessment, and field decision-making.</p>
+        <h2 id="filter-title" class="section-title">Find Your Perfect Stethoscope</h2>
+        <p class="section-sub">Filter by use case, environment, and budget</p>
+        
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">
+            <i class="fa-solid fa-list"></i> All Models
+          </button>
+          <button class="filter-btn" data-filter="students" aria-pressed="false">
+            <i class="fa-solid fa-graduation-cap"></i> For Students
+          </button>
+          <button class="filter-btn" data-filter="loud" aria-pressed="false">
+            <i class="fa-solid fa-volume-high"></i> Loud Environments
+          </button>
+          <button class="filter-btn" data-filter="comfort" aria-pressed="false">
+            <i class="fa-solid fa-cloud"></i> Comfort Focus
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== STETHOSCOPE GRID ========== -->
+    <section aria-labelledby="steth-products-title">
+      <div class="container">
+        <h2 id="steth-products-title" class="sr-only">Stethoscope Products</h2>
+        <div id="stethGrid" class="grid" role="list"></div>
+        <div style="text-align: center; margin-top: 40px;">
+          <a class="btn" href="shop.html">
+            <i class="fa-solid fa-arrow-left"></i> Back to All Products
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WHY CHOOSE STETHOSCOPES ========== -->
+    <section style="background: var(--bg-color); padding: 60px 0; margin-top: 60px;" aria-labelledby="why-steth-title">
+      <div class="container">
+        <h2 id="why-steth-title" class="section-title">Why Choose EMS Stethoscopes</h2>
+        <p class="section-sub">Engineered for paramedics, tested in the field</p>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+          
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-ear" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
+            <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">Crystal Acoustics</h3>
+            <p style="color: var(--gray);">Precision-tuned tunable diaphragms for reliable assessment in any environment—quiet clinic or active ambulance.</p>
           </article>
-          <article class="trust-card">
-            <i class="fa-solid fa-bolt"></i>
-            <h3>Critical Care Ready</h3>
-            <p>Electronic options engineered for louder environments and advanced listening support.</p>
+
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-hand-holding-heart" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
+            <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">All-Day Comfort</h3>
+            <p style="color: var(--gray);">Soft-seal ear tips, lightweight tubing, and ergonomic design keep you comfortable through 24-hour shifts.</p>
           </article>
-          <article class="trust-card">
-            <i class="fa-solid fa-briefcase-medical"></i>
-            <h3>Duty Focused</h3>
-            <p>Products selected around responder use cases, portability, and long-shift durability.</p>
+
+          <article class="card" style="text-align: center; padding: 40px 30px;">
+            <i class="fa-solid fa-screwdriver" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;" aria-hidden="true"></i>
+            <h3 style="margin-bottom: 15px; color: var(--text-color); font-family: 'Cinzel', serif;">Field Durability</h3>
+            <p style="color: var(--gray);">Latex-free materials, reinforced tubing, and weather-resistant construction built to survive station life and rig deployment.</p>
           </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PRE-FOOTER BENEFITS ========== -->
+    <section class="prefooter-benefits" aria-labelledby="benefits-title">
+      <div class="container">
+        <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
+        <div class="benefit-grid">
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3>Fast Shipping</h3>
+            <p>Free shipping on orders over $50. Same-day dispatch available for in-stock items.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3>Quality Guaranteed</h3>
+            <p>All stethoscopes field-tested by working EMS professionals. Lifetime warranty on select items.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <h3>24/7 Support</h3>
+            <p>Expert help whenever you need it. Live chat, phone, and email support available.</p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-icon" aria-hidden="true">
+              <i class="fa-solid fa-rotate-left"></i>
+            </div>
+            <h3>Easy Returns</h3>
+            <p>30-day hassle-free returns on non-sterile items. Your satisfaction is guaranteed.</p>
+          </article>
+
         </div>
       </div>
     </section>
   </main>
 
-  <!-- ===== PRE-FOOTER BENEFITS (BOXES) ===== -->
-<section class="prefooter-benefits">
-  <div class="container">
-
-    <div class="benefit-grid">
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-truck-fast"></i>
-        </div>
-        <h3>Fast Shipping</h3>
-        <p>Free shipping on orders over $50. Same-day dispatch available.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <h3>Quality Guaranteed</h3>
-        <p>All products field-tested by working EMS professionals.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <h3>24/7 Support</h3>
-        <p>Expert help whenever you need it. We’re here for you.</p>
-      </article>
-
-      <article class="benefit-card">
-        <div class="benefit-icon">
-          <i class="fa-solid fa-rotate-left"></i>
-        </div>
-        <h3>Easy Returns</h3>
-        <p>30-day hassle-free returns. Your satisfaction guaranteed.</p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<footer>
-  <!-- existing footer content -->
-</footer>
-  <footer>
+  <!-- ========== FOOTER ========== -->
+  <footer style="background: var(--header-bg); padding: 60px 0 20px; border-top: 3px solid var(--accent);">
     <div class="container">
-      <div style="text-align:center;color:var(--gray);font-size:14px;">
-        © 2026 EMS Luxe Supply. All rights reserved.
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px;">
+        
+        <div style="flex: 1; min-width: 250px;">
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif; font-size: 18px;">
+            <i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY
+          </h4>
+          <p style="color: var(--gray); font-size: 14px; line-height: 1.8; margin-bottom: 20px;">
+            Premium stethoscopes and field gear for medical professionals. Trusted by EMTs, paramedics, and first responders.
+          </p>
+          <div style="display: flex; gap: 15px;">
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Facebook">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Twitter">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+            <a href="#" style="color: var(--accent); font-size: 20px; transition: 0.3s;" aria-label="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+
+        <div style="flex: 1; min-width: 200px;">
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Quick Links</h4>
+          <p style="margin: 8px 0;"><a href="index.html" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Home</a></p>
+          <p style="margin: 8px 0;"><a href="shop.html" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Shop All</a></p>
+          <p style="margin: 8px 0;"><a href="stethoscopes.html" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Stethoscopes</a></p>
+        </div>
+
+        <div style="flex: 1; min-width: 200px;">
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Support</h4>
+          <p style="margin: 8px 0;"><a href="#" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Shipping Info</a></p>
+          <p style="margin: 8px 0;"><a href="#" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> Returns</a></p>
+          <p style="margin: 8px 0;"><a href="#" style="color: var(--text-color); text-decoration: none;"><i class="fa-solid fa-chevron-right" style="font-size: 12px; margin-right: 8px;"></i> FAQ</a></p>
+        </div>
+
+        <div style="flex: 1; min-width: 250px;">
+          <h4 style="color: var(--accent); margin-bottom: 15px; font-family: 'Cinzel', serif;">Contact</h4>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-envelope" style="color: var(--accent); width: 20px;"></i> support@emsluxe.com
+          </p>
+          <p style="color: var(--text-color); margin: 10px 0; font-size: 14px;">
+            <i class="fa-solid fa-phone" style="color: var(--accent); width: 20px;"></i> 1-800-EMS-LUXE
+          </p>
+        </div>
+
+      </div>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 20px; text-align: center; color: var(--gray); font-size: 13px;">
+        <p>© 2026 EMS Luxe Supply. All rights reserved. | Premium Stethoscopes & Field Gear</p>
       </div>
     </div>
   </footer>
 
+  <!-- ========== CART DRAWER ========== -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
-  <aside id="cartDrawer" class="drawer" aria-label="Shopping cart">
+  <aside id="cartDrawer" class="drawer" aria-label="Shopping cart" role="dialog" aria-modal="true">
     <div class="drawer-header">
       <div class="drawer-title">
         <i class="fa-solid fa-cart-shopping"></i> Your Cart
@@ -168,47 +242,57 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <div class="drawer-body" id="cartItems"></div>
+    <div class="drawer-body" id="cartItems">
+      <div class="empty-cart">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Your cart is empty</p>
+      </div>
+    </div>
     <div class="drawer-footer">
       <div class="total-row">
         <span>Total</span>
         <span id="cartTotal">$0.00</span>
       </div>
-      <button id="checkoutBtn" class="btn" style="width:100%;">
-        <i class="fa-solid fa-credit-card"></i> Checkout
+      <button id="checkoutBtn" class="btn" style="width: 100%;">
+        <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
       </button>
     </div>
   </aside>
 
-  <div id="modalBackdrop" class="modal-backdrop">
-    <div class="modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
+  <!-- ========== PRODUCT MODAL ========== -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
+    <div class="modal" id="productModal">
       <div class="modal-header">
-        <h2 class="modal-title" id="modalProductName">Product Name</h2>
+        <h2 class="modal-title" id="modalProductName">Product Details</h2>
         <button class="modal-close" id="modalClose" aria-label="Close product details">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
         <div class="modal-product">
-          <img id="modalProductImage" src="" alt="" title="">
+          <img id="modalProductImage" src="https://placehold.co/800x600/572403/ffd977?text=Stethoscope" alt="Product image" loading="lazy">
           <div class="modal-product-info">
-            <div class="pill" id="modalProductBadge"></div>
+            <div class="pill" id="modalProductBadge" style="display: none;">New</div>
             <div class="price" id="modalProductPrice">$0.00</div>
-            <div class="sku" id="modalProductSku">SKU: ---</div>
-            <p class="description" id="modalProductDescription"></p>
-
-            <div id="modalProductKeywords" class="modal-keywords"></div>
-
-            <div class="features">
-              <h4><i class="fa-solid fa-star"></i> Key Features</h4>
-              <ul id="modalProductFeatures"></ul>
+            <p style="font-size: 13px; color: var(--gray); margin-bottom: 15px;">
+              SKU: <span id="modalProductSku">---</span>
+            </p>
+            <p id="modalProductDescription" style="color: var(--text-color); line-height: 1.7; margin-bottom: 25px;">
+              Product description will appear here...
+            </p>
+            <div>
+              <h4 style="color: var(--accent); margin-bottom: 12px; font-family: 'Cinzel', serif;">
+                <i class="fa-solid fa-star"></i> Key Features
+              </h4>
+              <ul id="modalProductFeatures" style="color: var(--text-color); line-height: 1.8; padding-left: 20px;">
+                <!-- Features populated by JS -->
+              </ul>
             </div>
-
             <div class="modal-product-actions">
-              <button class="btn secondary" type="button" onclick="closeProductModal()">
-                <i class="fa-solid fa-arrow-left"></i> Continue
+              <button class="btn secondary" onclick="closeProductModal()">
+                <i class="fa-solid fa-arrow-left"></i> Continue Shopping
               </button>
-              <button class="btn" id="modalAddToCart" type="button">
+              <button class="btn" id="modalAddToCart">
                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
               </button>
             </div>
@@ -218,6 +302,6 @@
     </div>
   </div>
 
-  <script src="js/script.js" defer></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

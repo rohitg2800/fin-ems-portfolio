@@ -1,6 +1,6 @@
 /* =========================================
    EMS Luxe Supply – Global script.js
-   Fixed for existing HTML structure
+   Updated with Stethoscope Filtering & Full Features
    ========================================= */
 
 "use strict";
@@ -18,6 +18,7 @@ const PRODUCTS = [
     sku: "EMS-STETH-CLASSIC",
     price: 109,
     badge: "Best for Students",
+    filters: ["all", "students", "comfort"],
     description:
       "Everyday acoustic performance for EMTs and students. Tunable diaphragm, reliable build, and field-ready comfort.",
     bullets: [
@@ -40,6 +41,7 @@ const PRODUCTS = [
     sku: "EMS-STETH-ELECTRO",
     price: 289,
     badge: "Best in Loud Environments",
+    filters: ["all", "loud"],
     description:
       "Electronic stethoscope with active noise reduction to cut through sirens and engine noise in the field.",
     bullets: [
@@ -56,12 +58,59 @@ const PRODUCTS = [
     }
   },
   {
+    id: "steth-cardiology-pro",
+    name: "Cardiology Pro Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-CARDIO",
+    price: 199,
+    badge: "Premium",
+    filters: ["all", "comfort"],
+    description:
+      "Advanced stethoscope designed for detailed cardiac assessment. Superior acoustics with lightweight, ergonomic design.",
+    bullets: [
+      "Advanced dual-frequency tuning system",
+      "Precision crafted diaphragm for clear heart sounds",
+      "Extra-soft silicone ear tips",
+      "Lifetime quality guarantee"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+      alt: "Premium stethoscope on medical surface",
+      title: "Cardiology professional stethoscope",
+      keywords: ["cardiology", "premium stethoscope", "cardiac"]
+    }
+  },
+  {
+    id: "steth-universal-pro",
+    name: "Universal Pro Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-UNIVERSAL",
+    price: 149,
+    badge: "Versatile",
+    filters: ["all", "students", "loud", "comfort"],
+    description:
+      "All-purpose stethoscope for any environment. Balanced acoustics, durability, and comfort for extended use.",
+    bullets: [
+      "Universal diaphragm compatible",
+      "Reinforced Y-tube construction",
+      "Color-coded tubing for organization",
+      "10-year manufacturer warranty"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1631217314831-e489b5cfd246?auto=format&fit=crop&w=1200&q=80",
+      alt: "Professional multi-use stethoscope",
+      title: "Universal pro stethoscope",
+      keywords: ["universal", "multi-use", "professional"]
+    }
+  },
+  {
     id: "kit-student-starter",
     name: "EMT / Paramedic Student Starter Kit",
     category: "Kits",
     sku: "EMS-KIT-STUDENT",
     price: 59,
     badge: "Student Bundle",
+    filters: ["all"],
     description:
       "Starter kit aligned with EMT and paramedic coursework: shears, penlight, tape, pupil gauge, and pocket tools.",
     bullets: [
@@ -84,6 +133,7 @@ const PRODUCTS = [
     sku: "EMS-PANTS-5IN1",
     price: 79,
     badge: "New Arrival",
+    filters: ["all"],
     description:
       "Reinforced tactical pants with shears, radio, and glove pockets. Built for long shifts and rough calls.",
     bullets: [
@@ -106,6 +156,7 @@ const PRODUCTS = [
     sku: "EMS-PACK-JUMP",
     price: 189,
     badge: "Agency Favorite",
+    filters: ["all"],
     description:
       "Modular EMS backpack with internal organizers for airways, IV, and trauma gear. Built for first-due rigs.",
     bullets: [
@@ -128,6 +179,7 @@ const PRODUCTS = [
     sku: "EMS-TOOL-SHEARS",
     price: 19,
     badge: "Essential Tool",
+    filters: ["all"],
     description:
       "Hardened trauma shears designed to cut denim, leather, and seatbelts without losing edge.",
     bullets: [
@@ -165,7 +217,7 @@ function initTheme() {
     const saved = localStorage.getItem(THEME_KEY);
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const theme = saved || (prefersDark ? "dark" : "light");
-    
+
     document.documentElement.setAttribute("data-theme", theme);
     updateThemeUI(theme);
   } catch (err) {
@@ -177,7 +229,7 @@ function toggleTheme() {
   try {
     const current = document.documentElement.getAttribute("data-theme") || "light";
     const next = current === "dark" ? "light" : "dark";
-    
+
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem(THEME_KEY, next);
     updateThemeUI(next);
@@ -189,7 +241,7 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-  
+
   if (icon) {
     icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
   }
@@ -240,10 +292,16 @@ function showNotification(message, type = "success") {
     notification.setAttribute("role", "alert");
     notification.setAttribute("aria-live", "polite");
     notification.innerHTML = `
-      <i class="fa-solid ${type === "success" ? "fa-check-circle" : type === "error" ? "fa-exclamation-circle" : "fa-info-circle"}" aria-hidden="true"></i>
+      <i class="fa-solid ${
+        type === "success"
+          ? "fa-check-circle"
+          : type === "error"
+          ? "fa-exclamation-circle"
+          : "fa-info-circle"
+      }" aria-hidden="true"></i>
       <span>${message}</span>
     `;
-    
+
     document.body.appendChild(notification);
 
     setTimeout(() => {
@@ -260,7 +318,7 @@ function updateCartBadge() {
   try {
     const badge = $("#cartBadge");
     if (!badge) return;
-    
+
     const count = cartCount(loadCart());
     badge.textContent = count;
     badge.style.display = count > 0 ? "flex" : "none";
@@ -276,7 +334,7 @@ function addToCart(productId, quantity = 1) {
       showNotification("Product not found", "error");
       return;
     }
-    
+
     const cart = loadCart();
     cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
     saveCart(cart);
@@ -292,12 +350,12 @@ function removeFromCart(productId) {
   try {
     const cart = loadCart();
     const product = PRODUCT_MAP[productId];
-    
+
     delete cart[productId];
     saveCart(cart);
     updateCartBadge();
     renderCart();
-    
+
     if (product) {
       showNotification(`${product.name} removed`, "info");
     }
@@ -310,13 +368,13 @@ function changeCartQty(productId, delta) {
   try {
     const cart = loadCart();
     if (!cart[productId]) return;
-    
+
     cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
-    
+
     if (cart[productId] <= 0) {
       delete cart[productId];
     }
-    
+
     saveCart(cart);
     updateCartBadge();
     renderCart();
@@ -351,10 +409,10 @@ function renderCart() {
       .map(([id, qty]) => {
         const p = PRODUCT_MAP[id];
         if (!p) return "";
-        
+
         const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
         const alt = p.image?.alt || p.name;
-        
+
         return `
           <div class="cart-item">
             <img src="${img}" alt="${alt}" loading="lazy" width="90" height="90">
@@ -385,10 +443,10 @@ function openCart() {
   try {
     const backdrop = $("#cartBackdrop");
     const drawer = $("#cartDrawer");
-    
+
     if (backdrop) backdrop.classList.add("active");
     if (drawer) drawer.classList.add("active");
-    
+
     document.body.classList.add("no-scroll");
     renderCart();
   } catch (err) {
@@ -400,10 +458,10 @@ function closeCart() {
   try {
     const backdrop = $("#cartBackdrop");
     const drawer = $("#cartDrawer");
-    
+
     if (backdrop) backdrop.classList.remove("active");
     if (drawer) drawer.classList.remove("active");
-    
+
     document.body.classList.remove("no-scroll");
   } catch (err) {
     console.error("Close cart failed:", err);
@@ -428,7 +486,7 @@ function openProductModal(productId) {
     const imgEl = $("#modalProductImage");
     const nameEl = $("#modalProductName");
     const priceEl = $("#modalProductPrice");
-    const skuEl = $("#modalProductSku");
+    const skuText = $("#modalProductSku");
     const descEl = $("#modalProductDescription");
     const badgeEl = $("#modalProductBadge");
     const featsEl = $("#modalProductFeatures");
@@ -439,10 +497,18 @@ function openProductModal(productId) {
     if (imgEl) {
       imgEl.src = imgSrc;
       imgEl.alt = imgAlt;
+      if (p.image?.title) imgEl.title = p.image.title;
     }
     if (nameEl) nameEl.textContent = p.name;
     if (priceEl) priceEl.textContent = money(p.price);
-    if (skuEl) skuEl.textContent = p.sku;
+    if (skuText) {
+      // some pages use "SKU: ---" text, some use just span
+      if (skuText.tagName === "SPAN") {
+        skuText.textContent = p.sku;
+      } else {
+        skuText.textContent = `SKU: ${p.sku}`;
+      }
+    }
     if (descEl) descEl.textContent = p.description;
 
     if (badgeEl) {
@@ -474,6 +540,27 @@ function closeProductModal() {
     document.body.classList.remove("no-scroll");
   } catch (err) {
     console.error("Close modal failed:", err);
+  }
+}
+
+/* ---------- FILTERING ---------- */
+
+let currentFilter = "all";
+
+function filterProducts(filterName) {
+  try {
+    currentFilter = filterName;
+
+    // Update button states on stethoscopes page
+    $$(".filter-btn").forEach((btn) => {
+      const isActive = btn.dataset.filter === filterName;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive);
+    });
+
+    renderProducts();
+  } catch (err) {
+    console.error("Filter products failed:", err);
   }
 }
 
@@ -520,10 +607,16 @@ function productCardHTML(p) {
 
 function renderProducts() {
   try {
-    const grid = $("#productGrid");
+    // Front page uses #productGrid, stethoscope page uses #stethGrid
+    const grid = $("#productGrid") || $("#stethGrid");
     if (!grid) return;
-    
-    grid.innerHTML = PRODUCTS.map(productCardHTML).join("");
+
+    const filtered = PRODUCTS.filter((p) => {
+      if (currentFilter === "all") return true;
+      return p.filters && p.filters.includes(currentFilter);
+    });
+
+    grid.innerHTML = filtered.map(productCardHTML).join("");
   } catch (err) {
     console.error("Render products failed:", err);
   }
@@ -609,6 +702,13 @@ function main() {
       });
     }
 
+    // Filter button listeners on stethoscopes page
+    $$(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterProducts(btn.dataset.filter);
+      });
+    });
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeProductModal();
@@ -618,15 +718,6 @@ function main() {
   } catch (err) {
     console.error("Main init failed:", err);
   }
-}
-function showLoading() {
-  const el = document.getElementById("loading");
-  if (el) el.style.display = "flex";
-}
-
-function hideLoading() {
-  const el = document.getElementById("loading");
-  if (el) el.style.display = "none";
 }
 
 // Initialize when DOM ready
