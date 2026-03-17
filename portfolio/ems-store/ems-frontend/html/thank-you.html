@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | EMS Luxe Supply</title>
+  
+  <!-- Same SEO/Meta as index.html -->
+  <meta name="description" content="Thank you for contacting EMS Luxe Supply. We'll respond within 24 hours.">
+  
+  <!-- Fonts & Icons (same as main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Your existing CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <style>
+    /* Thank You Page Specific Styles */
+    .thank-you-hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, var(--bg-color) 0%, rgba(188, 148, 55, 0.08) 100%);
+    }
+    
+    .thank-you-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 60px 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 
+        0 20px 60px rgb(170, 13, 13),
+        0 0 0 1px rgb(255, 255, 255);
+      border: 1px solid rgb(205, 159, 54);
+    }
+    
+    [data-theme="dark"] .thank-you-card {
+      background: rgba(202, 54, 54, 0.95);
+      border-color: rgb(221, 23, 23);
+    }
+    
+    .thank-you-icon {
+      font-size: 80px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      animation: bounce 2s infinite;
+    }
+    
+    .thank-you-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      color: var(--text-color);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    
+    .thank-you-text {
+      color: var(--gray);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-12px); }
+      60% { transform: translateY(-6px); }
+    }
+    
+    /* Mobile */
+    @media (max-width: 640px) {
+      .thank-you-card {
+        padding: 40px 24px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <!-- Same Topbar as index.html -->
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <div class="brand-title">EMS LUXE SUPPLY</div>
+          <div class="fine">PREMIUM FIELD GEAR</div>
+        </div>
+      </a>
+      
+      <!-- Theme Toggle -->
+      <button id="themeToggle" class="theme-toggle">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+        <span id="themeText">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Thank You Hero -->
+  <main class="thank-you-hero">
+    <div class="thank-you-card">
+      <div class="thank-you-icon">
+        <i class="fa-solid fa-check-circle"></i>
+      </div>
+      <h1 class="thank-you-title">Message Sent Successfully!</h1>
+      <p class="thank-you-text">
+        Thank you for reaching out to EMS Luxe Supply. 
+        <strong>We'll respond within 24 hours</strong> with personalized service.
+      </p>
+      
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn">
+          <i class="fa-solid fa-house"></i> Continue Shopping
+        </a>
+        <a href="contact.html" class="btn secondary">
+          <i class="fa-solid fa-envelope"></i> Send Another
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer style="text-align: center; padding: 20px; color: var(--gray); font-size: 0.9rem; border-top: 1px solid var(--border-color);">
+    © 2026 EMS Luxe Supply | 
+    <a href="contact.html" style="color: var(--accent);">Contact Us</a>
+  </footer>
+
+  <!-- Your JS (theme toggle) -->
+  <script src="js/script.js"></script>
+  <script>
+    // Quick theme init for this page
+    const initTheme = () => {
+      const saved = localStorage.getItem('ems_theme_preference');
+      const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (icon) icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      if (text) text.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    };
+    
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('ems_theme_preference', next);
+        initTheme();
+      });
+    }
+    
+    initTheme();
+  </script>
+</body>
+</html>
