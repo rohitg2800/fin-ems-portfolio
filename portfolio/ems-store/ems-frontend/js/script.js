@@ -1012,15 +1012,14 @@ function main() {
         setTimeout(openCart, 250);
       });
     }
-      if (checkoutBtn) {
+   if (checkoutBtn) {
       checkoutBtn.addEventListener("click", () => {
         const cart = loadCart();
         const total = cartTotal(cart);
         if (total === 0) {
           showNotification("Your cart is empty", "error");
         } else {
-          // Redirect to checkout page
-          window.location.href = "checkout.html";
+          openCheckout();
         }
       });
     }
@@ -1048,4 +1047,254 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", main);
 } else {
   main();
+}
+/* ========== CHECKOUT MODAL ========== */
+
+function openCheckout() {
+  try {
+    const backdrop = document.getElementById("checkoutBackdrop");
+    const modal = document.getElementById("checkoutModal");
+    
+    if (backdrop) backdrop.classList.add("active");
+    if (modal) modal.classList.add("active");
+    
+    document.body.classList.add("no-scroll");
+    renderCheckoutSummary();
+  } catch (err) {
+    console.error("Open checkout failed:", err);
+  }
+}
+
+function closeCheckout() {
+  try {
+    const backdrop = document.getElementById("checkoutBackdrop");
+    const modal = document.getElementById("checkoutModal");
+    
+    if (backdrop) backdrop.classList.remove("active");
+    if (modal) modal.classList.remove("active");
+    
+    document.body.classList.remove("no-scroll");
+  } catch (err) {
+    console.error("Close checkout failed:", err);
+  }
+}
+
+function renderCheckoutSummary() {
+  try {
+    const cart = loadCart();
+    const container = document.getElementById("checkoutOrderItems");
+    const totalEl = document.getElementById("checkoutTotal");
+
+    if (!container || !totalEl) return;
+
+    const entries = Object.entries(cart);
+    let total = 0;
+
+    if (!entries.length) {
+      container.innerHTML = '<p style="color: var(--gray); text-align: center;">Your cart is empty</p>';
+      totalEl.textContent = money(0);
+      return;
+    }
+
+    container.innerHTML = entries
+      .map(([id, qty]) => {
+        const p = PRODUCT_MAP[id];
+        if (!p) return "";
+        
+        const itemTotal = p.price * parseInt(qty, 10);
+        total += itemTotal;
+        
+        return `
+          <div class="checkout-item">
+            <span class="checkout-item-name">
+              <strong>${p.name}</strong><br>
+              <span style="font-size: 12px;">x${qty}</span>
+            </span>
+            <span class="checkout-item-price">${money(itemTotal)}</span>
+          </div>
+        `;
+      })
+      .join("");
+
+    totalEl.textContent = money(total);
+  } catch (err) {
+    console.error("Render checkout summary failed:", err);
+  }
+}
+
+function validateCheckoutForm() {
+  const fields = {
+    checkoutName: "Name",
+    checkoutEmail: "Email",
+    checkoutPhone: "Phone",
+    checkoutAddress: "Address",
+    checkoutCity: "City",
+    checkoutState: "State",
+    checkoutZip: "ZIP Code",
+    checkoutCountry: "Country",
+    checkoutCardNum: "Card Number",
+    checkoutExpiry: "Expiry",
+    checkoutCVC: "CVC"
+  };
+
+  const errorEl = document.getElementById("checkoutError");
+  
+  for (const [id, label] of Object.entries(fields)) {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) {
+      if (errorEl) {
+        errorEl.textContent = `Please fill in ${label}`;
+        errorEl.style.display = "block";
+      }
+      return false;
+    }
+  }
+
+  const email = document.getElementById("checkoutEmail").value;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (errorEl) {
+      errorEl.textContent = "Please enter a valid email address";
+      errorEl.style.display = "block";
+    }
+    return false;
+  }
+
+  const cardNum = document.getElementById("checkoutCardNum").value.replace(/\s/g, "");
+  if (!/^\d{13,19}$/.test(cardNum)) {
+    if (errorEl) {
+      errorEl.textContent = "Please enter a valid card number";
+      errorEl.style.display = "block";
+    }
+    return false;
+  }
+
+  const expiry = document.getElementById("checkoutExpiry").value;
+  if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+    if (errorEl) {
+      errorEl.textContent = "Expiry format should be MM/YY";
+      errorEl.style.display = "block";
+    }
+    return false;
+  }
+
+  const cvc = document.getElementById("checkoutCVC").value;
+  if (!/^\d{3,4}$/.test(cvc)) {
+    if (errorEl) {
+      errorEl.textContent = "Please enter a valid CVC";
+      errorEl.style.display = "block";
+    }
+    return false;
+  }
+
+  const agree = document.getElementById("checkoutAgree");
+  if (!agree || !agree.checked) {
+    if (errorEl) {
+      errorEl.textContent = "Please agree to the terms";
+      errorEl.style.display = "block";
+    }
+    return false;
+  }
+
+  return true;
+}
+
+function processCheckout() {
+  try {
+    const errorEl = document.getElementById("checkoutError");
+    if (errorEl) errorEl.style.display = "none";
+
+    if (!validateCheckoutForm()) return;
+
+    const submitBtn = document.getElementById("checkoutSubmitBtn");
+    if (!submitBtn) return;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+    // Simulate payment processing (2 seconds)
+    setTimeout(() => {
+      const orderId = "ORD-" + Date.now();
+      const cart = loadCart();
+      const total = cartTotal(cart);
+      const email = document.getElementById("checkoutEmail").value;
+
+      // Save order
+      const orders = JSON.parse(localStorage.getItem("ems_orders") || "[]");
+      orders.push({
+        orderId: orderId,
+        date: new Date().toLocaleString(),
+        name: document.getElementById("checkoutName").value,
+        email: email,
+        total: total,
+        items: cart
+      });
+      localStorage.setItem("ems_orders", JSON.stringify(orders));
+
+      // Clear cart
+      localStorage.removeItem(STORAGE_KEY);
+      updateCartBadge();
+
+      showNotification(`Order ${orderId} confirmed! Check your email.`, "success");
+      closeCheckout();
+
+      // Reset form
+      document.getElementById("checkoutName").value = "";
+      document.getElementById("checkoutEmail").value = "";
+      document.getElementById("checkoutPhone").value = "";
+      document.getElementById("checkoutAddress").value = "";
+      document.getElementById("checkoutCity").value = "";
+      document.getElementById("checkoutState").value = "";
+      document.getElementById("checkoutZip").value = "";
+      document.getElementById("checkoutCountry").value = "";
+      document.getElementById("checkoutCardNum").value = "";
+      document.getElementById("checkoutExpiry").value = "";
+      document.getElementById("checkoutCVC").value = "";
+      document.getElementById("checkoutAgree").checked = false;
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Complete Purchase';
+    }, 2000);
+  } catch (err) {
+    console.error("Checkout processing failed:", err);
+    const submitBtn = document.getElementById("checkoutSubmitBtn");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Complete Purchase';
+    }
+  }
+}
+
+// Add to main() event listeners:
+const checkoutClose = document.getElementById("checkoutClose");
+const checkoutBackdrop = document.getElementById("checkoutBackdrop");
+const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
+
+if (checkoutClose) checkoutClose.addEventListener("click", closeCheckout);
+if (checkoutBackdrop) {
+  checkoutBackdrop.addEventListener("click", (e) => {
+    if (e.target === checkoutBackdrop) closeCheckout();
+  });
+}
+if (checkoutSubmitBtn) checkoutSubmitBtn.addEventListener("click", processCheckout);
+
+// Format card input
+const cardNumInput = document.getElementById("checkoutCardNum");
+if (cardNumInput) {
+  cardNumInput.addEventListener("input", (e) => {
+    let value = e.target.value.replace(/\s/g, "");
+    let formatted = value.match(/.{1,4}/g)?.join(" ") || value;
+    e.target.value = formatted;
+  });
+}
+
+// Format expiry input
+const expiryInput = document.getElementById("checkoutExpiry");
+if (expiryInput) {
+  expiryInput.addEventListener("input", (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length >= 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2, 4);
+    }
+    e.target.value = value;
+  });
 }
