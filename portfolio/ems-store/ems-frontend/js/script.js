@@ -1012,7 +1012,7 @@ function main() {
         setTimeout(openCart, 250);
       });
     }
-   if (checkoutBtn) {
+      if (checkoutBtn) {
       checkoutBtn.addEventListener("click", () => {
         const cart = loadCart();
         const total = cartTotal(cart);
@@ -1042,6 +1042,7 @@ function main() {
     console.error("Main init failed:", err);
   }
 }
+
 /* ========== CHECKOUT MODAL ========== */
 
 function openCheckout() {
@@ -1258,10 +1259,12 @@ function processCheckout() {
   }
 }
 
-// Add to main() event listeners:
+// Add checkout event listeners in main() function
 const checkoutClose = document.getElementById("checkoutClose");
 const checkoutBackdrop = document.getElementById("checkoutBackdrop");
 const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
+const cardNumInput = document.getElementById("checkoutCardNum");
+const expiryInput = document.getElementById("checkoutExpiry");
 
 if (checkoutClose) checkoutClose.addEventListener("click", closeCheckout);
 if (checkoutBackdrop) {
@@ -1272,7 +1275,6 @@ if (checkoutBackdrop) {
 if (checkoutSubmitBtn) checkoutSubmitBtn.addEventListener("click", processCheckout);
 
 // Format card input
-const cardNumInput = document.getElementById("checkoutCardNum");
 if (cardNumInput) {
   cardNumInput.addEventListener("input", (e) => {
     let value = e.target.value.replace(/\s/g, "");
@@ -1282,7 +1284,6 @@ if (cardNumInput) {
 }
 
 // Format expiry input
-const expiryInput = document.getElementById("checkoutExpiry");
 if (expiryInput) {
   expiryInput.addEventListener("input", (e) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -1292,6 +1293,7 @@ if (expiryInput) {
     e.target.value = value;
   });
 }
+
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", main);

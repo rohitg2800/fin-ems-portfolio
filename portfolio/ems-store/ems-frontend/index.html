@@ -369,6 +369,249 @@
     <div class="spinner"></div>
   </div>
 
+  <!-- ========== CHECKOUT MODAL ========== -->
+<div id="checkoutBackdrop" class="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal checkout-modal" id="checkoutModal" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+    <div class="modal-header">
+      <h2 class="modal-title"><i class="fa-solid fa-credit-card"></i> Secure Checkout</h2>
+      <button class="modal-close" id="checkoutClose" aria-label="Close checkout">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body checkout-content">
+      <div class="checkout-container">
+        
+        <!-- LEFT: Billing Form -->
+        <div class="checkout-form-section">
+          <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 20px;">
+            <i class="fa-solid fa-user"></i> Billing Information
+          </h3>
+
+          <div id="checkoutError" class="error-message" style="display: none; margin-bottom: 15px;"></div>
+
+          <div class="form-group">
+            <label for="checkoutName">Full Name *</label>
+            <input type="text" id="checkoutName" required placeholder="John Doe">
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutEmail">Email *</label>
+            <input type="email" id="checkoutEmail" required placeholder="john@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutPhone">Phone *</label>
+            <input type="tel" id="checkoutPhone" required placeholder="+1 (555) 000-0000">
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutAddress">Street Address *</label>
+            <input type="text" id="checkoutAddress" required placeholder="123 Medical Lane">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label for="checkoutCity">City *</label>
+              <input type="text" id="checkoutCity" required placeholder="Trauma City">
+            </div>
+            <div class="form-group">
+              <label for="checkoutState">State *</label>
+              <input type="text" id="checkoutState" required placeholder="CA">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label for="checkoutZip">ZIP Code *</label>
+              <input type="text" id="checkoutZip" required placeholder="90210">
+            </div>
+            <div class="form-group">
+              <label for="checkoutCountry">Country *</label>
+              <select id="checkoutCountry" required>
+                <option value="">Select Country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-color);">
+            <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 15px;">
+              <i class="fa-solid fa-credit-card"></i> Card Information
+            </h3>
+            
+            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Card Number *</label>
+            <input type="text" id="checkoutCardNum" placeholder="4242 4242 4242 4242" maxlength="19">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+              <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Expiry *</label>
+                <input type="text" id="checkoutExpiry" placeholder="MM/YY" maxlength="5">
+              </div>
+              <div>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">CVC *</label>
+                <input type="text" id="checkoutCVC" placeholder="123" maxlength="4">
+              </div>
+            </div>
+
+            <div id="cardErrors" style="color: #c00; margin-top: 10px; font-size: 14px; display: none;"></div>
+          </div>
+
+          <label style="display: flex; align-items: center; gap: 10px; margin: 25px 0; cursor: pointer;">
+            <input type="checkbox" id="checkoutAgree" required>
+            <span style="font-size: 14px;">I agree to Terms of Service</span>
+          </label>
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <div class="checkout-summary-section">
+          <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 20px;">
+            <i class="fa-solid fa-receipt"></i> Order Summary
+          </h3>
+
+          <div id="checkoutOrderItems" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;">
+            <!-- Populated by JS -->
+          </div>
+
+          <div style="border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <span style="font-size: 18px; font-weight: 600;">Total:</span>
+              <span id="checkoutTotal" style="font-size: 24px; color: var(--accent); font-weight: 700;">$0.00</span>
+            </div>
+
+            <button id="checkoutSubmitBtn" class="btn" style="width: 100%; padding: 14px;">
+              <i class="fa-solid fa-lock"></i> Complete Purchase
+            </button>
+
+            <p style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--gray);">
+              <i class="fa-solid fa-lock"></i> Secured by industry-standard encryption
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS for Checkout Modal -->
+<style>
+  .checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .checkout-container {
+      grid-template-columns: 1fr;
+    }
+
+    .checkout-modal {
+      width: 95vw !important;
+      max-width: 95vw !important;
+    }
+  }
+
+  .checkout-form-section {
+    padding-right: 20px;
+    border-right: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 768px) {
+    .checkout-form-section {
+      padding-right: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+  }
+
+  .checkout-summary-section {
+    background: rgba(255, 217, 119, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .checkout-summary-section {
+      position: static;
+      margin-top: 20px;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 217, 119, 0.1);
+  }
+
+  .error-message {
+    background-color: #fee;
+    color: #c00;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 4px solid #c00;
+  }
+
+  .checkout-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+  }
+
+  .checkout-item:last-child {
+    border-bottom: none;
+  }
+
+  .checkout-item-name {
+    color: var(--text-color);
+  }
+
+  .checkout-item-qty {
+    color: var(--gray);
+    margin: 0 10px;
+  }
+
+  .checkout-item-price {
+    color: var(--accent);
+    font-weight: 600;
+  }
+</style>
+
+
   <!-- JavaScript -->
   <script src="js/script.js" defer></script>
 </body>
