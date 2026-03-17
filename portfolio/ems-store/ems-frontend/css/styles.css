@@ -29,7 +29,7 @@
 
   /* Borders & shadows (optimized HSL) */
   --border-color: #d6c080;
-  --shadow: 0 6px 24px hsl(56, 73%, 36% / 0.4);
+  --shadow: 0 6px 24px hsl(56, 73%, 36% / 0.6);
   --shadow-hover: 0 12px 40px hsl(280, 51%, 24% / 0.6);
 }
 
