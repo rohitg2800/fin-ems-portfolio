@@ -11,6 +11,7 @@ const THEME_KEY = "ems_theme_preference";
 
 /* ---------- PRODUCT DATA ---------- */
 const PRODUCTS = [
+  // ====== STETHOSCOPES ======
   {
     id: "steth-littmann-classic",
     name: "Classic Acoustic Stethoscope",
@@ -100,6 +101,52 @@ const PRODUCTS = [
     }
   },
   {
+    id: "steth-lightweight-student",
+    name: "Lightweight Student Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-STUDENT",
+    price: 69,
+    badge: "Budget Pick",
+    filters: ["all", "students"],
+    description:
+      "Affordable, lightweight stethoscope ideal for skills labs, clinicals, and early ride-alongs.",
+    bullets: [
+      "Lightweight aluminum chestpiece",
+      "Comfortable PVC tubing",
+      "Color options for student cohorts",
+      "1-year limited warranty"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1613141411232-0f5e1e93a3e7?auto=format&fit=crop&w=1200&q=80",
+      alt: "Blue lightweight stethoscope on clipboard",
+      title: "Lightweight student stethoscope"
+    }
+  },
+  {
+    id: "steth-rig-duty",
+    name: "Rig-Duty Hybrid Stethoscope",
+    category: "Stethoscopes",
+    sku: "EMS-STETH-RIG",
+    price: 159,
+    badge: "Rig Favorite",
+    filters: ["all", "loud", "comfort"],
+    description:
+      "Hybrid acoustic design tuned for use in ambulances and helicopters with improved isolation.",
+    bullets: [
+      "Angled headset for secure fit while moving",
+      "Thicker acoustic tubing to block exterior noise",
+      "Reinforced yoke for long-term durability",
+      "Includes spare ear tips and ID tag"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      alt: "Stethoscope hanging in an ambulance",
+      title: "Rig-duty hybrid stethoscope"
+    }
+  },
+
+  // ====== KITS ======
+  {
     id: "kit-student-starter",
     name: "EMT / Paramedic Student Starter Kit",
     category: "Kits",
@@ -119,28 +166,6 @@ const PRODUCTS = [
       src: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1200&q=80",
       alt: "Medical kit with stethoscope, scissors, and diagnostic tools",
       title: "Complete student starter kit for EMT training"
-    }
-  },
-  {
-    id: "pants-5in1-tactical",
-    name: "5-in-1 Tactical EMS Pants",
-    category: "Apparel",
-    sku: "EMS-PANTS-5IN1",
-    price: 79,
-    badge: "New Arrival",
-    filters: ["all"],
-    description:
-      "Reinforced tactical pants with shears, radio, and glove pockets. Built for long shifts and rough calls.",
-    bullets: [
-      "Ripstop fabric with DWR coating",
-      "Reinforced knees and seat",
-      "Dedicated shears & radio pockets",
-      "Wrinkle-resistant, machine washable"
-    ],
-    image: {
-      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
-      alt: "Dark tactical pants hanging on a clothing rack",
-      title: "5-in-1 tactical EMS pants"
     }
   },
   {
@@ -165,6 +190,32 @@ const PRODUCTS = [
       title: "Rapid response EMS backpack"
     }
   },
+
+  // ====== APPAREL ======
+  {
+    id: "pants-5in1-tactical",
+    name: "5-in-1 Tactical EMS Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-5IN1",
+    price: 79,
+    badge: "New Arrival",
+    filters: ["all"],
+    description:
+      "Reinforced tactical pants with shears, radio, and glove pockets. Built for long shifts and rough calls.",
+    bullets: [
+      "Ripstop fabric with DWR coating",
+      "Reinforced knees and seat",
+      "Dedicated shears & radio pockets",
+      "Wrinkle-resistant, machine washable"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
+      alt: "Dark tactical pants hanging on a clothing rack",
+      title: "5-in-1 tactical EMS pants"
+    }
+  },
+
+  // ====== TOOLS ======
   {
     id: "tool-shears-ballistic",
     name: "Ballistic-Rated Trauma Shears",
@@ -209,7 +260,6 @@ function initTheme() {
     const saved = localStorage.getItem(THEME_KEY);
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const theme = saved || (prefersDark ? "dark" : "light");
-
     document.documentElement.setAttribute("data-theme", theme);
     updateThemeUI(theme);
   } catch (err) {
@@ -221,7 +271,6 @@ function toggleTheme() {
   try {
     const current = document.documentElement.getAttribute("data-theme") || "light";
     const next = current === "dark" ? "light" : "dark";
-
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem(THEME_KEY, next);
     updateThemeUI(next);
@@ -233,7 +282,6 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-
   if (icon) {
     icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
   }
@@ -310,7 +358,6 @@ function updateCartBadge() {
   try {
     const badge = $("#cartBadge");
     if (!badge) return;
-
     const count = cartCount(loadCart());
     badge.textContent = count;
     badge.style.display = count > 0 ? "flex" : "none";
@@ -326,7 +373,6 @@ function addToCart(productId, quantity = 1) {
       showNotification("Product not found", "error");
       return;
     }
-
     const cart = loadCart();
     cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
     saveCart(cart);
@@ -342,12 +388,10 @@ function removeFromCart(productId) {
   try {
     const cart = loadCart();
     const product = PRODUCT_MAP[productId];
-
     delete cart[productId];
     saveCart(cart);
     updateCartBadge();
     renderCart();
-
     if (product) {
       showNotification(`${product.name} removed`, "info");
     }
@@ -360,13 +404,8 @@ function changeCartQty(productId, delta) {
   try {
     const cart = loadCart();
     if (!cart[productId]) return;
-
     cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
-
-    if (cart[productId] <= 0) {
-      delete cart[productId];
-    }
-
+    if (cart[productId] <= 0) delete cart[productId];
     saveCart(cart);
     updateCartBadge();
     renderCart();
@@ -401,10 +440,8 @@ function renderCart() {
       .map(([id, qty]) => {
         const p = PRODUCT_MAP[id];
         if (!p) return "";
-
         const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
         const alt = p.image?.alt || p.name;
-
         return `
           <div class="cart-item">
             <img src="${img}" alt="${alt}" loading="lazy" width="90" height="90">
@@ -435,10 +472,8 @@ function openCart() {
   try {
     const backdrop = $("#cartBackdrop");
     const drawer = $("#cartDrawer");
-
     if (backdrop) backdrop.classList.add("active");
     if (drawer) drawer.classList.add("active");
-
     document.body.classList.add("no-scroll");
     renderCart();
   } catch (err) {
@@ -450,10 +485,8 @@ function closeCart() {
   try {
     const backdrop = $("#cartBackdrop");
     const drawer = $("#cartDrawer");
-
     if (backdrop) backdrop.classList.remove("active");
     if (drawer) drawer.classList.remove("active");
-
     document.body.classList.remove("no-scroll");
   } catch (err) {
     console.error("Close cart failed:", err);
@@ -472,7 +505,6 @@ function openProductModal(productId) {
 
     const modal = $("#productModal");
     const backdrop = $("#modalBackdrop");
-
     if (!modal || !backdrop) return;
 
     const imgEl = $("#modalProductImage");
@@ -495,7 +527,6 @@ function openProductModal(productId) {
     if (priceEl) priceEl.textContent = money(p.price);
 
     if (skuWrapper) {
-      // Sometimes span, sometimes block "SKU: ---"
       if (skuWrapper.tagName === "SPAN") {
         skuWrapper.textContent = p.sku;
       } else {
@@ -519,7 +550,6 @@ function openProductModal(productId) {
     }
 
     modal.dataset.productId = productId;
-
     backdrop.classList.add("active");
     document.body.classList.add("no-scroll");
   } catch (err) {
@@ -544,13 +574,11 @@ let currentFilter = "all";
 function filterProducts(filterName) {
   try {
     currentFilter = filterName;
-
     $$(".filter-btn").forEach((btn) => {
       const isActive = btn.dataset.filter === filterName;
       btn.classList.toggle("active", isActive);
       btn.setAttribute("aria-pressed", isActive);
     });
-
     renderProducts();
   } catch (err) {
     console.error("Filter products failed:", err);
@@ -562,7 +590,6 @@ function filterProducts(filterName) {
 function productCardHTML(p) {
   const shortDesc =
     p.description.length > 130 ? p.description.slice(0, 128) + "…" : p.description;
-
   const imgSrc = p.image?.src || "https://placehold.co/600x400/572403/ffd977?text=EMS";
   const imgAlt = p.image?.alt || p.name;
 
@@ -581,7 +608,7 @@ function productCardHTML(p) {
         <div class="price-row">
           <div>
             <div class="price">${money(p.price)}</div>
-            <div style="font-size: 12px; color: var(--gray);">${p.sku}</div>
+            <div class="sku-small">${p.sku}</div>
           </div>
           ${p.badge ? `<div class="pill">${p.badge}</div>` : "<div></div>"}
         </div>
@@ -610,7 +637,7 @@ function renderProducts() {
     const gridApparel = $("#gridApparel");
     const gridTools = $("#gridTools");
 
-    // SHOP PAGE: multiple category grids
+    // SHOP PAGE: category grids
     if (gridStethoscopes || gridKits || gridApparel || gridTools) {
       if (gridStethoscopes) {
         const items = PRODUCTS.filter((p) => p.category === "Stethoscopes");
@@ -631,7 +658,7 @@ function renderProducts() {
       return;
     }
 
-    // STETHOSCOPES PAGE: single grid + filter buttons
+    // STETHOSCOPES PAGE: only stethoscopes + filters
     if (stethPageGrid) {
       const items = PRODUCTS.filter((p) => {
         if (p.category !== "Stethoscopes") return false;
@@ -642,9 +669,11 @@ function renderProducts() {
       return;
     }
 
-    // HOME / INDEX PAGE: generic productGrid (if present)
+    // HOME PAGE: generic Featured grid
     if (homeGrid) {
-      homeGrid.innerHTML = PRODUCTS.map(productCardHTML).join("");
+      // show a subset (first 4) as "featured"
+      const featured = PRODUCTS.slice(0, 4);
+      homeGrid.innerHTML = featured.map(productCardHTML).join("");
     }
   } catch (err) {
     console.error("Render products failed:", err);
@@ -694,8 +723,8 @@ function main() {
     const checkoutBtn   = $("#checkoutBtn");
 
     if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-    if (cartBtn) cartBtn.addEventListener("click", openCart);
-    if (cartClose) cartClose.addEventListener("click", closeCart);
+    if (cartBtn)      cartBtn.addEventListener("click", openCart);
+    if (cartClose)    cartClose.addEventListener("click", closeCart);
     if (cartBackdrop) {
       cartBackdrop.addEventListener("click", (e) => {
         if (e.target === cartBackdrop) closeCart();
@@ -706,7 +735,7 @@ function main() {
         if (e.target === modalBackdrop) closeProductModal();
       });
     }
-    if (modalClose) modalClose.addEventListener("click", closeProductModal);
+    if (modalClose)   modalClose.addEventListener("click", closeProductModal);
     if (modalAdd) {
       modalAdd.addEventListener("click", () => {
         const modal = $("#productModal");
@@ -730,7 +759,7 @@ function main() {
       });
     }
 
-    // Stethoscope filter buttons (only exist on that page)
+    // Stethoscope filter buttons
     $$(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         filterProducts(btn.dataset.filter);
@@ -748,7 +777,6 @@ function main() {
   }
 }
 
-// Initialize when DOM ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", main);
 } else {

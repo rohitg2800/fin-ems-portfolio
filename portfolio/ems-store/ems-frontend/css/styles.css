@@ -48,9 +48,9 @@
   --card-bg: #171210;
   --header-bg: linear-gradient(135deg, #171210 0%, #2b1b10 60%, #3d2717 100%);
 
-  --text-color: #8b8f54;
+  --text-color: #f3eedf;      /* UPDATED: brighter text for readability */
   --header-text: #ffe9a8;
-  --gray: #b0a28b;
+  --gray: #d5ccb7;            /* slightly brighter muted text */
 
   --border-color: #3f2718;
   --shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
@@ -219,6 +219,8 @@ img {
   transition: 0.3s;
 }
 
+/* ACTIVE NAV using aria-current="page" */
+.nav a[aria-current="page"],
 .nav a:hover {
   background: var(--accent);
   color: var(--primary);
@@ -428,6 +430,26 @@ img {
   margin: 40px 0;
 }
 
+/* Extra soft card style for info sections */
+.card-soft {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 28px 22px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.card-soft h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card-soft p {
+  color: var(--gray);
+  font-size: 14px;
+}
+
 .card {
   background: var(--card-bg);
   border-radius: 15px;
@@ -517,6 +539,12 @@ img {
   font-weight: 700;
 }
 
+/* small SKU text used in JS cards */
+.sku-small {
+  font-size: 11px;
+  color: var(--gray);
+}
+
 .card-actions {
   display: flex;
   gap: 12px;
@@ -527,6 +555,87 @@ img {
   padding: 12px;
   font-size: 14px;
 }
+
+/* ----------  FILTERS (STETH PAGE)  ---------- */
+.filter-section {
+  padding: 40px 0 10px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.25s;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent);
+  background: rgba(255, 216, 107, 0.16);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--primary);
+}
+
+/* ----------  BENEFIT & TRUST CARDS (existing classes work with new pages) ---------- */
+.prefooter-benefits {
+  padding: 60px 0;
+}
+
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 24px;
+}
+
+.benefit-card {
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 22px 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.benefit-card h3 {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
+.benefit-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.benefit-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: rgba(245, 182, 34, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+/* trust-section and trust-card already defined in your earlier CSS (kept) */
 
 /* ----------  MODAL  ---------- */
 .modal-backdrop {
@@ -732,381 +841,106 @@ img {
   display: flex;
   gap: 15px;
   padding: 20px;
-  margin-bottom: 15px;
-  background: var(--bg-color);
-  border-radius: 10px;
   border-bottom: 1px solid var(--border-color);
-  transition: 0.3s;
 }
 
-.cart-item:hover {
-  transform: translateX(5px);
-  border-left: 3px solid var(--accent);
+/* ----------  FOOTER (for .footer-main used on steth page) ---------- */
+.footer-main {
+  background: var(--header-bg);
+  border-top: 3px solid var(--accent);
+  padding: 40px 0 20px;
 }
 
-.cart-item img {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-}
-
-.cart-item-title {
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: 8px;
-}
-
-.cart-item-price {
-  color: var(--accent);
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.cart-item-quantity {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.cart-item-quantity button {
-  width: 35px;
-  height: 35px;
-  border: 2px solid var(--accent);
-  border-radius: 8px;
-  background: var(--card-bg);
-  color: var(--accent);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.cart-item-quantity button:hover {
-  background: var(--accent);
-  color: var(--primary);
-  transform: scale(1.08);
-}
-
-.cart-item-remove {
-  background: none;
-  border: none;
-  color: #e53e3e;
-  font-size: 20px;
-  margin-left: auto;
-  cursor: pointer;
-  transition: 0.3s;
-  padding: 5px;
-}
-
-.cart-item-remove:hover {
-  transform: scale(1.15);
-}
-
-.empty-cart {
-  text-align: center;
-  color: var(--gray);
-  padding: 60px 20px;
-}
-
-.empty-cart i {
-  font-size: 60px;
-  opacity: 0.45;
-  margin-bottom: 20px;
-}
-
-/* ----------  NOTIFICATION  ---------- */
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(140px); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes slideOut {
-  to { opacity: 0; transform: translateX(120px); }
-}
-
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 18px 24px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 600;
-  z-index: 1000;
-  border: 2px solid var(--accent);
-  animation: slideIn 0.35s;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-}
-
-.notification.success {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-  color: #fff;
-}
-
-.notification.error {
-  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-  color: #fff;
-}
-
-.notification.info {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  color: var(--accent);
-}
-
-/* ----------  SPINNER  ---------- */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 5px solid var(--border-color);
-  border-top: 5px solid var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  box-shadow: 0 0 20px var(--accent);
-}
-
-/* ----------  PRE-FOOTER BENEFITS  ---------- */
-.prefooter-benefits {
-  padding: 50px 0;
-  background: var(--bg-color);
-  border-top: 1px solid var(--border-color);
-}
-
-.benefit-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.benefit-card {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 22px 20px;
-  border: 2px solid rgba(255, 216, 107, 0.65);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.benefit-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-  border-color: var(--accent-hover);
-}
-
-.benefit-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 216, 107, 0.12);
-  color: var(--accent);
-  margin-bottom: 4px;
-  font-size: 20px;
-}
-
-.benefit-card h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-color);
-}
-
-.benefit-card p {
-  font-size: 14px;
-  color: var(--gray);
-  line-height: 1.6;
-}
-
-/* ----------  EMT STETHOSCOPES CTA  ---------- */
-.emt-steth-cta {
-  padding: 32px 0 16px;
-}
-
-.emt-steth-head h2 {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  color: var(--text-color);
-}
-
-.emt-steth-head p {
-  font-size: 14px;
-  color: var(--gray);
-  margin-bottom: 16px;
-}
-
-.emt-steth-buttons {
+.footer-columns {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 30px;
+  margin-bottom: 24px;
 }
 
-.pill-btn {
-  border-radius: 999px;
-  padding: 8px 16px;
+.footer-col {
+  flex: 1;
+  min-width: 220px;
   font-size: 13px;
-  font-weight: 600;
-  border: 1px solid var(--accent);
-  background: rgba(255, 217, 119, 0.06);
-  color: var(--text-color);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.pill-btn:hover {
-  background: var(--accent);
-  color: #1b1207;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-  transform: translateY(-1px);
+.footer-col h4 {
+  margin: 0 0 10px;
+  font-family: 'Cinzel', serif;
+  color: var(--accent);
+}
+
+.footer-col p {
+  margin: 4px 0;
+  color: var(--gray);
+}
+
+.footer-col a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.footer-col a i {
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* ----------  NOTIFICATIONS ---------- */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--card-bg);
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  z-index: 999;
+  box-shadow: var(--shadow);
+}
+
+/* ----------  UTILITIES ---------- */
+.no-scroll {
+  overflow: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 /* ----------  RESPONSIVE  ---------- */
-@media (max-width: 992px) {
-  .benefit-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-    width: 40px;
-    height: 40px;
-  }
-  
   .nav {
     display: none;
-    width: 100%;
-    order: 4;
-    gap: 0;
   }
-  
-  .nav a {
-    padding: 12px 15px;
-    font-size: 14px;
-    margin: 5px 0;
-    justify-content: flex-start;
+
+  .menu-toggle {
+    display: block;
   }
-  
-  .hero {
-    padding: 40px 0;
-  }
-  
-  .hero-title {
-    font-size: 1.6rem;
-  }
-  
+
   .grid {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
-  
-  .drawer {
-    width: 100%;
-    right: -100%;
-  }
-  
-  .drawer.active {
-    right: 0;
-  }
-  
-  .modal {
-    margin: 10px;
-    max-height: 85vh;
-  }
-  
-  .modal-product img {
-    height: 250px;
-  }
-  
-  .notification {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-    padding: 12px 18px;
-    font-size: 14px;
-  }
-}
 
-@media (max-width: 600px) {
-  .benefit-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .emt-steth-buttons {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 375px) {
-  .brand-title {
-    font-size: 14px;
-  }
-  
-  .hero-title {
-    font-size: 1.4rem;
-  }
-  
-  .section-title {
-    font-size: 1.5rem;
-  }
-  
-  .theme-toggle {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .icon-btn {
-    width: 38px;
-    height: 38px;
-    font-size: 16px;
-  }
-  
-  .menu-toggle {
-    width: 36px;
-    height: 36px;
-  }
-}
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin: 3rem 0;
-}
-
-.category-section {
-  margin: 4rem 0;
-  padding: 2rem 0;
-}
-
-.section-subtitle {
-  color: var(--text-color-muted);
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
+  .hero {
+    padding: 60px 0 40px;
   }
 }
