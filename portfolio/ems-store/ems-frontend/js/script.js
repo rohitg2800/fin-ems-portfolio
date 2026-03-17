@@ -68,7 +68,7 @@ const PRODUCTS = [
       "Advanced stethoscope designed for detailed cardiac assessment. Superior acoustics with lightweight, ergonomic design.",
     bullets: [
       "Advanced dual-frequency tuning system",
-      "Precision crafted diaphragm for clear heart sounds",
+      "Precision-crafted diaphragm for clear heart sounds",
       "Extra-soft silicone ear tips",
       "Lifetime quality guarantee"
     ],
@@ -145,7 +145,7 @@ const PRODUCTS = [
     }
   },
 
-  // ====== KITS ======
+  // ====== KITS (5+) ======
   {
     id: "kit-student-starter",
     name: "EMT / Paramedic Student Starter Kit",
@@ -190,8 +190,75 @@ const PRODUCTS = [
       title: "Rapid response EMS backpack"
     }
   },
+  {
+    id: "kit-als-airway-roll",
+    name: "ALS Airway Roll Kit",
+    category: "Kits",
+    sku: "EMS-KIT-ALS-AIRWAY",
+    price: 129,
+    badge: "ALS Ready",
+    filters: ["all"],
+    description:
+      "Roll-out airway kit with compartments for BVM, OPAs, NPAs, supraglottic devices, and adjuncts.",
+    bullets: [
+      "Roll design with labeled airway pockets",
+      "High-visibility interior for night calls",
+      "Wipe-clean, fluid-resistant materials",
+      "Fits inside standard jump bags"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1615486511563-016d2b84c63f?auto=format&fit=crop&w=1200&q=80",
+      alt: "Airway management tools in a rolled EMS kit",
+      title: "ALS airway roll kit"
+    }
+  },
+  {
+    id: "kit-mci-triage",
+    name: "MCI Triage & Tag Kit",
+    category: "Kits",
+    sku: "EMS-KIT-MCI",
+    price: 149,
+    badge: "Incident Command",
+    filters: ["all"],
+    description:
+      "Mass-casualty triage kit with tags, tape, and tools for rapid START/JumpSTART triage.",
+    bullets: [
+      "Includes 100 color-coded triage tags",
+      "Pre-printed incident command checklists",
+      "High-visibility carry pouch",
+      "Ideal for drills and real incidents"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
+      alt: "Triage equipment laid out on the ground",
+      title: "Mass casualty triage kit"
+    }
+  },
+  {
+    id: "kit-clinic-diagnostic",
+    name: "Clinic Diagnostic Kit",
+    category: "Kits",
+    sku: "EMS-KIT-CLINIC",
+    price: 99,
+    badge: "Station Essential",
+    filters: ["all"],
+    description:
+      "Station-side diagnostic kit with BP cuff, otoscope, reflex hammer, and thermometer case.",
+    bullets: [
+      "Adult and large adult BP cuffs included",
+      "LED otoscope with spare specula",
+      "Reflex hammer and digital thermometer",
+      "Rigid carry case with foam insert"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      alt: "Diagnostic instruments arranged in a kit",
+      title: "Clinic diagnostic kit"
+    }
+  },
 
   // ====== APPAREL ======
+    // ====== APPAREL ======
   {
     id: "pants-5in1-tactical",
     name: "5-in-1 Tactical EMS Pants",
@@ -214,8 +281,118 @@ const PRODUCTS = [
       title: "5-in-1 tactical EMS pants"
     }
   },
+  {
+    id: "pants-milspec-cargo",
+    name: "Mil‑Spec 8‑Pocket Cargo Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-MILSPEC",
+    price: 89,
+    badge: "High Capacity",
+    filters: ["all"],
+    description:
+      "Military-inspired EMS pants with 8 functional pockets for shears, gloves, markers, and diagnostic tools.",
+    bullets: [
+      "8 total pockets including dual cargo and phone slots",
+      "Bartacked stress points for durability",
+      "Adjustable waist tabs for in‑rig comfort",
+      "Fade-resistant mil‑spec fabric blend"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1612810432634-96f64dc8ccb6?auto=format&fit=crop&w=1200&q=80",
+      alt: "Olive green cargo pants folded on a bench",
+      title: "Mil-spec multi-pocket EMS cargo pants"
+    }
+  },
+  {
+    id: "pants-rugged-rig",
+    name: "Rugged Rig Cargo Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-RIG",
+    price: 99,
+    badge: "Field Proven",
+    filters: ["all"],
+    description:
+      "Heavy-duty, rig-ready pants with reinforced seams and 7 multi-depth pockets for tools and supplies.",
+    bullets: [
+      "7 pockets sized for radios, gloves, and pens",
+      "Triple-stitched seams in high-wear zones",
+      "Articulated knees for easier kneeling and climbing",
+      "Moisture-wicking inner waistband for long shifts"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1200&q=80",
+      alt: "Dark work pants with multiple pockets",
+      title: "Rugged multi-pocket rig pants"
+    }
+  },
+  {
+    id: "pants-lightweight-duty",
+    name: "Lightweight Duty BDU Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-LW-BDU",
+    price: 69,
+    badge: "Summer Shift",
+    filters: ["all"],
+    description:
+      "Breathable, lightweight BDU‑style pants with 6 pockets, ideal for hot climates and busy summer shifts.",
+    bullets: [
+      "6-pocket BDU layout with cargo and back pockets",
+      "Lightweight weave for improved airflow",
+      "Drawstring cuffs for secure fit over boots",
+      "Colorfast fabric that resists fading and stains"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1200&q=80",
+      alt: "Lightweight tactical pants hanging on a rack",
+      title: "Lightweight EMS duty BDU pants"
+    }
+  },
+  {
+    id: "pants-winter-softshell",
+    name: "Winter Softshell EMS Pants",
+    category: "Apparel",
+    sku: "EMS-PANTS-WINTER",
+    price: 119,
+    badge: "Cold Weather",
+    filters: ["all"],
+    description:
+      "Fleece-lined softshell EMS pants with 5 zipped pockets to secure gear during cold, wet calls.",
+    bullets: [
+      "Softshell exterior with DWR water resistance",
+      "Fleece lining for thermal insulation",
+      "5 zipped pockets to secure gear in snow and rain",
+      "Gusseted crotch for unrestricted movement"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1200&q=80",
+      alt: "Softshell winter pants with multiple zip pockets",
+      title: "Fleece-lined winter EMS pants"
+    }
+  },
+  {
+    id: "shorts-cargo-duty",
+    name: "Cargo Duty Shorts (Station Use)",
+    category: "Apparel",
+    sku: "EMS-SHORTS-CARGO",
+    price: 54,
+    badge: "Station Wear",
+    filters: ["all"],
+    description:
+      "Multi-pocket duty shorts for station and training days, with 6 pockets and reinforced seat.",
+    bullets: [
+      "6 pockets including dual cargo and utility slots",
+      "Reinforced seat panel for long bench sitting",
+      "Belt loops sized for duty belts",
+      "Quick-dry fabric ideal for hot weather drills"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1580674280375-c10aeeb185d2?auto=format&fit=crop&w=1200&q=80",
+      alt: "Cargo shorts with multiple pockets on a wood surface",
+      title: "Multi-pocket cargo duty shorts"
+    }
+  },
 
-  // ====== TOOLS ======
+  // ====== TOOLS (5+) ======
   {
     id: "tool-shears-ballistic",
     name: "Ballistic-Rated Trauma Shears",
@@ -237,8 +414,97 @@ const PRODUCTS = [
       alt: "Black and teal trauma shears on orange background",
       title: "Ballistic-rated trauma shears"
     }
+  },
+  {
+    id: "tool-rescue-multitool",
+    name: "Responder Rescue Multitool",
+    category: "Tools",
+    sku: "EMS-TOOL-MULTI",
+    price: 49,
+    badge: "Multi-Function",
+    filters: ["all"],
+    description:
+      "Folding rescue multitool with seatbelt cutter, oxygen key, glass punch, and utility blade.",
+    bullets: [
+      "Integrated seatbelt cutter and window punch",
+      "Oxygen tank wrench built into handle",
+      "One-hand opening design with pocket clip",
+      "Stainless steel construction with textured grip"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1558645836-f470fb64a8fd?auto=format&fit=crop&w=1200&q=80",
+      alt: "Rescue multitool on dark surface",
+      title: "Responder rescue multitool"
+    }
+  },
+  {
+    id: "tool-window-punch",
+    name: "Spring-Loaded Window Punch",
+    category: "Tools",
+    sku: "EMS-TOOL-PUNCH",
+    price: 15,
+    badge: "Extrication",
+    filters: ["all"],
+    description:
+      "One-handed, spring-loaded center punch for rapid tempered glass access during vehicle extrication.",
+    bullets: [
+      "One-hand thumb activation",
+      "Hardened steel tip for tempered glass",
+      "Pocket clip and lanyard hole",
+      "Tested for thousands of activations"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1200&q=80",
+      alt: "Rescue tool placed on car dashboard",
+      title: "Spring-loaded window punch"
+    }
+  },
+  {
+    id: "tool-penlight-led",
+    name: "LED Pupil Penlight",
+    category: "Tools",
+    sku: "EMS-TOOL-PENLIGHT",
+    price: 12,
+    badge: "Neuro Exam",
+    filters: ["all"],
+    description:
+      "Aluminum penlight with pupil gauge printing for neuro checks and general assessments.",
+    bullets: [
+      "Warm-white LED optimized for pupil exams",
+      "Pupil gauge printed on barrel",
+      "Metal pocket clip with click tail switch",
+      "Includes reusable batteries"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1598866594230-a7c12756260b?auto=format&fit=crop&w=1200&q=80",
+      alt: "LED penlight on a notebook",
+      title: "EMS LED pupil penlight"
+    }
+  },
+  {
+    id: "tool-tourniquet-combat",
+    name: "Combat-Ready Tourniquet",
+    category: "Tools",
+    sku: "EMS-TOOL-TQ",
+    price: 35,
+    badge: "Bleeding Control",
+    filters: ["all"],
+    description:
+      "Windlass-style tourniquet with time label for rapid extremity hemorrhage control.",
+    bullets: [
+      "Hook-and-loop strap with single-routing buckle",
+      "Textured windlass rod for gloved grip",
+      "Time label for application documentation",
+      "Vacuum-packed, compact profile"
+    ],
+    image: {
+      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      alt: "Tourniquet and trauma supplies on table",
+      title: "Combat-ready tourniquet"
+    }
   }
 ];
+
 
 const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
 
@@ -670,11 +936,10 @@ function renderProducts() {
     }
 
     // HOME PAGE: generic Featured grid
-    if (homeGrid) {
-      // show a subset (first 4) as "featured"
-      const featured = PRODUCTS.slice(0, 4);
-      homeGrid.innerHTML = featured.map(productCardHTML).join("");
-    }
+   // HOME PAGE: show ALL products
+if (homeGrid) {
+  homeGrid.innerHTML = PRODUCTS.map(productCardHTML).join("");
+}
   } catch (err) {
     console.error("Render products failed:", err);
   }
