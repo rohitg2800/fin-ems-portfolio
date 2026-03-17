@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>FAQs — EMS Luxe Supply</title>
+  <title>Contact Us — EMS Luxe Supply</title>
   <meta name="description"
-        content="Frequently asked questions about EMS Luxe Supply shipping, returns, warranties, bulk orders, payments, and data privacy.">
+        content="Contact EMS Luxe Supply for questions about orders, bulk EMS gear, warranty, and support for students and agencies.">
 
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Site styles -->
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body data-theme="light">
@@ -42,6 +46,7 @@
         <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="contact.html" aria-current="page"><i class="fa-solid fa-envelope"></i> Contact</a>
       </nav>
+
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
         <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
         <span id="themeText">Dark</span>
@@ -61,191 +66,119 @@
     </a>
   </div>
 
-  <!-- ========== HERO ========== -->
   <main>
-    <section class="hero hero-compact" aria-labelledby="faq-hero-title">
+    <!-- ========== HERO ========== -->
+    <section class="hero hero-compact" aria-labelledby="contact-hero-title">
       <div class="container">
         <div class="hero-card">
-          <h1 id="faq-hero-title" class="hero-title">Frequently Asked Questions</h1>
+          <h1 id="contact-hero-title" class="hero-title">Contact EMS Luxe Supply</h1>
           <p class="hero-sub">
-            Answers to the most common questions about orders, shipping, returns, warranties, and bulk EMS gear.
+            Have a question about gear, orders, or bulk outfitting? Send us a message and our team will respond as soon as possible.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ========== FAQ SECTIONS ========== -->
-    <section style="padding: 60px 0 20px;">
+    <!-- ========== CONTACT SECTION ========== -->
+    <section style="padding: 60px 0 40px;">
       <div class="container">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: flex-start; gap: 32px;">
 
-        <!-- Ordering & Payments -->
-        <h2 class="section-title">Ordering & Payments</h2>
-        <p class="section-sub">How to place orders, pay securely, and track your purchase.</p>
+          <!-- Contact form -->
+          <article class="card" style="padding: 24px 22px;">
+            <h2 class="section-title" style="margin-top: 0; font-size: 1.6rem; text-align: left;">
+              Send Us a Message
+            </h2>
+            <p style="color: var(--gray); font-size: 0.95rem; margin-bottom: 20px;">
+              Fill out the form below and we’ll get back to you within one business day.
+            </p>
 
-        <details class="faq-item">
-          <summary>Which payment methods do you accept?</summary>
-          <p>
-            We support credit and debit cards (Visa, MasterCard, RuPay, Amex), UPI, and net banking.
-            Approved agencies can also request purchase-order terms for bulk orders.
-          </p>
-        </details>
+            <form class="contact-form" action="#" method="post">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name">Full Name</label>
+                  <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+              </div>
 
-        <details class="faq-item">
-          <summary>Can I change or cancel my order after placing it?</summary>
-          <p>
-            Orders can be changed or cancelled within a short window before they enter the packing queue.
-            Contact support@emsluxe.com or use live chat with your order ID as soon as possible.
-          </p>
-        </details>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="topic">Topic</label>
+                  <select id="topic" name="topic" required>
+                    <option value="">Select a topic</option>
+                    <option value="order">Order question</option>
+                    <option value="product">Product recommendation</option>
+                    <option value="bulk">Bulk / agency pricing</option>
+                    <option value="warranty">Warranty / return</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="orderId">Order ID (optional)</label>
+                  <input type="text" id="orderId" name="orderId" placeholder="#EMS-12345">
+                </div>
+              </div>
 
-        <details class="faq-item">
-          <summary>Is my payment information secure?</summary>
-          <p>
-            Yes. All payments are processed through PCI‑DSS Level 1 compliant gateways using TLS 1.3 encryption.
-            We never store full card details on our servers.
-          </p>
-        </details>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="How can we help?" required></textarea>
+              </div>
 
-        <!-- Shipping -->
-        <h2 class="section-title">Shipping & Delivery</h2>
-        <p class="section-sub">Timelines, tracking, and international options.</p>
+              <div class="form-footer">
+                <button type="submit" class="btn">
+                  <i class="fa-solid fa-paper-plane"></i> Send Message
+                </button>
+                <p class="form-note">
+                  By submitting, you agree to be contacted about your inquiry. We never sell your data.
+                </p>
+              </div>
+            </form>
+          </article>
 
-        <details class="faq-item">
-          <summary>How long does shipping usually take?</summary>
-          <p>
-            Most in‑stock domestic orders ship within 48 hours and arrive in 3–7 business days.
-            Express and international options are available at checkout with estimated delivery windows.
-          </p>
-        </details>
+          <!-- Contact info / quick help -->
+          <article class="card-soft">
+            <i class="fa-solid fa-headset card-icon" aria-hidden="true"></i>
+            <h3>Need faster help?</h3>
+            <p style="margin-bottom: 16px;">
+              For urgent gear or order issues, you can also reach us through the channels below.
+            </p>
 
-        <details class="faq-item">
-          <summary>Do you ship internationally?</summary>
-          <p>
-            Yes. We ship to most regions worldwide. Duties or import taxes may be charged by your local customs
-            office depending on your country’s regulations.
-          </p>
-        </details>
+            <ul style="list-style: none; padding-left: 0; font-size: 0.95rem; color: var(--gray);">
+              <li style="margin-bottom: 10px;">
+                <i class="fa-solid fa-envelope" style="width: 24px;"></i>
+                <strong>Email:</strong> support@emsluxe.com
+              </li>
+              <li style="margin-bottom: 10px;">
+                <i class="fa-solid fa-phone" style="width: 24px;"></i>
+                <strong>Phone:</strong> 1-800-EMS-LUXE (Mon–Fri, 8 AM–8 PM EST)
+              </li>
+              <li style="margin-bottom: 10px;">
+                <i class="fa-solid fa-location-dot" style="width: 24px;"></i>
+                1001 Medical Lane, Trauma City
+              </li>
+            </ul>
 
-        <details class="faq-item">
-          <summary>How do I track my order?</summary>
-          <p>
-            Once your order ships, you’ll receive a tracking link by email and SMS (where available).
-            You can also view tracking information on your account order history page.
-          </p>
-        </details>
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 18px 0;">
 
-        <!-- Returns & Warranty -->
-        <h2 class="section-title">Returns & Warranty</h2>
-        <p class="section-sub">What’s covered, what isn’t, and how to start a return.</p>
+            <h4 style="font-family: 'Cinzel', serif; margin-bottom: 10px;">Common topics</h4>
+            <ul style="list-style: disc; padding-left: 20px; font-size: 0.9rem; color: var(--gray);">
+              <li>Order status or tracking issues</li>
+              <li>Help choosing stethoscopes or kits for students</li>
+              <li>Bulk pricing for EMS agencies and schools</li>
+              <li>Warranty or replacement for damaged gear</li>
+            </ul>
 
-        <details class="faq-item">
-          <summary>What is your return policy?</summary>
-          <p>
-            Unused, non‑sterile items can be returned or exchanged within 30 days of delivery.
-            Items must be in resellable condition with original packaging and contents included.
-          </p>
-        </details>
+            <p style="margin-top: 18px; font-size: 0.9rem; color: var(--gray);">
+              For quick answers, you can also visit our <a href="faq.html" style="color: var(--accent); text-decoration: none;">FAQs</a>
+              or <a href="trust.html" style="color: var(--accent); text-decoration: none;">Trust & Safety</a> page.
+            </p>
+          </article>
 
-        <details class="faq-item">
-          <summary>How do I start a return?</summary>
-          <p>
-            Email returns@emsluxe.com with your order ID and the item you’d like to return.
-            We’ll send a prepaid label for eligible domestic orders or guide you to the nearest return hub.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do your products include a warranty?</summary>
-          <p>
-            Most tools include a 12‑month warranty against manufacturing defects.
-            Some premium lines (like select stethoscopes and shears) offer extended or lifetime replacement coverage.
-          </p>
-        </details>
-
-        <!-- Bulk & Agencies -->
-        <h2 class="section-title">Agencies, Schools & Bulk Orders</h2>
-        <p class="section-sub">Support for EMS agencies, hospitals, and training programs.</p>
-
-        <details class="faq-item">
-          <summary>Do you offer bulk or agency pricing?</summary>
-          <p>
-            Yes. Tiered discounts typically start at 10 units per SKU, with deeper discounts for agency‑wide outfitting.
-            Contact sales@emsluxe.com with your gear list for a custom quote.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can you build custom kits for our department or school?</summary>
-          <p>
-            We regularly build custom trauma, airway, and student starter kits for fire/EMS agencies and education programs.
-            Send your checklist or syllabus, and we’ll propose an itemized kit.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do you accept purchase orders?</summary>
-          <p>
-            Verified agencies, hospitals, and accredited schools can be approved for purchase‑order terms
-            after a short account review. Email ap@emsluxe.com to start the process.
-          </p>
-        </details>
-
-        <!-- Product & Sizing -->
-        <h2 class="section-title">Products & Sizing</h2>
-        <p class="section-sub">Choosing the right model, fit, and configuration.</p>
-
-        <details class="faq-item">
-          <summary>Which stethoscope is best for EMT or paramedic students?</summary>
-          <p>
-            Our Classic Acoustic and Lightweight Student models are optimized for training labs and early ride‑alongs.
-            For advanced cardiac work, consider the Cardiology Pro line.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I choose the right size for pants or apparel?</summary>
-          <p>
-            Each apparel item includes a detailed size guide on its product page.
-            When between sizes, we recommend sizing up to allow for layering and movement onscene.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Are your trauma kits supplied with medications or IV fluids?</summary>
-          <p>
-            No. Due to regulatory requirements, we only provide hardware and consumables such as bandages and tools.
-            Medications and IV fluids must be sourced through appropriate medical supply channels.
-          </p>
-        </details>
-
-        <!-- Security & Privacy -->
-        <h2 class="section-title">Security & Privacy</h2>
-        <p class="section-sub">How we handle your data and keep your account safe.</p>
-
-        <details class="faq-item">
-          <summary>How is my personal data protected?</summary>
-          <p>
-            We encrypt account data at rest and in transit. We never sell personal data, and we honor GDPR/CCPA
-            requests to export or delete your profile when submitted through our privacy portal.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can I delete my account?</summary>
-          <p>
-            Yes. Contact privacy@emsluxe.com from your registered email address, and we’ll guide you through
-            verification and permanent account deletion.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I contact support if my question isn’t listed here?</summary>
-          <p>
-            You can reach us anytime at support@emsluxe.com, via the contact form on the Trust page,
-            or through live chat during business hours.
-          </p>
-        </details>
-
+        </div>
       </div>
     </section>
 
@@ -307,6 +240,7 @@
           <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
           <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
           <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
+          <p><a href="contact.html"><i class="fa-solid fa-chevron-right"></i> Contact</a></p>
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
@@ -320,7 +254,7 @@
     </div>
   </footer>
 
-  <!-- ========== CART & MODAL (shared components) ========== -->
+  <!-- ========== CART & MODAL (shared) ========== -->
   <div id="cartBackdrop" class="drawer-backdrop"></div>
   <aside id="cartDrawer" class="drawer" aria-label="Shopping cart" role="dialog" aria-modal="true">
     <div class="drawer-header">

@@ -944,3 +944,94 @@ img {
     padding: 60px 0 40px;
   }
 }
+/* ========== CONTACT FORM ========== */
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-form .form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.contact-form .form-group {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contact-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+./* ========== UPDATED: Bold Round Golden-Red Inputs ========== */
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  padding: 14px 16px; /* bigger padding for bold feel */
+  border-radius: 24px; /* very round */
+  border: 2px solid rgba(188, 148, 55, 0.8); /* golden-red border */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 240, 0.9)); /* subtle cream glow */
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600; /* bold text */
+  outline: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 16px rgba(188, 148, 55, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form select,
+[data-theme="dark"] .contact-form textarea {
+  background: linear-gradient(145deg, rgba(28, 24, 20, 0.95), rgba(188, 148, 55, 0.08));
+  border-color: rgba(255, 217, 119, 0.7);
+  box-shadow: 
+    0 4px 20px rgba(188, 148, 55, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  font-weight: 500;
+  color: rgba(107, 114, 128, 0.6);
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: #bc9437; /* solid golden-red */
+  box-shadow: 
+    0 0 0 4px rgb(114, 90, 35),
+    0 8px 32px rgb(232, 182, 67),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+
+[data-theme="dark"] .contact-form input:focus,
+[data-theme="dark"] .contact-form select:focus,
+[data-theme="dark"] .contact-form textarea:focus {
+  background: rgba(28, 24, 20, 0.98);
+}
+
+/* label also bolder */
+.contact-form label {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
