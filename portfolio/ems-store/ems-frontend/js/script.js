@@ -1,6 +1,7 @@
 /* =========================================
    EMS Luxe Supply – Global script.js
    Production-ready: all pages
+   Fixed: Non-blocking loading, defensive queries
    ========================================= */
 
 "use strict";
@@ -161,21 +162,29 @@ const money = (n) =>
 /* ---------- THEME (DAY / NIGHT) ---------- */
 
 function initTheme() {
-  const saved = localStorage.getItem(THEME_KEY);
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const theme = saved || (prefersDark ? "dark" : "light");
-  
-  document.documentElement.setAttribute("data-theme", theme);
-  updateThemeUI(theme);
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const theme = saved || (prefersDark ? "dark" : "light");
+    
+    document.documentElement.setAttribute("data-theme", theme);
+    updateThemeUI(theme);
+  } catch (err) {
+    console.warn("Theme init failed:", err);
+  }
 }
 
 function toggleTheme() {
-  const current = document.documentElement.getAttribute("data-theme") || "light";
-  const next = current === "dark" ? "light" : "dark";
-  
-  document.documentElement.setAttribute("data-theme", next);
-  localStorage.setItem(THEME_KEY, next);
-  updateThemeUI(next);
+  try {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    const next = current === "dark" ? "light" : "dark";
+    
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem(THEME_KEY, next);
+    updateThemeUI(next);
+  } catch (err) {
+    console.error("Theme toggle failed:", err);
+  }
 }
 
 function updateThemeUI(theme) {
@@ -229,260 +238,292 @@ function cartTotal(cart) {
 /* ---------- NOTIFICATIONS ---------- */
 
 function showNotification(message, type = "success") {
-  // Remove existing notifications
-  $$(".notification").forEach((n) => n.remove());
+  try {
+    $$(".notification").forEach((n) => n.remove());
 
-  const icons = {
-    success: "fa-check-circle",
-    error: "fa-exclamation-circle",
-    info: "fa-info-circle"
-  };
+    const icons = {
+      success: "fa-check-circle",
+      error: "fa-exclamation-circle",
+      info: "fa-info-circle"
+    };
 
-  const notification = document.createElement("div");
-  notification.className = `notification ${type}`;
-  notification.setAttribute("role", "alert");
-  notification.setAttribute("aria-live", "polite");
-  notification.innerHTML = `
-    <i class="fa-solid ${icons[type] || icons.info}" aria-hidden="true"></i>
-    <span>${message}</span>
-  `;
-  
-  document.body.appendChild(notification);
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.setAttribute("role", "alert");
+    notification.setAttribute("aria-live", "polite");
+    notification.innerHTML = `
+      <i class="fa-solid ${icons[type] || icons.info}" aria-hidden="true"></i>
+      <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
 
-  // Auto-dismiss
-  setTimeout(() => {
-    notification.style.animation = "slideOut 0.3s forwards";
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    setTimeout(() => {
+      notification.style.animation = "slideOut 0.3s forwards";
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  } catch (err) {
+    console.error("Notification failed:", err);
+  }
 }
 
 /* ---------- CART OPERATIONS ---------- */
 
 function updateCartBadge() {
-  const badge = $("#cartBadge");
-  const cartBtn = $("#cartBtn");
-  if (!badge) return;
-  
-  const count = cartCount(loadCart());
-  badge.textContent = count;
-  badge.style.display = count > 0 ? "flex" : "none";
-  
-  if (cartBtn) {
-    cartBtn.setAttribute("aria-label", `Shopping cart, ${count} item${count !== 1 ? "s" : ""}`);
+  try {
+    const badge = $("#cartBadge");
+    const cartBtn = $("#cartBtn");
+    if (!badge) return;
+    
+    const count = cartCount(loadCart());
+    badge.textContent = count;
+    badge.style.display = count > 0 ? "flex" : "none";
+    
+    if (cartBtn) {
+      cartBtn.setAttribute("aria-label", `Shopping cart, ${count} item${count !== 1 ? "s" : ""}`);
+    }
+  } catch (err) {
+    console.warn("Cart badge update failed:", err);
   }
 }
 
 function addToCart(productId, quantity = 1) {
-  const product = PRODUCT_MAP[productId];
-  if (!product) {
-    showNotification("Product not found", "error");
-    return;
+  try {
+    const product = PRODUCT_MAP[productId];
+    if (!product) {
+      showNotification("Product not found", "error");
+      return;
+    }
+    
+    const cart = loadCart();
+    cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
+    saveCart(cart);
+    updateCartBadge();
+    showNotification(`${product.name} added to cart`, "success");
+  } catch (err) {
+    console.error("Add to cart failed:", err);
+    showNotification("Error adding to cart", "error");
   }
-  
-  const cart = loadCart();
-  cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
-  saveCart(cart);
-  updateCartBadge();
-  showNotification(`${product.name} added to cart`, "success");
 }
 
 function removeFromCart(productId) {
-  const cart = loadCart();
-  const product = PRODUCT_MAP[productId];
-  
-  delete cart[productId];
-  saveCart(cart);
-  updateCartBadge();
-  renderCart();
-  
-  if (product) {
-    showNotification(`${product.name} removed`, "info");
+  try {
+    const cart = loadCart();
+    const product = PRODUCT_MAP[productId];
+    
+    delete cart[productId];
+    saveCart(cart);
+    updateCartBadge();
+    renderCart();
+    
+    if (product) {
+      showNotification(`${product.name} removed`, "info");
+    }
+  } catch (err) {
+    console.error("Remove from cart failed:", err);
   }
 }
 
 function changeCartQty(productId, delta) {
-  const cart = loadCart();
-  if (!cart[productId]) return;
-  
-  cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
-  
-  if (cart[productId] <= 0) {
-    delete cart[productId];
+  try {
+    const cart = loadCart();
+    if (!cart[productId]) return;
+    
+    cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
+    
+    if (cart[productId] <= 0) {
+      delete cart[productId];
+    }
+    
+    saveCart(cart);
+    updateCartBadge();
+    renderCart();
+  } catch (err) {
+    console.error("Change cart quantity failed:", err);
   }
-  
-  saveCart(cart);
-  updateCartBadge();
-  renderCart();
 }
 
 /* ---------- CART DRAWER ---------- */
 
 function renderCart() {
-  const body = $("#cartItems");
-  const totalEl = $("#cartTotal");
-  if (!body || !totalEl) return;
+  try {
+    const body = $("#cartItems");
+    const totalEl = $("#cartTotal");
+    if (!body || !totalEl) return;
 
-  const cart = loadCart();
-  const entries = Object.entries(cart);
+    const cart = loadCart();
+    const entries = Object.entries(cart);
 
-  if (!entries.length) {
-    body.innerHTML = `
-      <div class="empty-cart">
-        <i class="fa-solid fa-cart-arrow-down" aria-hidden="true"></i>
-        <p>Your cart is empty</p>
-      </div>
-    `;
-    totalEl.textContent = money(0);
-    return;
-  }
-
-  body.innerHTML = entries
-    .map(([id, qty]) => {
-      const p = PRODUCT_MAP[id];
-      if (!p) return "";
-      
-      const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
-      const alt = p.image?.alt || p.name;
-      
-      return `
-        <div class="cart-item">
-          <img src="${img}" alt="${alt}" loading="lazy" width="80" height="80">
-          <div class="cart-item-details">
-            <div class="cart-item-title">${p.name}</div>
-            <div class="cart-item-price">${money(p.price)}</div>
-            <div class="cart-item-quantity">
-              <button onclick="changeCartQty('${id}', -1)" aria-label="Decrease quantity">−</button>
-              <span aria-label="Quantity">${qty}</span>
-              <button onclick="changeCartQty('${id}', 1)" aria-label="Increase quantity">+</button>
-              <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${p.name}">
-                <i class="fa-solid fa-trash" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
+    if (!entries.length) {
+      body.innerHTML = `
+        <div class="empty-cart">
+          <i class="fa-solid fa-cart-arrow-down" aria-hidden="true"></i>
+          <p>Your cart is empty</p>
         </div>
       `;
-    })
-    .join("");
+      totalEl.textContent = money(0);
+      return;
+    }
 
-  totalEl.textContent = money(cartTotal(cart));
+    body.innerHTML = entries
+      .map(([id, qty]) => {
+        const p = PRODUCT_MAP[id];
+        if (!p) return "";
+        
+        const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
+        const alt = p.image?.alt || p.name;
+        
+        return `
+          <div class="cart-item">
+            <img src="${img}" alt="${alt}" loading="lazy" width="80" height="80">
+            <div class="cart-item-details">
+              <div class="cart-item-title">${p.name}</div>
+              <div class="cart-item-price">${money(p.price)}</div>
+              <div class="cart-item-quantity">
+                <button onclick="changeCartQty('${id}', -1)" aria-label="Decrease quantity">−</button>
+                <span aria-label="Quantity">${qty}</span>
+                <button onclick="changeCartQty('${id}', 1)" aria-label="Increase quantity">+</button>
+                <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${p.name}">
+                  <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+
+    totalEl.textContent = money(cartTotal(cart));
+  } catch (err) {
+    console.error("Render cart failed:", err);
+  }
 }
 
 function openCart() {
-  const backdrop = $("#cartBackdrop");
-  const drawer = $("#cartDrawer");
-  
-  if (backdrop) backdrop.classList.add("active");
-  if (drawer) {
-    drawer.classList.add("active");
-    drawer.setAttribute("aria-hidden", "false");
+  try {
+    const backdrop = $("#cartBackdrop");
+    const drawer = $("#cartDrawer");
+    
+    if (backdrop) backdrop.classList.add("active");
+    if (drawer) {
+      drawer.classList.add("active");
+      drawer.setAttribute("aria-hidden", "false");
+    }
+    
+    document.body.classList.add("no-scroll");
+    renderCart();
+    
+    setTimeout(() => {
+      const firstBtn = drawer?.querySelector("button");
+      if (firstBtn) firstBtn.focus();
+    }, 100);
+  } catch (err) {
+    console.error("Open cart failed:", err);
   }
-  
-  document.body.classList.add("no-scroll");
-  renderCart();
-  
-  // Focus first interactive element
-  setTimeout(() => {
-    const firstBtn = drawer?.querySelector("button");
-    if (firstBtn) firstBtn.focus();
-  }, 100);
 }
 
 function closeCart() {
-  const backdrop = $("#cartBackdrop");
-  const drawer = $("#cartDrawer");
-  
-  if (backdrop) backdrop.classList.remove("active");
-  if (drawer) {
-    drawer.classList.remove("active");
-    drawer.setAttribute("aria-hidden", "true");
+  try {
+    const backdrop = $("#cartBackdrop");
+    const drawer = $("#cartDrawer");
+    
+    if (backdrop) backdrop.classList.remove("active");
+    if (drawer) {
+      drawer.classList.remove("active");
+      drawer.setAttribute("aria-hidden", "true");
+    }
+    
+    document.body.classList.remove("no-scroll");
+    
+    const cartBtn = $("#cartBtn");
+    if (cartBtn) cartBtn.focus();
+  } catch (err) {
+    console.error("Close cart failed:", err);
   }
-  
-  document.body.classList.remove("no-scroll");
-  
-  // Return focus to cart button
-  const cartBtn = $("#cartBtn");
-  if (cartBtn) cartBtn.focus();
 }
 
 /* ---------- PRODUCT MODAL ---------- */
 
 function openProductModal(productId) {
-  const p = PRODUCT_MAP[productId];
-  if (!p) {
-    showNotification("Product not found", "error");
-    return;
-  }
-
-  const modal = $("#productModal");
-  const backdrop = $("#modalBackdrop");
-
-  if (!modal || !backdrop) {
-    showNotification("Product details not available on this page", "info");
-    return;
-  }
-
-  // Populate modal content
-  const imgEl = $("#modalProductImage");
-  const nameEl = $("#modalProductName");
-  const priceEl = $("#modalProductPrice");
-  const skuEl = $("#modalProductSku");
-  const descEl = $("#modalProductDescription");
-  const badgeEl = $("#modalProductBadge");
-  const featsEl = $("#modalProductFeatures");
-
-  const imgSrc = p.image?.src || "https://placehold.co/800x600/572403/ffd977?text=EMS";
-  const imgAlt = p.image?.alt || p.name;
-  const imgTitle = p.image?.title || p.name;
-
-  if (imgEl) {
-    imgEl.src = imgSrc;
-    imgEl.alt = imgAlt;
-    imgEl.title = imgTitle;
-  }
-  if (nameEl) nameEl.textContent = p.name;
-  if (priceEl) priceEl.textContent = money(p.price);
-  if (skuEl) skuEl.textContent = p.sku;
-  if (descEl) descEl.textContent = p.description;
-
-  if (badgeEl) {
-    if (p.badge) {
-      badgeEl.textContent = p.badge;
-      badgeEl.style.display = "inline-block";
-    } else {
-      badgeEl.style.display = "none";
+  try {
+    const p = PRODUCT_MAP[productId];
+    if (!p) {
+      showNotification("Product not found", "error");
+      return;
     }
+
+    const modal = $("#productModal");
+    const backdrop = $("#modalBackdrop");
+
+    if (!modal || !backdrop) {
+      showNotification("Product details not available on this page", "info");
+      return;
+    }
+
+    const imgEl = $("#modalProductImage");
+    const nameEl = $("#modalProductName");
+    const priceEl = $("#modalProductPrice");
+    const skuEl = $("#modalProductSku");
+    const descEl = $("#modalProductDescription");
+    const badgeEl = $("#modalProductBadge");
+    const featsEl = $("#modalProductFeatures");
+
+    const imgSrc = p.image?.src || "https://placehold.co/800x600/572403/ffd977?text=EMS";
+    const imgAlt = p.image?.alt || p.name;
+    const imgTitle = p.image?.title || p.name;
+
+    if (imgEl) {
+      imgEl.src = imgSrc;
+      imgEl.alt = imgAlt;
+      imgEl.title = imgTitle;
+    }
+    if (nameEl) nameEl.textContent = p.name;
+    if (priceEl) priceEl.textContent = money(p.price);
+    if (skuEl) skuEl.textContent = p.sku;
+    if (descEl) descEl.textContent = p.description;
+
+    if (badgeEl) {
+      if (p.badge) {
+        badgeEl.textContent = p.badge;
+        badgeEl.style.display = "inline-block";
+      } else {
+        badgeEl.style.display = "none";
+      }
+    }
+
+    if (featsEl) {
+      featsEl.innerHTML = p.bullets.map((b) => `<li>${b}</li>`).join("");
+    }
+
+    modal.dataset.productId = productId;
+
+    backdrop.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+
+    setTimeout(() => {
+      const closeBtn = $("#modalClose");
+      if (closeBtn) closeBtn.focus();
+    }, 100);
+  } catch (err) {
+    console.error("Open modal failed:", err);
   }
-
-  if (featsEl) {
-    featsEl.innerHTML = p.bullets.map((b) => `<li>${b}</li>`).join("");
-  }
-
-  // Store product ID for add to cart
-  modal.dataset.productId = productId;
-
-  // Show modal
-  backdrop.classList.add("active");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("no-scroll");
-
-  // Focus close button
-  setTimeout(() => {
-    const closeBtn = $("#modalClose");
-    if (closeBtn) closeBtn.focus();
-  }, 100);
 }
 
 function closeProductModal() {
-  const backdrop = $("#modalBackdrop");
-  const modal = $("#productModal");
-  
-  if (backdrop) backdrop.classList.remove("active");
-  if (modal) modal.setAttribute("aria-hidden", "true");
-  
-  document.body.classList.remove("no-scroll");
+  try {
+    const backdrop = $("#modalBackdrop");
+    const modal = $("#productModal");
+    
+    if (backdrop) backdrop.classList.remove("active");
+    if (modal) modal.setAttribute("aria-hidden", "true");
+    
+    document.body.classList.remove("no-scroll");
+  } catch (err) {
+    console.error("Close modal failed:", err);
+  }
 }
 
-/* Backward compatibility alias */
 window.openModal = openProductModal;
 
 /* ---------- PRODUCT GRID RENDERING ---------- */
@@ -537,141 +578,162 @@ function productCardHTML(p) {
 }
 
 function renderProductsInto(container, category = null) {
-  if (!container) return;
-  
-  const list = category
-    ? PRODUCTS.filter((p) => p.category === category)
-    : PRODUCTS;
-  
-  container.innerHTML = list.map(productCardHTML).join("");
+  try {
+    if (!container) return;
+    
+    const list = category
+      ? PRODUCTS.filter((p) => p.category === category)
+      : PRODUCTS;
+    
+    container.innerHTML = list.map(productCardHTML).join("");
+  } catch (err) {
+    console.error("Render products failed:", err);
+  }
 }
 
 function renderAllGrids() {
-  renderProductsInto($("#productGrid"));
-  renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
-  renderProductsInto($("#gridKits"), "Kits");
-  renderProductsInto($("#gridApparel"), "Apparel");
-  renderProductsInto($("#gridTools"), "Tools");
+  try {
+    requestAnimationFrame(() => {
+      renderProductsInto($("#productGrid"));
+      renderProductsInto($("#gridStethoscopes"), "Stethoscopes");
+      renderProductsInto($("#gridKits"), "Kits");
+      renderProductsInto($("#gridApparel"), "Apparel");
+      renderProductsInto($("#gridTools"), "Tools");
+    });
+  } catch (err) {
+    console.error("Render all grids failed:", err);
+  }
 }
 
 /* ---------- MOBILE NAV ---------- */
 
 function initMobileNav() {
-  const toggle = $("#menuToggle");
-  const nav = $(".nav");
-  if (!toggle || !nav) return;
+  try {
+    const toggle = $("#menuToggle");
+    const nav = $(".nav");
+    if (!toggle || !nav) return;
 
-  toggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("nav-open");
-    toggle.classList.toggle("active");
-    toggle.setAttribute("aria-expanded", isOpen);
-  });
-
-  // Close on link click
-  nav.querySelectorAll("a").forEach((a) => {
-    a.addEventListener("click", () => {
-      nav.classList.remove("nav-open");
-      toggle.classList.remove("active");
-      toggle.setAttribute("aria-expanded", "false");
+    toggle.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("nav-open");
+      toggle.classList.toggle("active");
+      toggle.setAttribute("aria-expanded", isOpen);
     });
-  });
 
-  // Close on resize to desktop
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 768) {
-      nav.classList.remove("nav-open");
-      toggle.classList.remove("active");
-      toggle.setAttribute("aria-expanded", "false");
-    }
-  });
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        nav.classList.remove("nav-open");
+        toggle.classList.remove("active");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        nav.classList.remove("nav-open");
+        toggle.classList.remove("active");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  } catch (err) {
+    console.warn("Mobile nav init failed:", err);
+  }
 }
 
 /* ---------- INIT ---------- */
 
-function main() {
-  initTheme();
-  renderAllGrids();
-  updateCartBadge();
-  initMobileNav();
+function attachEventListeners() {
+  try {
+    const themeToggle = $("#themeToggle");
+    const cartBtn = $("#cartBtn");
+    const cartClose = $("#cartClose");
+    const cartBackdrop = $("#cartBackdrop");
+    const checkoutBtn = $("#checkoutBtn");
+    const modalBackdrop = $("#modalBackdrop");
+    const modalClose = $("#modalClose");
+    const modalAdd = $("#modalAddToCart");
 
-  // Event listeners
-  const themeToggle = $("#themeToggle");
-  const cartBtn = $("#cartBtn");
-  const cartClose = $("#cartClose");
-  const cartBackdrop = $("#cartBackdrop");
-  const checkoutBtn = $("#checkoutBtn");
-  const modalBackdrop = $("#modalBackdrop");
-  const modalClose = $("#modalClose");
-  const modalAdd = $("#modalAddToCart");
+    if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
 
-  if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-
-  if (cartBtn) cartBtn.addEventListener("click", openCart);
-  if (cartClose) cartClose.addEventListener("click", closeCart);
-  if (cartBackdrop) {
-    cartBackdrop.addEventListener("click", (e) => {
-      if (e.target === cartBackdrop) closeCart();
-    });
-  }
-
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", () => {
-      const cart = loadCart();
-      const total = cartTotal(cart);
-      
-      if (total === 0) {
-        showNotification("Your cart is empty", "error");
-      } else {
-        showNotification(`Proceeding to checkout — ${money(total)}`, "success");
-        // In production: window.location.href = "/checkout";
-      }
-    });
-  }
-
-  if (modalBackdrop) {
-    modalBackdrop.addEventListener("click", (e) => {
-      if (e.target === modalBackdrop) closeProductModal();
-    });
-  }
-  if (modalClose) modalClose.addEventListener("click", closeProductModal);
-  
-  if (modalAdd) {
-    modalAdd.addEventListener("click", () => {
-      const modal = $("#productModal");
-      if (!modal) return;
-      
-      const productId = modal.dataset.productId;
-      if (!productId) return;
-      
-      addToCart(productId, 1);
-      closeProductModal();
-      setTimeout(openCart, 250);
-    });
-  }
-
-  // Keyboard shortcuts
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeProductModal();
-      closeCart();
+    if (cartBtn) cartBtn.addEventListener("click", openCart);
+    if (cartClose) cartClose.addEventListener("click", closeCart);
+    if (cartBackdrop) {
+      cartBackdrop.addEventListener("click", (e) => {
+        if (e.target === cartBackdrop) closeCart();
+      });
     }
-  });
 
-  // Optional: Best stethoscopes pill buttons (if present on page)
-  $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.target;
-      const productMap = {
-        students: "steth-littmann-classic",
-        loud: "steth-electronic",
-        comfort: "steth-littmann-classic"
-      };
-      
-      if (productMap[target]) {
-        openProductModal(productMap[target]);
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", () => {
+        const cart = loadCart();
+        const total = cartTotal(cart);
+        
+        if (total === 0) {
+          showNotification("Your cart is empty", "error");
+        } else {
+          showNotification(`Proceeding to checkout — ${money(total)}`, "success");
+        }
+      });
+    }
+
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === modalBackdrop) closeProductModal();
+      });
+    }
+    if (modalClose) modalClose.addEventListener("click", closeProductModal);
+    
+    if (modalAdd) {
+      modalAdd.addEventListener("click", () => {
+        const modal = $("#productModal");
+        if (!modal) return;
+        
+        const productId = modal.dataset.productId;
+        if (!productId) return;
+        
+        addToCart(productId, 1);
+        closeProductModal();
+        setTimeout(openCart, 250);
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeProductModal();
+        closeCart();
       }
     });
-  });
+
+    $$(".emt-steth-buttons .pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+        const productMap = {
+          students: "steth-littmann-classic",
+          loud: "steth-electronic",
+          comfort: "steth-littmann-classic"
+        };
+        
+        if (productMap[target]) {
+          openProductModal(productMap[target]);
+        }
+      });
+    });
+  } catch (err) {
+    console.error("Event listener attachment failed:", err);
+  }
+}
+
+function main() {
+  try {
+    initTheme();
+    updateCartBadge();
+    initMobileNav();
+    attachEventListeners();
+    
+    // Render grids asynchronously to not block page
+    renderAllGrids();
+  } catch (err) {
+    console.error("Main init failed:", err);
+  }
 }
 
 // Initialize when DOM ready
