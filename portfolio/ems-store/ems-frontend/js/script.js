@@ -29,7 +29,7 @@ const PRODUCTS = [
       "5-year manufacturer warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584467541268-b040f83be3fd?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1348004602/photo/red-medical-stethoscope-and-bell-on-red-background-medical-service-appointment.jpg?s=612x612&w=0&k=20&c=-iVDAO5BXJotqwTJ5gXkpD7y-gBMph7CCHCEHymjj8M=",
       alt: "Stethoscope lying beside medical textbooks and study materials",
       title: "Student-ready classic stethoscope"
     }
@@ -51,7 +51,7 @@ const PRODUCTS = [
       "Protective field case included"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1285018002/photo/diabetic-measurement-tools-and-insulin-pen-on-table.jpg?s=612x612&w=0&k=20&c=bz1-Y413zzoyTFM4Rd6qQJcTOzeWyCGJVRAXqE5DwS0=",
       alt: "Interior of an EMS helicopter with medical equipment",
       title: "Stethoscope tuned for loud EMS environments"
     }
@@ -73,7 +73,7 @@ const PRODUCTS = [
       "Lifetime quality guarantee"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1091130498/photo/pulse-trace-and-stethoscope.jpg?s=612x612&w=0&k=20&c=MEtVyeQZQauAP4jYgto1V2FUPimEqVI3jQFGaFpgc3g=",
       alt: "Premium stethoscope on medical surface",
       title: "Cardiology professional stethoscope"
     }
@@ -95,7 +95,7 @@ const PRODUCTS = [
       "10-year manufacturer warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1631217314831-e489b5cfd246?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/474219539/photo/digital-tablet-and-stethoscope-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=w4ZFdM-2RsYp_9VpsYPJojIFmQafrIUQQdrJWeq771g=",
       alt: "Professional multi-use stethoscope",
       title: "Universal pro stethoscope"
     }
@@ -117,7 +117,7 @@ const PRODUCTS = [
       "1-year limited warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1613141411232-0f5e1e93a3e7?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1155553594/photo/a-female-healthcare-professional-taking-a-reading-using-a-stethoscope-and-carefully-listening.jpg?s=612x612&w=0&k=20&c=dEBySxJgDiPdphMWzCH9rgnrXa4q8SKmRYK2v_BCrKY=",
       alt: "Blue lightweight stethoscope on clipboard",
       title: "Lightweight student stethoscope"
     }
@@ -139,7 +139,7 @@ const PRODUCTS = [
       "Includes spare ear tips and ID tag"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/183361669/photo/botanist-examining-a-plant.jpg?s=612x612&w=0&k=20&c=JYXx6eMuY_sbB73XJ92ae27t1xiUr2E0d31HKFy3BTY=",
       alt: "Stethoscope hanging in an ambulance",
       title: "Rig-duty hybrid stethoscope"
     }
@@ -185,7 +185,7 @@ const PRODUCTS = [
       "Abrasion-resistant base panel"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/2248428896/photo/extra-large-tactical-sanitary-rescue-backpack.jpg?s=612x612&w=0&k=20&c=qqvxOP4Z4b45cXwFon5UzxU5FVBoZIOl8GAmTGgUTgQ=",
       alt: "Red EMS trauma backpack on station floor",
       title: "Rapid response EMS backpack"
     }
@@ -207,7 +207,7 @@ const PRODUCTS = [
       "Fits inside standard jump bags"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1615486511563-016d2b84c63f?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1461631711/photo/screwdriver-with-replaceable-bits.jpg?s=612x612&w=0&k=20&c=K38pvGYuY1rFSrUmmIpUoH1Nz3LiKTW00rAuMiZ6DPA=",
       alt: "Airway management tools in a rolled EMS kit",
       title: "ALS airway roll kit"
     }
@@ -229,7 +229,7 @@ const PRODUCTS = [
       "Ideal for drills and real incidents"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/952119162/photo/medical-supplies.jpg?s=612x612&w=0&k=20&c=FFQiImGoXIZFd_5o7e46TBXzPKgIL-vPo42yO2JLaEM=", 
       alt: "Triage equipment laid out on the ground",
       title: "Mass casualty triage kit"
     }
@@ -251,7 +251,7 @@ const PRODUCTS = [
       "Rigid carry case with foam insert"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/477984136/vector/first-aid-kit.jpg?s=612x612&w=0&k=20&c=zfKTAwJ6RVhOpvMGKOeTJ6_GyYDXOjwUBNxNZ_17Q1M=",
       alt: "Diagnostic instruments arranged in a kit",
       title: "Clinic diagnostic kit"
     }
@@ -276,7 +276,7 @@ const PRODUCTS = [
       "Wrinkle-resistant, machine washable"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1446081026/photo/a-soldier-a-tactical-medic-opens-a-first-aid-kit-close-up-view.jpg?s=612x612&w=0&k=20&c=ed__scBcEWjLPggF2hnjRVDXZpfWGvISYyAocMTH2ho=",
       alt: "Dark tactical pants hanging on a clothing rack",
       title: "5-in-1 tactical EMS pants"
     }
@@ -298,7 +298,7 @@ const PRODUCTS = [
       "Fade-resistant mil‑spec fabric blend"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1612810432634-96f64dc8ccb6?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/173559155/photo/casual-wear.jpg?s=612x612&w=0&k=20&c=d7EmtBKQfdigGXe-JA-IYFk5lIkpYxJTqX7Fs-hX7cI=",
       alt: "Olive green cargo pants folded on a bench",
       title: "Mil-spec multi-pocket EMS cargo pants"
     }
@@ -320,7 +320,7 @@ const PRODUCTS = [
       "Moisture-wicking inner waistband for long shifts"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/618546958/photo/man-climbing-a-ladder.jpg?s=612x612&w=0&k=20&c=CsdimmNLuDJzj45k_n0R2_7ekO1hhAmh-6ffpywAHls=",
       alt: "Dark work pants with multiple pockets",
       title: "Rugged multi-pocket rig pants"
     }
@@ -342,7 +342,7 @@ const PRODUCTS = [
       "Colorfast fabric that resists fading and stains"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/468832278/photo/police-officer-using-speed-gun.jpg?s=612x612&w=0&k=20&c=Nuiy1KxfdmmhjQPMmWU3RG0urhSafAdpcWKV8-5jQNk=",
       alt: "Lightweight tactical pants hanging on a rack",
       title: "Lightweight EMS duty BDU pants"
     }
@@ -364,7 +364,7 @@ const PRODUCTS = [
       "Gusseted crotch for unrestricted movement"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/91099607/photo/snowshoeing-adventure.jpg?s=612x612&w=0&k=20&c=sBvSoB8t0AVFxU7Dc_mxO76NNSzBM8zEv14zT2FNW1Q=",
       alt: "Softshell winter pants with multiple zip pockets",
       title: "Fleece-lined winter EMS pants"
     }
@@ -386,7 +386,7 @@ const PRODUCTS = [
       "Quick-dry fabric ideal for hot weather drills"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1580674280375-c10aeeb185d2?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1430594504/photo/mens-shorts-isolated.jpg?s=612x612&w=0&k=20&c=IvJ9va1uC8CptZpBzWja3IGTq3_gbaUpTRNd9yK5AOY=",
       alt: "Cargo shorts with multiple pockets on a wood surface",
       title: "Multi-pocket cargo duty shorts"
     }
@@ -410,7 +410,7 @@ const PRODUCTS = [
       "Lifetime replacement warranty"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1668853060178-2d53667b7345?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/2238279585/photo/creative-contemporary-collage-scissors-cutting-chain-link-symbolizing-fragile-rebellion-and.jpg?s=612x612&w=0&k=20&c=2Aqc_dpf4ILAibYLjSME0esv1qiP5KHI_KxNiQCWxKk=",
       alt: "Black and teal trauma shears on orange background",
       title: "Ballistic-rated trauma shears"
     }
@@ -432,7 +432,7 @@ const PRODUCTS = [
       "Stainless steel construction with textured grip"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1558645836-f470fb64a8fd?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1452469768/photo/disaster-supply-kit-for-earthquake-on-black-wooden-table-flat-lay.jpg?s=612x612&w=0&k=20&c=ql1dRG2j9HvOw5w9q6UIX7EZK7gbiMkJPMlMsd8X_rg=",
       alt: "Rescue multitool on dark surface",
       title: "Responder rescue multitool"
     }
@@ -454,7 +454,7 @@ const PRODUCTS = [
       "Tested for thousands of activations"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1273900646/photo/new-awl-with-red-handle-cut-out-on-the-hand.jpg?s=612x612&w=0&k=20&c=xzIRaXhpEfO9XOaTYkvLmYzteIut0GnLBalwwhxcT1M=",
       alt: "Rescue tool placed on car dashboard",
       title: "Spring-loaded window punch"
     }
@@ -476,7 +476,7 @@ const PRODUCTS = [
       "Includes reusable batteries"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1598866594230-a7c12756260b?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1180949169/photo/led-metal-tactical-flashlight-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=fe-Hx91mniEXNBxglMfqZPa3BflSN_D2DSZhDIFNQO8=",
       alt: "LED penlight on a notebook",
       title: "EMS LED pupil penlight"
     }
@@ -498,7 +498,7 @@ const PRODUCTS = [
       "Vacuum-packed, compact profile"
     ],
     image: {
-      src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
+      src: "https://media.istockphoto.com/id/1130302444/photo/person-in-black-medical-gloves-applies-the-tourniquet-to-his-hand-to-prevent-bleeding-during.jpg?s=612x612&w=0&k=20&c=9GHA2jpOwj7dKZlwmetKcYEFi42Fv1m4B8N8D5hW75A=",
       alt: "Tourniquet and trauma supplies on table",
       title: "Combat-ready tourniquet"
     }
