@@ -207,6 +207,14 @@
               <i class="fa-brands fa-linkedin"></i>
             </a>
           </div>
+          <!-- Admin Orders Button — Add this before </div> of footer container -->
+<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center;">
+  <a href="html/ems_orders.html" target="_blank" class="btn" style="background: var(--accent); color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+    <i class="fa-solid fa-list-check"></i>
+    Admin Orders
+  </a>
+</div>
+
         </div>
 
         <!-- Quick Links -->
@@ -373,221 +381,67 @@
 
   <!-- JavaScript -->
   <script src="js/script.js" defer></script>
-  <!-- ========== CHECKOUT MODAL ========== -->
-<div id="checkoutBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" style="z-index: 1000;">
-  <div class="modal checkout-modal" id="checkoutModal" style="max-width: 900px; max-height: 90vh; overflow-y: auto; z-index: 1001;">
+  <!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3.11.0/dist/index.min.js"></script>
+
+<!-- Checkout Modal -->
+<div id="checkoutBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+  <div class="modal" id="checkoutModal" style="max-width: 580px;">
     <div class="modal-header">
-      <h2 class="modal-title"><i class="fa-solid fa-credit-card"></i> Secure Checkout</h2>
-      <button class="modal-close" id="checkoutClose" aria-label="Close checkout">
+      <h2 class="modal-title" id="checkoutTitle">
+        <i class="fa-solid fa-credit-card"></i> Checkout
+      </h2>
+      <button class="modal-close" id="checkoutModalClose" aria-label="Close checkout">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
+    <div class="modal-body" style="padding: 24px;">
 
-    <div class="modal-body checkout-content">
-      <div class="checkout-container">
-        <div class="checkout-form-section">
-          <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 20px;">
-            <i class="fa-solid fa-user"></i> Billing Information
-          </h3>
-
-          <div id="checkoutError" class="error-message" style="display: none; margin-bottom: 15px;"></div>
-
-          <div class="form-group">
-            <label for="checkoutName">Full Name *</label>
-            <input type="text" id="checkoutName" placeholder="Abhrahim Johnson">
-          </div>
-
-          <div class="form-group">
-            <label for="checkoutEmail">Email *</label>
-            <input type="email" id="checkoutEmail" placeholder="abhrahim.johnson@example.com">
-          </div>
-
-          <div class="form-group">
-            <label for="checkoutPhone">Phone *</label>
-            <input type="tel" id="checkoutPhone" placeholder="+91 (555) 000-0000">
-          </div>
-
-          <div class="form-group">
-            <label for="checkoutAddress">Street Address *</label>
-            <input type="text" id="checkoutAddress" placeholder="123 Medical Lane">
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="form-group">
-              <label for="checkoutCity">City *</label>
-              <input type="text" id="checkoutCity" placeholder="Bihar">
-            </div>
-            <div class="form-group">
-              <label for="checkoutState">State *</label>
-              <input type="text" id="checkoutState" placeholder="IND">
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="form-group">
-              <label for="checkoutZip">ZIP Code *</label>
-              <input type="text" id="checkoutZip" placeholder="800001">
-            </div>
-            <div class="form-group">
-              <label for="checkoutCountry">Country *</label>
-              <select id="checkoutCountry">
-                <option value="">Select Country</option>
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="GB">United Kingdom</option>
-                <option value="AU">Australia</option>
-                <option value="IN">India</option>
-                <option value="DE">Germany</option>
-                <option value="FR">France</option>    
-                <option value="JP">Japan</option>
-                <option value="CN">China</option>
-                <option value="BR">Brazil</option>
-                <option value="ZA">South Africa</option>
-                  
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-color);">
-            <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 15px;">
-              <i class="fa-solid fa-credit-card"></i> Card Information
-            </h3>
-            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Card Number *</label>
-            <input type="text" id="checkoutCardNum" placeholder="4242 4242 4242 4242" maxlength="19">
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-              <div>
-                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Expiry *</label>
-                <input type="text" id="checkoutExpiry" placeholder="MM/YY" maxlength="5">
-              </div>
-              <div>
-                <label style="display: block; margin-bottom: 8px; font-weight: 600;">CVC *</label>
-                <input type="text" id="checkoutCVC" placeholder="123" maxlength="4">
-              </div>
-            </div>
-          </div>
-
-          <label style="display: flex; align-items: center; gap: 10px; margin: 25px 0; cursor: pointer;">
-            <input type="checkbox" id="checkoutAgree">
-            <span style="font-size: 14px;">I agree to Terms of Service</span>
-          </label>
-        </div>
-
-        <div class="checkout-summary-section">
-          <h3 style="font-family: 'Cinzel', serif; color: var(--accent); margin-bottom: 20px;">
-            <i class="fa-solid fa-receipt"></i> Order Summary
-          </h3>
-
-          <div id="checkoutOrderItems" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;"></div>
-
-          <div style="border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-              <span style="font-size: 18px; font-weight: 600;">Total:</span>
-              <span id="checkoutTotal" style="font-size: 24px; color: var(--accent); font-weight: 700;">$0.00</span>
-            </div>
-
-            <button id="checkoutSubmitBtn" class="btn" style="width: 100%; padding: 14px; background: var(--accent); color: var(--header-bg);">
-              <i class="fa-solid fa-lock"></i> Complete Purchase
-            </button>
-
-            <p style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--gray);">
-              <i class="fa-solid fa-lock"></i> Secured by encryption
-            </p>
-          </div>
-        </div>
+      <!-- Order Summary -->
+      <div id="checkoutOrderItems" style="background: var(--bg-color); border-radius: 10px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border-color);"></div>
+      <div style="display:flex; justify-content: space-between; font-weight:700; margin-bottom: 24px;">
+        <span>Total</span>
+        <span id="checkoutTotal" style="color:var(--accent);"></span>
       </div>
+
+      <!-- Error Message -->
+      <div id="checkoutError" style="display:none; padding:12px; margin-bottom:16px; border-radius:8px; background:#ffebee; color:#c62828; font-size:14px; text-align:center;"></div>
+
+      <!-- Form -->
+      <form id="checkoutForm" novalidate>
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; margin-bottom:6px; color:var(--text-color);"><i class="fa-solid fa-user" style="color:var(--accent);"></i> Full Name *</label>
+          <input type="text" id="checkoutName" placeholder="John Doe" required
+            style="width:100%; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); font-size:14px; box-sizing:border-box;">
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; margin-bottom:6px; color:var(--text-color);"><i class="fa-solid fa-envelope" style="color:var(--accent);"></i> Email *</label>
+          <input type="email" id="checkoutEmail" placeholder="you@example.com" required
+            style="width:100%; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); font-size:14px; box-sizing:border-box;">
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-weight:600; margin-bottom:6px; color:var(--text-color);"><i class="fa-solid fa-phone" style="color:var(--accent);"></i> Phone *</label>
+          <input type="tel" id="checkoutPhone" placeholder="+91 9999999999" required
+            style="width:100%; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); font-size:14px; box-sizing:border-box;">
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label style="display:block; font-weight:600; margin-bottom:6px; color:var(--text-color);"><i class="fa-solid fa-location-dot" style="color:var(--accent);"></i> Address *</label>
+          <textarea id="checkoutAddress" placeholder="Street, State, City, PIN" rows="3" required
+            style="width:100%; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); background:var(--card-bg); color:var(--text-color); font-size:14px; box-sizing:border-box; resize:vertical;"></textarea>
+        </div>
+
+        <button id="checkoutSubmitBtn" type="submit" class="btn" style="width:100%; font-size:16px; padding:12px;">
+          <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
+        </button>
+      </form>
     </div>
   </div>
 </div>
 
-<style>
-  .checkout-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    padding: 20px;
-  }
-
-  @media (max-width: 768px) {
-    .checkout-container {
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-  }
-
-  .checkout-form-section {
-    padding-right: 20px;
-    border-right: 1px solid var(--border-color);
-  }
-
-  @media (max-width: 768px) {
-    .checkout-form-section {
-      padding-right: 0;
-      border-right: none;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 20px;
-      margin-bottom: 20px;
-    }
-  }
-
-  .checkout-summary-section {
-    background: rgba(255, 217, 119, 0.05);
-    padding: 20px;
-    border-radius: 8px;
-    height: fit-content;
-  }
-
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
-    font-size: 14px;
-  }
-
-  .form-group input:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(255, 217, 119, 0.1);
-  }
-
-  .error-message {
-    background-color: #fee;
-    color: #c00;
-    padding: 12px;
-    border-radius: 6px;
-    border-left: 4px solid #c00;
-  }
-
-  .checkout-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 13px;
-  }
-
-  .checkout-item-price {
-    color: var(--accent);
-    font-weight: 600;
-  }
-</style>
+<script src="js/script.js"></script>
 
 </body>
 </html>

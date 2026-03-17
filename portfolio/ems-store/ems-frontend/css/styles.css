@@ -1034,3 +1034,31 @@ img {
   font-size: 0.9rem;
 }
 
+/* Admin Button Styles */
+.admin-btn {
+  background: var(--accent) !important;
+  color: white !important;
+  text-decoration: none !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.3s !important;
+  border: 2px solid transparent !important;
+}
+
+.admin-btn:hover {
+  background: #4a2003 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(87, 36, 3, 0.3) !important;
+}
+
+[data-theme="dark"] .admin-btn {
+  background: #6b3a1e !important;
+}
+
+[data-theme="dark"] .admin-btn:hover {
+  background: #572403 !important;
+}

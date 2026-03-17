@@ -1049,11 +1049,20 @@ function openCheckout() {
   try {
     const backdrop = document.getElementById("checkoutBackdrop");
     const modal = document.getElementById("checkoutModal");
-    
-    if (backdrop) backdrop.classList.add("active");
-    if (modal) modal.classList.add("active");
-    
+    const submitBtn = document.getElementById("checkoutSubmitBtn");
+    const cart = loadCart();
+    const total = cartTotal(cart);
+
+    if (!backdrop || !modal || !submitBtn) return;
+    if (total === 0) {
+      showNotification("Your cart is empty", "error");
+      return;
+    }
+
+    backdrop.classList.add("active");
+    modal.classList.add("active");
     document.body.classList.add("no-scroll");
+
     renderCheckoutSummary();
   } catch (err) {
     console.error("Open checkout failed:", err);
@@ -1064,10 +1073,8 @@ function closeCheckout() {
   try {
     const backdrop = document.getElementById("checkoutBackdrop");
     const modal = document.getElementById("checkoutModal");
-    
     if (backdrop) backdrop.classList.remove("active");
     if (modal) modal.classList.remove("active");
-    
     document.body.classList.remove("no-scroll");
   } catch (err) {
     console.error("Close checkout failed:", err);
@@ -1095,19 +1102,13 @@ function renderCheckoutSummary() {
       .map(([id, qty]) => {
         const p = PRODUCT_MAP[id];
         if (!p) return "";
-        
-        const itemTotal = p.price * parseInt(qty, 10);
+        const itemTotal = p.price * (parseInt(qty, 10) || 0);
         total += itemTotal;
-        
         return `
-          <div class="checkout-item">
-            <span class="checkout-item-name">
-              <strong>${p.name}</strong><br>
-              <span style="font-size: 12px;">x${qty}</span>
-            </span>
-            <span class="checkout-item-price">${money(itemTotal)}</span>
-          </div>
-        `;
+          <div class="checkout-item" style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border-color); font-size:14px;">
+            <span style="color:var(--text-color);">${p.name} <span style="color:var(--gray);">×${qty}</span></span>
+            <span style="color:var(--accent);">${money(itemTotal)}</span>
+          </div>`;
       })
       .join("");
 
@@ -1119,21 +1120,14 @@ function renderCheckoutSummary() {
 
 function validateCheckoutForm() {
   const fields = {
-    checkoutName: "Name",
-    checkoutEmail: "Email",
-    checkoutPhone: "Phone",
-    checkoutAddress: "Address",
-    checkoutCity: "City",
-    checkoutState: "State",
-    checkoutZip: "ZIP Code",
-    checkoutCountry: "Country",
-    checkoutCardNum: "Card Number",
-    checkoutExpiry: "Expiry",
-    checkoutCVC: "CVC"
+    checkoutName:   "Name",
+    checkoutEmail:  "Email",
+    checkoutPhone:  "Phone",
+    checkoutAddress: "Address"
   };
 
   const errorEl = document.getElementById("checkoutError");
-  
+
   for (const [id, label] of Object.entries(fields)) {
     const el = document.getElementById(id);
     if (!el || !el.value.trim()) {
@@ -1154,37 +1148,10 @@ function validateCheckoutForm() {
     return false;
   }
 
-  const cardNum = document.getElementById("checkoutCardNum").value.replace(/\s/g, "");
-  if (!/^\d{13,19}$/.test(cardNum)) {
+  const phone = document.getElementById("checkoutPhone").value;
+  if (!/^\d{8,15}$/.test(phone.replace(/\D/g, ""))) {
     if (errorEl) {
-      errorEl.textContent = "Please enter a valid card number";
-      errorEl.style.display = "block";
-    }
-    return false;
-  }
-
-  const expiry = document.getElementById("checkoutExpiry").value;
-  if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-    if (errorEl) {
-      errorEl.textContent = "Expiry format should be MM/YY";
-      errorEl.style.display = "block";
-    }
-    return false;
-  }
-
-  const cvc = document.getElementById("checkoutCVC").value;
-  if (!/^\d{3,4}$/.test(cvc)) {
-    if (errorEl) {
-      errorEl.textContent = "Please enter a valid CVC";
-      errorEl.style.display = "block";
-    }
-    return false;
-  }
-
-  const agree = document.getElementById("checkoutAgree");
-  if (!agree || !agree.checked) {
-    if (errorEl) {
-      errorEl.textContent = "Please agree to the terms";
+      errorEl.textContent = "Please enter a valid phone number";
       errorEl.style.display = "block";
     }
     return false;
@@ -1193,106 +1160,111 @@ function validateCheckoutForm() {
   return true;
 }
 
-function processCheckout() {
+function generateOrderId() {
+  return "ORD#" + Math.random().toString(36).substr(2, 9).toUpperCase();
+}
+
+function sendConfirmationEmail(orderData) {
   try {
-    const errorEl = document.getElementById("checkoutError");
-    if (errorEl) errorEl.style.display = "none";
+    emailjs.init("YOUR_EMAILJS_PUBLIC_KEY_HERE"); // <---------- REPLACE THIS
 
-    if (!validateCheckoutForm()) return;
+    const itemsList = Object.entries(orderData.items).map(([id, qty]) => {
+      const p = PRODUCT_MAP[id];
+      return p ? `• ${p.name} (SKU: ${p.sku}) × ${qty}  =  ${money(p.price * qty)}` : "";
+    }).join("\n");
 
-    const submitBtn = document.getElementById("checkoutSubmitBtn");
-    if (!submitBtn) return;
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-
-    // Simulate payment processing (2 seconds)
-    setTimeout(() => {
-      const orderId = "ORD-" + Date.now();
-      const cart = loadCart();
-      const total = cartTotal(cart);
-      const email = document.getElementById("checkoutEmail").value;
-
-      // Save order
-      const orders = JSON.parse(localStorage.getItem("ems_orders") || "[]");
-      orders.push({
-        orderId: orderId,
-        date: new Date().toLocaleString(),
-        name: document.getElementById("checkoutName").value,
-        email: email,
-        total: total,
-        items: cart
-      });
-      localStorage.setItem("ems_orders", JSON.stringify(orders));
-
-      // Clear cart
-      localStorage.removeItem(STORAGE_KEY);
-      updateCartBadge();
-
-      showNotification(`Order ${orderId} confirmed! Check your email.`, "success");
-      closeCheckout();
-
-      // Reset form
-      document.getElementById("checkoutName").value = "";
-      document.getElementById("checkoutEmail").value = "";
-      document.getElementById("checkoutPhone").value = "";
-      document.getElementById("checkoutAddress").value = "";
-      document.getElementById("checkoutCity").value = "";
-      document.getElementById("checkoutState").value = "";
-      document.getElementById("checkoutZip").value = "";
-      document.getElementById("checkoutCountry").value = "";
-      document.getElementById("checkoutCardNum").value = "";
-      document.getElementById("checkoutExpiry").value = "";
-      document.getElementById("checkoutCVC").value = "";
-      document.getElementById("checkoutAgree").checked = false;
-
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Complete Purchase';
-    }, 2000);
+    emailjs.send("YOUR_EMAILJS_SERVICE_ID_HERE", "order_confirmation", {  // <----- REPLACE THESE
+      to_email:         orderData.email,
+      customer_name:    orderData.name,
+      customer_phone:   orderData.phone,
+      customer_address: orderData.address,
+      order_id:         orderData.orderId,
+      order_date:       orderData.date,
+      order_items:      itemsList,
+      order_total:      money(orderData.total)
+    });
   } catch (err) {
-    console.error("Checkout processing failed:", err);
-    const submitBtn = document.getElementById("checkoutSubmitBtn");
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Complete Purchase';
-    }
+    console.error("sendConfirmationEmail error:", err);
+    showNotification("Order placed but email may have failed", "info");
   }
 }
 
-// Add checkout event listeners in main() function
-const checkoutClose = document.getElementById("checkoutClose");
-const checkoutBackdrop = document.getElementById("checkoutBackdrop");
-const checkoutSubmitBtn = document.getElementById("checkoutSubmitBtn");
-const cardNumInput = document.getElementById("checkoutCardNum");
-const expiryInput = document.getElementById("checkoutExpiry");
+function processCheckout(e) {
+  e.preventDefault();
 
-if (checkoutClose) checkoutClose.addEventListener("click", closeCheckout);
-if (checkoutBackdrop) {
-  checkoutBackdrop.addEventListener("click", (e) => {
-    if (e.target === checkoutBackdrop) closeCheckout();
-  });
-}
-if (checkoutSubmitBtn) checkoutSubmitBtn.addEventListener("click", processCheckout);
+  if (!validateCheckoutForm()) return;
 
-// Format card input
-if (cardNumInput) {
-  cardNumInput.addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\s/g, "");
-    let formatted = value.match(/.{1,4}/g)?.join(" ") || value;
-    e.target.value = formatted;
-  });
+  const errorEl = document.getElementById("checkoutError");
+  if (errorEl) errorEl.style.display = "none";
+
+  const submitBtn = document.getElementById("checkoutSubmitBtn");
+  if (!submitBtn) return;
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+  // Get data from form
+  const cart        = loadCart();
+  const total       = cartTotal(cart);
+  const now         = new Date();
+  const orderId     = generateOrderId();
+  const orderData   = {
+    orderId: orderId,
+    date:    now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+    name:    document.getElementById("checkoutName").value,
+    email:   document.getElementById("checkoutEmail").value,
+    phone:   document.getElementById("checkoutPhone").value,
+    address: document.getElementById("checkoutAddress").value,
+    total:   total,
+    items:   cart
+  };
+
+  // Save to ems_orders array in localStorage
+  try {
+    const orders = JSON.parse(localStorage.getItem("ems_orders") || "[]");
+    orders.push(orderData);
+    localStorage.setItem("ems_orders", JSON.stringify(orders));
+  } catch (err) {
+    console.error("Save order failed:", err);
+  }
+
+  // Clear cart
+  localStorage.removeItem(STORAGE_KEY);
+  updateCartBadge();
+
+  showNotification(`Order confirmed! Order ID: ${orderId}`, "success");
+  closeCheckout();
+  renderCart();
+
+  // Reset form
+  document.getElementById("checkoutName").value   = "";
+  document.getElementById("checkoutEmail").value  = "";
+  document.getElementById("checkoutPhone").value  = "";
+  document.getElementById("checkoutAddress").value = "";
+
+  // Send confirmation email (replace public/service keys)
+  sendConfirmationEmail(orderData);
+
+  submitBtn.disabled = false;
+  submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order & Send Email';
 }
 
-// Format expiry input
-if (expiryInput) {
-  expiryInput.addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length >= 2) {
-      value = value.slice(0, 2) + "/" + value.slice(2, 4);
-    }
-    e.target.value = value;
+// Main init — add this event listener somewhere inside main()
+// (already exists in your script — just uncomment/keep it):
+// if (checkoutBtn) checkoutBtn.addEventListener("click", openCheckout);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("checkoutForm");
+  if (form) form.addEventListener("submit", processCheckout);
+
+  const closeBtn = document.getElementById("checkoutModalClose");
+  if (closeBtn) closeBtn.addEventListener("click", closeCheckout);
+
+  const backdrop = document.getElementById("checkoutBackdrop");
+  if (backdrop) backdrop.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeCheckout();
   });
-}
+});
 
 
 if (document.readyState === "loading") {
@@ -1300,3 +1272,25 @@ if (document.readyState === "loading") {
 } else {
   main();
 }
+/* ---------- ADMIN ORDERS BUTTON ---------- */
+function initAdminButton() {
+  const adminBtn = $(".admin-btn");
+  if (adminBtn) {
+    adminBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      // Check if user has placed any orders (optional security)
+      const orders = JSON.parse(localStorage.getItem("ems_orders") || "[]");
+      if (orders.length === 0) {
+        showNotification("No orders placed yet. Place a test order first!", "info");
+        return false;
+      }
+      
+      // Open in new tab
+      window.open("ems_orders.html", "_blank");
+    });
+  }
+}
+
+// Add to main() function — add this line:
+initAdminButton();
