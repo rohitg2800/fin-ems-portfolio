@@ -1042,12 +1042,6 @@ function main() {
     console.error("Main init failed:", err);
   }
 }
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", main);
-} else {
-  main();
-}
 /* ========== CHECKOUT MODAL ========== */
 
 function openCheckout() {
@@ -1297,4 +1291,10 @@ if (expiryInput) {
     }
     e.target.value = value;
   });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", main);
+} else {
+  main();
 }
