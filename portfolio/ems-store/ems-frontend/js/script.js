@@ -505,8 +505,7 @@ const PRODUCTS = [
   }
 ];
 
-
-const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
+ const PRODUCT_MAP = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
 
 /* ---------- HELPERS ---------- */
 const $ = (sel) => document.querySelector(sel);
@@ -519,8 +518,34 @@ const money = (n) =>
     minimumFractionDigits: 2
   });
 
-/* ---------- THEME (DAY / NIGHT) ---------- */
+function safeText(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
+function isVisible(el) {
+  return !!el && getComputedStyle(el).display !== "none";
+}
+
+function syncBodyScroll() {
+  const cartDrawer = document.getElementById("cartDrawer");
+  const modalBackdrop = document.getElementById("modalBackdrop");
+  const checkoutModal = document.getElementById("checkoutModal");
+
+  const cartOpen = !!cartDrawer && cartDrawer.classList.contains("open");
+  const productModalOpen = !!modalBackdrop && modalBackdrop.classList.contains("active");
+  const checkoutOpen =
+    !!checkoutModal &&
+    (checkoutModal.classList.contains("active") || isVisible(checkoutModal));
+
+  document.body.classList.toggle("no-scroll", cartOpen || productModalOpen || checkoutOpen);
+}
+
+/* ---------- THEME ---------- */
 function initTheme() {
   try {
     const saved = localStorage.getItem(THEME_KEY);
@@ -548,16 +573,11 @@ function toggleTheme() {
 function updateThemeUI(theme) {
   const icon = $("#themeIcon");
   const text = $("#themeText");
-  if (icon) {
-    icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
-  }
-  if (text) {
-    text.textContent = theme === "dark" ? "Light" : "Dark";
-  }
+  if (icon) icon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+  if (text) text.textContent = theme === "dark" ? "Light" : "Dark";
 }
 
 /* ---------- CART STORAGE ---------- */
-
 function loadCart() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
@@ -588,7 +608,6 @@ function cartTotal(cart) {
 }
 
 /* ---------- NOTIFICATIONS ---------- */
-
 function showNotification(message, type = "success") {
   try {
     $$(".notification").forEach((n) => n.remove());
@@ -605,21 +624,17 @@ function showNotification(message, type = "success") {
           ? "fa-exclamation-circle"
           : "fa-info-circle"
       }" aria-hidden="true"></i>
-      <span>${message}</span>
+      <span>${safeText(message)}</span>
     `;
 
     document.body.appendChild(notification);
-
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
   } catch (err) {
     console.error("Notification failed:", err);
   }
 }
 
-/* ---------- CART OPERATIONS ---------- */
-
+/* ---------- CART OPS ---------- */
 function updateCartBadge() {
   try {
     const badge = $("#cartBadge");
@@ -639,10 +654,12 @@ function addToCart(productId, quantity = 1) {
       showNotification("Product not found", "error");
       return;
     }
+
     const cart = loadCart();
     cart[productId] = (parseInt(cart[productId], 10) || 0) + quantity;
     saveCart(cart);
     updateCartBadge();
+    renderCart();
     showNotification(`${product.name} added to cart`, "success");
   } catch (err) {
     console.error("Add to cart failed:", err);
@@ -658,9 +675,7 @@ function removeFromCart(productId) {
     saveCart(cart);
     updateCartBadge();
     renderCart();
-    if (product) {
-      showNotification(`${product.name} removed`, "info");
-    }
+    if (product) showNotification(`${product.name} removed`, "info");
   } catch (err) {
     console.error("Remove from cart failed:", err);
   }
@@ -670,8 +685,10 @@ function changeCartQty(productId, delta) {
   try {
     const cart = loadCart();
     if (!cart[productId]) return;
+
     cart[productId] = (parseInt(cart[productId], 10) || 0) + delta;
     if (cart[productId] <= 0) delete cart[productId];
+
     saveCart(cart);
     updateCartBadge();
     renderCart();
@@ -680,8 +697,7 @@ function changeCartQty(productId, delta) {
   }
 }
 
-/* ---------- CART RENDERING ---------- */
-
+/* ---------- CART RENDER ---------- */
 function renderCart() {
   try {
     const body = $("#cartItems");
@@ -706,19 +722,21 @@ function renderCart() {
       .map(([id, qty]) => {
         const p = PRODUCT_MAP[id];
         if (!p) return "";
+
         const img = p.image?.src || "https://placehold.co/100x100/572403/ffd977?text=EMS";
         const alt = p.image?.alt || p.name;
+
         return `
           <div class="cart-item">
-            <img src="${img}" alt="${alt}" loading="lazy" width="90" height="90">
+            <img src="${img}" alt="${safeText(alt)}" loading="lazy" width="90" height="90">
             <div style="flex: 1;">
-              <div class="cart-item-title">${p.name}</div>
+              <div class="cart-item-title">${safeText(p.name)}</div>
               <div class="cart-item-price">${money(p.price)}</div>
               <div class="cart-item-quantity">
-                <button onclick="changeCartQty('${id}', -1)" aria-label="Decrease quantity">−</button>
+                <button type="button" onclick="changeCartQty('${p.id}', -1)" aria-label="Decrease quantity">−</button>
                 <span>${qty}</span>
-                <button onclick="changeCartQty('${id}', 1)" aria-label="Increase quantity">+</button>
-                <button class="cart-item-remove" onclick="removeFromCart('${id}')" aria-label="Remove ${p.name}">
+                <button type="button" onclick="changeCartQty('${p.id}', 1)" aria-label="Increase quantity">+</button>
+                <button type="button" class="cart-item-remove" onclick="removeFromCart('${p.id}')" aria-label="Remove ${safeText(p.name)}">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
@@ -734,40 +752,48 @@ function renderCart() {
   }
 }
 
-/* ---------- CART OPEN/CLOSE (overlay + drawer) ---------- */
-
-function toggleCart() {
+/* ---------- CART OPEN/CLOSE ---------- */
+function openCart() {
   try {
-    const overlay = document.getElementById("cartOverlay"); // from HTML
-    const drawer  = document.getElementById("cartDrawer");
-    if (!overlay || !drawer) {
-      console.warn("Cart elements not found (cartOverlay/cartDrawer).");
-      return;
-    }
+    const overlay = document.getElementById("cartOverlay");
+    const drawer = document.getElementById("cartDrawer");
+    if (!overlay || !drawer) return;
 
-    const isOpen = drawer.classList.contains("open");
-    if (isOpen) {
-      drawer.classList.remove("open");
-      overlay.style.display = "none";
-      document.body.classList.remove("no-scroll");
-    } else {
-      renderCart(); // refresh items each time it opens
-      drawer.classList.add("open");
-      overlay.style.display = "block";
-      document.body.classList.add("no-scroll");
-    }
+    renderCart();
+    drawer.classList.add("open");
+    overlay.style.display = "block";
+    syncBodyScroll();
   } catch (err) {
-    console.error("Toggle cart failed:", err);
+    console.error("Open cart failed:", err);
   }
 }
 
-// Backwards compatibility if something still calls openCart/closeCart
-function openCart()  { toggleCart(); }
-function closeCart() { toggleCart(); }
+function closeCart() {
+  try {
+    const overlay = document.getElementById("cartOverlay");
+    const drawer = document.getElementById("cartDrawer");
+    if (!overlay || !drawer) return;
 
+    drawer.classList.remove("open");
+    overlay.style.display = "none";
+    syncBodyScroll();
+  } catch (err) {
+    console.error("Close cart failed:", err);
+  }
+}
+
+function toggleCart() {
+  const drawer = document.getElementById("cartDrawer");
+  if (!drawer) return;
+
+  if (drawer.classList.contains("open")) {
+    closeCart();
+  } else {
+    openCart();
+  }
+}
 
 /* ---------- PRODUCT MODAL ---------- */
-
 function openProductModal(productId) {
   try {
     const p = PRODUCT_MAP[productId];
@@ -794,17 +820,13 @@ function openProductModal(productId) {
     if (imgEl) {
       imgEl.src = imgSrc;
       imgEl.alt = imgAlt;
-      if (p.image?.title) imgEl.title = p.image.title;
+      imgEl.title = p.image?.title || p.name;
     }
     if (nameEl) nameEl.textContent = p.name;
     if (priceEl) priceEl.textContent = money(p.price);
 
     if (skuWrapper) {
-      if (skuWrapper.tagName === "SPAN") {
-        skuWrapper.textContent = p.sku;
-      } else {
-        skuWrapper.textContent = `SKU: ${p.sku}`;
-      }
+      skuWrapper.textContent = skuWrapper.tagName === "SPAN" ? p.sku : `SKU: ${p.sku}`;
     }
 
     if (descEl) descEl.textContent = p.description;
@@ -819,12 +841,12 @@ function openProductModal(productId) {
     }
 
     if (featsEl) {
-      featsEl.innerHTML = p.bullets.map((b) => `<li>${b}</li>`).join("");
+      featsEl.innerHTML = p.bullets.map((b) => `<li>${safeText(b)}</li>`).join("");
     }
 
     modal.dataset.productId = productId;
     backdrop.classList.add("active");
-    document.body.classList.add("no-scroll");
+    syncBodyScroll();
   } catch (err) {
     console.error("Open modal failed:", err);
   }
@@ -834,14 +856,13 @@ function closeProductModal() {
   try {
     const backdrop = $("#modalBackdrop");
     if (backdrop) backdrop.classList.remove("active");
-    document.body.classList.remove("no-scroll");
+    syncBodyScroll();
   } catch (err) {
     console.error("Close modal failed:", err);
   }
 }
 
-/* ---------- FILTERING (Stethoscopes page) ---------- */
-
+/* ---------- FILTERING ---------- */
 let currentFilter = "all";
 
 function filterProducts(filterName) {
@@ -850,7 +871,7 @@ function filterProducts(filterName) {
     $$(".filter-btn").forEach((btn) => {
       const isActive = btn.dataset.filter === filterName;
       btn.classList.toggle("active", isActive);
-      btn.setAttribute("aria-pressed", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
     });
     renderProducts();
   } catch (err) {
@@ -858,8 +879,7 @@ function filterProducts(filterName) {
   }
 }
 
-/* ---------- PRODUCT CARD HTML ---------- */
-
+/* ---------- PRODUCT CARD ---------- */
 function productCardHTML(p) {
   const shortDesc =
     p.description.length > 130 ? p.description.slice(0, 128) + "…" : p.description;
@@ -869,27 +889,27 @@ function productCardHTML(p) {
   return `
     <article class="card" role="listitem">
       <div class="card-top">
-        <img src="${imgSrc}" alt="${imgAlt}" class="product-img" loading="lazy" width="600" height="400">
-        <div class="tag">${p.category}</div>
+        <img src="${imgSrc}" alt="${safeText(imgAlt)}" class="product-img" loading="lazy" width="600" height="400">
+        <div class="tag">${safeText(p.category)}</div>
       </div>
       <div class="card-inner">
-        <h3 class="card-title">${p.name}</h3>
-        <p class="card-text">${shortDesc}</p>
+        <h3 class="card-title">${safeText(p.name)}</h3>
+        <p class="card-text">${safeText(shortDesc)}</p>
         <ul class="feature-list-compact">
-          ${p.bullets.slice(0, 3).map((b) => `<li>${b}</li>`).join("")}
+          ${p.bullets.slice(0, 3).map((b) => `<li>${safeText(b)}</li>`).join("")}
         </ul>
         <div class="price-row">
           <div>
             <div class="price">${money(p.price)}</div>
-            <div class="sku-small">${p.sku}</div>
+            <div class="sku-small">${safeText(p.sku)}</div>
           </div>
-          ${p.badge ? `<div class="pill">${p.badge}</div>` : "<div></div>"}
+          ${p.badge ? `<div class="pill">${safeText(p.badge)}</div>` : "<div></div>"}
         </div>
         <div class="card-actions">
-          <button class="btn secondary" onclick="openProductModal('${p.id}')">
+          <button type="button" class="btn secondary" onclick="openProductModal('${p.id}')">
             <i class="fa-solid fa-eye"></i> Details
           </button>
-          <button class="btn" onclick="addToCart('${p.id}', 1)">
+          <button type="button" class="btn" onclick="addToCart('${p.id}', 1)">
             <i class="fa-solid fa-cart-plus"></i> Add
           </button>
         </div>
@@ -898,8 +918,7 @@ function productCardHTML(p) {
   `;
 }
 
-/* ---------- PRODUCT RENDERING FOR ALL PAGES ---------- */
-
+/* ---------- PRODUCT RENDERING ---------- */
 function renderProducts() {
   try {
     const homeGrid = $("#productGrid");
@@ -910,50 +929,53 @@ function renderProducts() {
     const gridApparel = $("#gridApparel");
     const gridTools = $("#gridTools");
 
-    // SHOP PAGE: category grids
     if (gridStethoscopes || gridKits || gridApparel || gridTools) {
       if (gridStethoscopes) {
-        const items = PRODUCTS.filter((p) => p.category === "Stethoscopes");
-        gridStethoscopes.innerHTML = items.map(productCardHTML).join("");
+        gridStethoscopes.innerHTML = PRODUCTS
+          .filter((p) => p.category === "Stethoscopes")
+          .map(productCardHTML)
+          .join("");
       }
       if (gridKits) {
-        const items = PRODUCTS.filter((p) => p.category === "Kits");
-        gridKits.innerHTML = items.map(productCardHTML).join("");
+        gridKits.innerHTML = PRODUCTS
+          .filter((p) => p.category === "Kits")
+          .map(productCardHTML)
+          .join("");
       }
       if (gridApparel) {
-        const items = PRODUCTS.filter((p) => p.category === "Apparel");
-        gridApparel.innerHTML = items.map(productCardHTML).join("");
+        gridApparel.innerHTML = PRODUCTS
+          .filter((p) => p.category === "Apparel")
+          .map(productCardHTML)
+          .join("");
       }
       if (gridTools) {
-        const items = PRODUCTS.filter((p) => p.category === "Tools");
-        gridTools.innerHTML = items.map(productCardHTML).join("");
+        gridTools.innerHTML = PRODUCTS
+          .filter((p) => p.category === "Tools")
+          .map(productCardHTML)
+          .join("");
       }
       return;
     }
 
-    // STETHOSCOPES PAGE: only stethoscopes + filters
     if (stethPageGrid) {
       const items = PRODUCTS.filter((p) => {
         if (p.category !== "Stethoscopes") return false;
         if (currentFilter === "all") return true;
-        return p.filters && p.filters.includes(currentFilter);
+        return p.filters?.includes(currentFilter);
       });
       stethPageGrid.innerHTML = items.map(productCardHTML).join("");
       return;
     }
 
-    // HOME PAGE: generic Featured grid
-   // HOME PAGE: show ALL products
-if (homeGrid) {
-  homeGrid.innerHTML = PRODUCTS.map(productCardHTML).join("");
-}
+    if (homeGrid) {
+      homeGrid.innerHTML = PRODUCTS.map(productCardHTML).join("");
+    }
   } catch (err) {
     console.error("Render products failed:", err);
   }
 }
 
 /* ---------- MOBILE NAV ---------- */
-
 function initMobileNav() {
   try {
     const toggle = $("#menuToggle");
@@ -962,7 +984,7 @@ function initMobileNav() {
 
     toggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("nav-open");
-      toggle.setAttribute("aria-expanded", isOpen);
+      toggle.setAttribute("aria-expanded", String(isOpen));
     });
 
     nav.querySelectorAll("a").forEach((a) => {
@@ -976,104 +998,23 @@ function initMobileNav() {
   }
 }
 
-/* ---------- INIT ---------- */
-
-function main() {
-  try {
-    initTheme();
-    initMobileNav();
-    renderProducts();
-    updateCartBadge();
-
-    const themeToggle   = $("#themeToggle");
-    const cartBtn       = $("#cartBtn");
-    const cartClose     = $("#cartClose");
-    const cartOverlay   = $("#cartOverlay"); 
-    const modalBackdrop = $("#modalBackdrop");
-    const modalClose    = $("#modalClose");
-    const modalAdd      = $("#modalAddToCart");
-    const checkoutBtn   = $("#checkoutBtn");
-
-    if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
-    if (cartBtn)      cartBtn.addEventListener("click", openCart);
-    if (cartClose)    cartClose.addEventListener("click", closeCart);
-    if (cartOverlay) {
-  cartOverlay.addEventListener("click", (e) => {
-    // click on dark background closes cart
-    if (e.target === cartOverlay) toggleCart();
-  });
-}
-    if (modalBackdrop) {
-      modalBackdrop.addEventListener("click", (e) => {
-        if (e.target === modalBackdrop) closeProductModal();
-      });
-    }
-    if (modalClose)   modalClose.addEventListener("click", closeProductModal);
-    if (modalAdd) {
-      modalAdd.addEventListener("click", () => {
-        const modal = $("#productModal");
-        if (!modal) return;
-        const productId = modal.dataset.productId;
-        if (!productId) return;
-        addToCart(productId, 1);
-        closeProductModal();
-        setTimeout(openCart, 250);
-      });
-    }
-      if (checkoutBtn) {
-      checkoutBtn.addEventListener("click", () => {
-        const cart = loadCart();
-        const total = cartTotal(cart);
-        if (total === 0) {
-          showNotification("Your cart is empty", "error");
-        } else {
-          openCheckout();
-        }
-      });
-    }
-
-
-    // Stethoscope filter buttons
-    $$(".filter-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        filterProducts(btn.dataset.filter);
-      });
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeProductModal();
-        closeCart();
-      }
-    });
-  } catch (err) {
-    console.error("Main init failed:", err);
-  }
-}
-
-
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", main);
-} else {
-  main();
-} 
-
-/* ========== EMAIL CHECKOUT (EmailJS) ========== */
-
+/* ---------- EMAIL CHECKOUT ---------- */
 const EMAILJS_CONFIG = {
-  publicKey:  "N5mzHg4TQmKz_T-1Z",
-  serviceId:  "service_gv3zi4q",
+  publicKey: "N5mzHg4TQmKz_T-1Z",
+  serviceId: "service_gv3zi4q",
   templateId: "template_5lpqoc7"
 };
 
 let emailInitialized = false;
 
 function ensureEmailInitialized() {
-  if (!emailInitialized) {
-    emailjs.init(EMAILJS_CONFIG.publicKey); // EmailJS docs: init once before send [web:181][web:184]
-    emailInitialized = true;
+  if (emailInitialized) return true;
+  if (typeof emailjs === "undefined") {
+    throw new Error("EmailJS library not loaded");
   }
+  emailjs.init(EMAILJS_CONFIG.publicKey);
+  emailInitialized = true;
+  return true;
 }
 
 function setCheckoutError(msg) {
@@ -1082,29 +1023,32 @@ function setCheckoutError(msg) {
     if (msg) showNotification(msg, "error");
     return;
   }
+
   if (!msg) {
     box.style.display = "none";
     box.textContent = "";
-  } else {
-    box.style.display = "block";
-    box.textContent = msg;
+    return;
   }
+
+  box.style.display = "block";
+  box.textContent = msg;
 }
 
-// Simple validation: required fields + email/phone format
 function validateCheckoutFormSimple() {
-  const nameEl    = document.getElementById("checkoutName");
-  const emailEl   = document.getElementById("checkoutEmail");
-  const phoneEl   = document.getElementById("checkoutPhone");
-  const addressEl = document.getElementById("checkoutAddress");
+  const name = document.getElementById("checkoutName")?.value.trim() || "";
+  const email = document.getElementById("checkoutEmail")?.value.trim() || "";
+  const phone = document.getElementById("checkoutPhone")?.value.trim() || "";
+  const address = document.getElementById("checkoutAddress")?.value.trim() || "";
 
-  const name    = nameEl?.value.trim()    || "";
-  const email   = emailEl?.value.trim()   || "";
-  const phone   = phoneEl?.value.trim()   || "";
-  const address = addressEl?.value.trim() || "";
+  if (!name) {
+    setCheckoutError("Please enter your name");
+    return false;
+  }
 
-  if (!name)   return setCheckoutError("Please enter your name"), false;
-  if (!email)  return setCheckoutError("Please enter your email"), false;
+  if (!email) {
+    setCheckoutError("Please enter your email");
+    return false;
+  }
 
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRe.test(email)) {
@@ -1116,9 +1060,10 @@ function validateCheckoutFormSimple() {
     setCheckoutError("Please enter your phone number");
     return false;
   }
+
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 10) {
-    setCheckoutError("Please enter a valid phone number (10+ digits)");
+    setCheckoutError("Please enter a valid phone number");
     return false;
   }
 
@@ -1131,11 +1076,11 @@ function validateCheckoutFormSimple() {
   return true;
 }
 
-// Open checkout modal
 function openCheckout() {
   try {
-    const cart  = loadCart();
+    const cart = loadCart();
     const total = cartTotal(cart);
+
     if (!Object.keys(cart).length || total <= 0) {
       showNotification("Your cart is empty", "error");
       return;
@@ -1143,18 +1088,20 @@ function openCheckout() {
 
     const modal = document.getElementById("checkoutModal");
     if (!modal) {
-      console.warn("checkoutModal not found in DOM.");
+      console.warn("checkoutModal not found");
       return;
     }
 
-    // If using display:none style
-    modal.style.display = "flex";
-    modal.classList.add("active");
+    const totalEl =
+      document.getElementById("modalCartTotal") ||
+      document.getElementById("checkoutTotal");
 
-    const totalEl = document.getElementById("modalCartTotal") || document.getElementById("checkoutTotal");
     if (totalEl) totalEl.textContent = total.toFixed(2);
 
-    document.body.classList.add("no-scroll");
+    modal.style.display = "flex";
+    modal.classList.add("active");
+    setCheckoutError("");
+    syncBodyScroll();
   } catch (err) {
     console.error("Open checkout failed:", err);
     showNotification("Unable to open checkout", "error");
@@ -1165,20 +1112,21 @@ function closeCheckout() {
   try {
     const modal = document.getElementById("checkoutModal");
     if (modal) {
-      modal.style.display = "none";
       modal.classList.remove("active");
+      modal.style.display = "none";
     }
-    document.body.classList.remove("no-scroll");
+    syncBodyScroll();
   } catch (err) {
     console.error("Close checkout failed:", err);
   }
 }
 
 async function submitOrder(event) {
-  if (event && event.preventDefault) event.preventDefault();
+  if (event) event.preventDefault();
 
-  const cart  = loadCart();
+  const cart = loadCart();
   const total = cartTotal(cart);
+
   if (!Object.keys(cart).length || total <= 0) {
     showNotification("Your cart is empty", "error");
     return;
@@ -1192,15 +1140,15 @@ async function submitOrder(event) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
   }
 
-  const name    = document.getElementById("checkoutName")?.value.trim()    || "";
-  const email   = document.getElementById("checkoutEmail")?.value.trim()   || "";
-  const phone   = document.getElementById("checkoutPhone")?.value.trim()   || "";
+  const name = document.getElementById("checkoutName")?.value.trim() || "";
+  const email = document.getElementById("checkoutEmail")?.value.trim() || "";
+  const phone = document.getElementById("checkoutPhone")?.value.trim() || "";
   const address = document.getElementById("checkoutAddress")?.value.trim() || "";
 
   const orderId = "EMS-" + Date.now();
-  const order   = {
+  const order = {
     orderId,
-    date:   new Date().toISOString(),
+    date: new Date().toISOString(),
     name,
     email,
     phone,
@@ -1209,7 +1157,6 @@ async function submitOrder(event) {
     total
   };
 
-  // Save for admin page (ems_orders)
   try {
     const existing = JSON.parse(localStorage.getItem("ems_orders") || "[]");
     existing.push(order);
@@ -1218,53 +1165,152 @@ async function submitOrder(event) {
     console.error("Saving order failed:", err);
   }
 
-  // Send confirmation email through EmailJS
   try {
     ensureEmailInitialized();
 
     const itemsText = Object.entries(order.items)
-      .map(([id, qty]) => `${PRODUCT_MAP[id]?.name || id} × ${qty}`)
+      .map(([id, qty]) => `${PRODUCT_MAP[id]?.name || id} x ${qty}`)
       .join("\n");
 
     await emailjs.send(
       EMAILJS_CONFIG.serviceId,
       EMAILJS_CONFIG.templateId,
       {
-        customer_name:    order.name,
-        customer_email:   order.email,
-        customer_phone:   order.phone,
+        customer_name: order.name,
+        customer_email: order.email,
+        customer_phone: order.phone,
         customer_address: order.address,
-        order_id:         order.orderId,
-        order_date:       new Date(order.date).toLocaleString("en-IN"),
-        order_items:      itemsText || "No item details",
-        order_total:      `$${order.total.toFixed(2)}`
+        order_id: order.orderId,
+        order_date: new Date(order.date).toLocaleString("en-IN"),
+        order_items: itemsText || "No item details",
+        order_total: `$${order.total.toFixed(2)}`
       }
     );
 
     showNotification(`Order ${orderId} confirmed! Email sent.`, "success");
   } catch (err) {
-    console.error("EmailJS error:", err);
+    console.error("Email send failed:", err);
     showNotification(`Order ${orderId} saved, but email failed.`, "info");
     setCheckoutError("Order saved, but confirmation email could not be sent.");
   }
 
-  // Clear cart + reset UI
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (err) {
     console.error("Cart clear failed:", err);
   }
+
   updateCartBadge();
   renderCart();
+
+  const form = document.getElementById("checkoutForm");
+  if (form) form.reset();
+
   closeCheckout();
-  document.getElementById("checkoutForm")?.reset();
+  closeCart();
 
   if (btn) {
     btn.disabled = false;
     btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order & Send Email';
   }
 }
-const checkoutForm = document.getElementById("checkoutForm");
-if (checkoutForm) {
-  checkoutForm.addEventListener("submit", submitOrder);
+
+/* ---------- INIT ---------- */
+function main() {
+  try {
+    initTheme();
+    initMobileNav();
+    renderProducts();
+    updateCartBadge();
+    renderCart();
+
+    const themeToggle = $("#themeToggle");
+    const cartBtn = $("#cartBtn");
+    const cartClose = $("#cartClose");
+    const cartOverlay = $("#cartOverlay");
+    const modalBackdrop = $("#modalBackdrop");
+    const modalClose = $("#modalClose");
+    const modalAdd = $("#modalAddToCart");
+    const checkoutBtn = $("#checkoutBtn");
+    const checkoutForm = $("#checkoutForm");
+    const checkoutClose = $("#checkoutClose");
+    const checkoutModal = $("#checkoutModal");
+
+    if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
+    if (cartBtn) cartBtn.addEventListener("click", toggleCart);
+    if (cartClose) cartClose.addEventListener("click", closeCart);
+
+    if (cartOverlay) {
+      cartOverlay.addEventListener("click", (e) => {
+        if (e.target === cartOverlay) closeCart();
+      });
+    }
+
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === modalBackdrop) closeProductModal();
+      });
+    }
+
+    if (modalClose) modalClose.addEventListener("click", closeProductModal);
+
+    if (modalAdd) {
+      modalAdd.addEventListener("click", () => {
+        const modal = $("#productModal");
+        const productId = modal?.dataset?.productId;
+        if (!productId) return;
+        addToCart(productId, 1);
+        closeProductModal();
+        setTimeout(openCart, 150);
+      });
+    }
+
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", () => {
+        const total = cartTotal(loadCart());
+        if (total <= 0) {
+          showNotification("Your cart is empty", "error");
+        } else {
+          openCheckout();
+        }
+      });
+    }
+
+    if (checkoutForm) {
+      checkoutForm.addEventListener("submit", submitOrder);
+    }
+
+    if (checkoutClose) {
+      checkoutClose.addEventListener("click", closeCheckout);
+    }
+
+    if (checkoutModal) {
+      checkoutModal.addEventListener("click", (e) => {
+        if (e.target === checkoutModal) closeCheckout();
+      });
+    }
+
+    $$(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterProducts(btn.dataset.filter);
+      });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeProductModal();
+        closeCheckout();
+        closeCart();
+      }
+    });
+  } catch (err) {
+    console.error("Main init failed:", err);
+  }
 }
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", main); 
+} else {
+  main();
+}
+   

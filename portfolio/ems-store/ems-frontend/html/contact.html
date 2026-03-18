@@ -5,23 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Contact Us — EMS Luxe Supply</title>
-  <meta name="description"
-        content="Contact EMS Luxe Supply for questions about orders, bulk EMS gear, warranty, and support for students and agencies.">
+  <meta name="description" content="Contact EMS Luxe Supply for questions about orders, bulk EMS gear, warranty, and support for students and agencies.">
 
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- Site styles -->
-  <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body data-theme="light">
-  <!-- ========== NAVIGATION ========== -->
   <header class="topbar">
     <div class="container topbar-inner">
       <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -44,7 +38,7 @@
         <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
         <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
         <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust</a>
+        <a href="trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
         <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="contact.html" aria-current="page"><i class="fa-solid fa-envelope"></i> Contact</a>
       </nav>
@@ -54,14 +48,13 @@
         <span id="themeText">Dark</span>
       </button>
 
-      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart, 0 items">
+      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart">
         <i class="fa-solid fa-cart-shopping"></i>
         <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
       </button>
     </div>
   </header>
 
-  <!-- Optional main-page button -->
   <div class="container" style="margin-top: 20px; text-align: center;">
     <a href="../index.html" class="btn">
       <i class="fa-solid fa-house"></i> Main Page
@@ -69,7 +62,6 @@
   </div>
 
   <main>
-    <!-- ========== HERO ========== -->
     <section class="hero hero-compact" aria-labelledby="contact-hero-title">
       <div class="container">
         <div class="hero-card">
@@ -81,12 +73,10 @@
       </div>
     </section>
 
-    <!-- ========== CONTACT SECTION ========== -->
     <section style="padding: 60px 0 40px;">
       <div class="container">
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: flex-start; gap: 32px;">
 
-          <!-- Contact form -->
           <article class="card" style="padding: 24px 22px;">
             <h2 class="section-title" style="margin-top: 0; font-size: 1.6rem; text-align: left;">
               Send Us a Message
@@ -96,15 +86,16 @@
             </p>
 
             <form class="contact-form" action="https://formspree.io/f/mdawpzkq" method="post">
+              <input type="hidden" name="_subject" value="New EMS Luxe contact message">
+              <input type="hidden" name="_next" value="https://your-domain.com/html/thank-you.html">
+              <input type="text" name="_gotcha" style="display:none">
+
               <div class="form-row">
                 <div class="form-group">
-                  <input type="hidden" name="_subject" value="New EMS Luxe contact message">
-                  <input type="hidden" name="_next" value="https://your-domain.com/html/thank-you.html">
-                  <input type="text" name="_gotcha" style="display:none">
-
                   <label for="name">Full Name</label>
                   <input type="text" id="name" name="name" placeholder="Your name" required>
                 </div>
+
                 <div class="form-group">
                   <label for="email">Email Address</label>
                   <input type="email" id="email" name="email" placeholder="you@example.com" required>
@@ -123,6 +114,7 @@
                     <option value="other">Other</option>
                   </select>
                 </div>
+
                 <div class="form-group">
                   <label for="orderId">Order ID (optional)</label>
                   <input type="text" id="orderId" name="orderId" placeholder="#EMS-12345">
@@ -138,14 +130,13 @@
                 <button type="submit" class="btn">
                   <i class="fa-solid fa-paper-plane"></i> Send Message
                 </button>
-                <p class="form-note">
+                <p class="form-note" style="margin-top: 12px; color: var(--gray); font-size: 0.9rem;">
                   By submitting, you agree to be contacted about your inquiry. We never sell your data.
                 </p>
               </div>
             </form>
           </article>
 
-          <!-- Contact info / quick help -->
           <article class="card-soft">
             <i class="fa-solid fa-headset card-icon" aria-hidden="true"></i>
             <h3>Need faster help?</h3>
@@ -179,8 +170,11 @@
             </ul>
 
             <p style="margin-top: 18px; font-size: 0.9rem; color: var(--gray);">
-              For quick answers, you can also visit our <a href="faq.html" style="color: var(--accent); text-decoration: none;">FAQs</a>
-              or <a href="trust.html" style="color: var(--accent); text-decoration: none;">Trust & Safety</a> page.
+              For quick answers, you can also visit our
+              <a href="faq.html" style="color: var(--accent); text-decoration: none;">FAQs</a>
+              or
+              <a href="trust.html" style="color: var(--accent); text-decoration: none;">Trust & Safety</a>
+              page.
             </p>
           </article>
 
@@ -188,7 +182,6 @@
       </div>
     </section>
 
-    <!-- ========== PRE-FOOTER BENEFITS ========== -->
     <section class="prefooter-benefits" aria-labelledby="benefits-title">
       <div class="container">
         <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
@@ -231,94 +224,75 @@
     </section>
   </main>
 
-  <!-- ========== FOOTER ========== -->
-  <footer class="footer-main">
-    <div class="container">
-      <div class="footer-columns">
-        <div class="footer-col">
-          <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
-          <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
-          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
-          <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
-          <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
-          <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
-          <p><a href="contact.html"><i class="fa-solid fa-chevron-right"></i> Contact</a></p>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
-          <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        © 2026 EMS Luxe Supply. All rights reserved.
-      </div>
-    </div>
-  </footer>
+  <!-- CART -->
+  <div id="cartOverlay" class="cart-overlay"></div>
 
-  <!-- ========== CART & MODAL (shared) ========== -->
-  <div id="cartBackdrop" class="drawer-backdrop"></div>
-  <aside id="cartDrawer" class="drawer" aria-label="Shopping cart" role="dialog" aria-modal="true">
-    <div class="drawer-header">
-      <div class="drawer-title">
-        <i class="fa-solid fa-cart-shopping"></i> Your Cart
-      </div>
-      <button id="cartClose" class="modal-close" aria-label="Close cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+  <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="cartClose" type="button" class="cart-close-btn" aria-label="Close cart">×</button>
     </div>
-    <div class="drawer-body" id="cartItems">
+
+    <div id="cartItems" class="cart-body">
       <div class="empty-cart">
         <i class="fa-solid fa-cart-shopping"></i>
         <p>Your cart is empty</p>
       </div>
     </div>
-    <div class="drawer-footer">
-      <div class="total-row">
+
+    <div class="cart-footer">
+      <div class="cart-total-row">
         <span>Total</span>
         <span id="cartTotal">$0.00</span>
       </div>
-      <button id="checkoutBtn" class="btn" style="width: 100%;">
+
+      <button id="checkoutBtn" type="button" class="btn" style="width: 100%;">
         <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
       </button>
     </div>
   </aside>
 
-  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
-    <div class="modal" id="productModal">
+  <!-- PRODUCT MODAL -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-labelledby="modalProductName">
+    <div id="productModal" class="modal-card">
       <div class="modal-header">
-        <h2 class="modal-title" id="modalProductName">Product Details</h2>
-        <button class="modal-close" id="modalClose" aria-label="Close product details">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h2 id="modalProductName" class="modal-title">Product Details</h2>
+        <button id="modalClose" type="button" class="modal-close-btn" aria-label="Close product details">×</button>
       </div>
+
       <div class="modal-body">
-        <div class="modal-product">
-          <img id="modalProductImage" src="https://placehold.co/800x600/572403/ffd977?text=Product" alt="Product image" loading="lazy">
-          <div class="modal-product-info">
-            <div class="pill" id="modalProductBadge" style="display: none;">New</div>
-            <div class="price" id="modalProductPrice">$0.00</div>
+        <div class="product-modal-grid">
+          <div>
+            <img
+              id="modalProductImage"
+              src="https://placehold.co/800x600/572403/ffd977?text=Product"
+              alt="Product image"
+              loading="lazy"
+            >
+          </div>
+
+          <div>
+            <div id="modalProductBadge" class="pill" style="display: none;">New</div>
+            <div id="modalProductPrice" class="price">$0.00</div>
             <p style="font-size: 13px; color: var(--gray); margin-bottom: 15px;">
               SKU: <span id="modalProductSku">---</span>
             </p>
             <p id="modalProductDescription" style="color: var(--text-color); line-height: 1.7; margin-bottom: 25px;">
               Product description will appear here...
             </p>
+
             <div>
               <h4 style="color: var(--accent); margin-bottom: 12px; font-family: 'Cinzel', serif;">
                 <i class="fa-solid fa-star"></i> Key Features
               </h4>
               <ul id="modalProductFeatures" style="color: var(--text-color); line-height: 1.8; padding-left: 20px;"></ul>
             </div>
+
             <div class="modal-product-actions">
-              <button class="btn secondary" onclick="closeProductModal()">
+              <button type="button" class="btn secondary" onclick="closeProductModal()">
                 <i class="fa-solid fa-arrow-left"></i> Continue Shopping
               </button>
-              <button class="btn" id="modalAddToCart">
+              <button type="button" class="btn" id="modalAddToCart">
                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
               </button>
             </div>
@@ -328,8 +302,67 @@
     </div>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="../js/script.js" defer></script>
+  <!-- CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Checkout</h3>
+        <button id="checkoutClose" type="button" class="modal-close-btn" aria-label="Close checkout">×</button>
+      </div>
 
+      <div class="modal-body">
+        <form id="checkoutForm" class="checkout-form">
+          <input id="checkoutName" type="text" placeholder="Full name" required>
+          <input id="checkoutEmail" type="email" placeholder="Email address" required>
+          <input id="checkoutPhone" type="tel" placeholder="Phone number" required>
+          <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
+
+          <div id="checkoutError" class="checkout-error"></div>
+
+          <div class="checkout-total-box">
+            Total: $<span id="modalCartTotal">0.00</span>
+          </div>
+
+          <button id="checkoutSubmitBtn" type="submit" class="btn">
+            <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-main">
+    <div class="container">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
+          <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
+          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
+          <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
+          <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
+          <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
+          <p><a href="contact.html"><i class="fa-solid fa-chevron-right"></i> Contact</a></p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
+          <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        © 2026 EMS Luxe Supply. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="../js/script.js" defer></script>
 </body>
 </html>
