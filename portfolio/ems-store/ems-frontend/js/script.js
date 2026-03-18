@@ -734,30 +734,37 @@ function renderCart() {
   }
 }
 
-function openCart() {
+/* ---------- CART OPEN/CLOSE (overlay + drawer) ---------- */
+
+function toggleCart() {
   try {
-    const backdrop = $("#cartBackdrop");
-    const drawer = $("#cartDrawer");
-    if (backdrop) backdrop.classList.add("active");
-    if (drawer) drawer.classList.add("active");
-    document.body.classList.add("no-scroll");
-    renderCart();
+    const overlay = document.getElementById("cartOverlay"); // from HTML
+    const drawer  = document.getElementById("cartDrawer");
+    if (!overlay || !drawer) {
+      console.warn("Cart elements not found (cartOverlay/cartDrawer).");
+      return;
+    }
+
+    const isOpen = drawer.classList.contains("open");
+    if (isOpen) {
+      drawer.classList.remove("open");
+      overlay.style.display = "none";
+      document.body.classList.remove("no-scroll");
+    } else {
+      renderCart(); // refresh items each time it opens
+      drawer.classList.add("open");
+      overlay.style.display = "block";
+      document.body.classList.add("no-scroll");
+    }
   } catch (err) {
-    console.error("Open cart failed:", err);
+    console.error("Toggle cart failed:", err);
   }
 }
 
-function closeCart() {
-  try {
-    const backdrop = $("#cartBackdrop");
-    const drawer = $("#cartDrawer");
-    if (backdrop) backdrop.classList.remove("active");
-    if (drawer) drawer.classList.remove("active");
-    document.body.classList.remove("no-scroll");
-  } catch (err) {
-    console.error("Close cart failed:", err);
-  }
-}
+// Backwards compatibility if something still calls openCart/closeCart
+function openCart()  { toggleCart(); }
+function closeCart() { toggleCart(); }
+
 
 /* ---------- PRODUCT MODAL ---------- */
 
@@ -981,7 +988,7 @@ function main() {
     const themeToggle   = $("#themeToggle");
     const cartBtn       = $("#cartBtn");
     const cartClose     = $("#cartClose");
-    const cartBackdrop  = $("#cartBackdrop");
+    const cartOverlay   = $("#cartOverlay"); 
     const modalBackdrop = $("#modalBackdrop");
     const modalClose    = $("#modalClose");
     const modalAdd      = $("#modalAddToCart");
@@ -990,11 +997,12 @@ function main() {
     if (themeToggle) themeToggle.addEventListener("click", toggleTheme);
     if (cartBtn)      cartBtn.addEventListener("click", openCart);
     if (cartClose)    cartClose.addEventListener("click", closeCart);
-    if (cartBackdrop) {
-      cartBackdrop.addEventListener("click", (e) => {
-        if (e.target === cartBackdrop) closeCart();
-      });
-    }
+    if (cartOverlay) {
+  cartOverlay.addEventListener("click", (e) => {
+    // click on dark background closes cart
+    if (e.target === cartOverlay) toggleCart();
+  });
+}
     if (modalBackdrop) {
       modalBackdrop.addEventListener("click", (e) => {
         if (e.target === modalBackdrop) closeProductModal();
@@ -1049,4 +1057,214 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", main);
 } else {
   main();
-}   
+} 
+
+/* ========== EMAIL CHECKOUT (EmailJS) ========== */
+
+const EMAILJS_CONFIG = {
+  publicKey:  "N5mzHg4TQmKz_T-1Z",
+  serviceId:  "service_gv3zi4q",
+  templateId: "template_5lpqoc7"
+};
+
+let emailInitialized = false;
+
+function ensureEmailInitialized() {
+  if (!emailInitialized) {
+    emailjs.init(EMAILJS_CONFIG.publicKey); // EmailJS docs: init once before send [web:181][web:184]
+    emailInitialized = true;
+  }
+}
+
+function setCheckoutError(msg) {
+  const box = document.getElementById("checkoutError");
+  if (!box) {
+    if (msg) showNotification(msg, "error");
+    return;
+  }
+  if (!msg) {
+    box.style.display = "none";
+    box.textContent = "";
+  } else {
+    box.style.display = "block";
+    box.textContent = msg;
+  }
+}
+
+// Simple validation: required fields + email/phone format
+function validateCheckoutFormSimple() {
+  const nameEl    = document.getElementById("checkoutName");
+  const emailEl   = document.getElementById("checkoutEmail");
+  const phoneEl   = document.getElementById("checkoutPhone");
+  const addressEl = document.getElementById("checkoutAddress");
+
+  const name    = nameEl?.value.trim()    || "";
+  const email   = emailEl?.value.trim()   || "";
+  const phone   = phoneEl?.value.trim()   || "";
+  const address = addressEl?.value.trim() || "";
+
+  if (!name)   return setCheckoutError("Please enter your name"), false;
+  if (!email)  return setCheckoutError("Please enter your email"), false;
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(email)) {
+    setCheckoutError("Please enter a valid email address");
+    return false;
+  }
+
+  if (!phone) {
+    setCheckoutError("Please enter your phone number");
+    return false;
+  }
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 10) {
+    setCheckoutError("Please enter a valid phone number (10+ digits)");
+    return false;
+  }
+
+  if (!address || address.length < 10) {
+    setCheckoutError("Please enter a complete delivery address");
+    return false;
+  }
+
+  setCheckoutError("");
+  return true;
+}
+
+// Open checkout modal
+function openCheckout() {
+  try {
+    const cart  = loadCart();
+    const total = cartTotal(cart);
+    if (!Object.keys(cart).length || total <= 0) {
+      showNotification("Your cart is empty", "error");
+      return;
+    }
+
+    const modal = document.getElementById("checkoutModal");
+    if (!modal) {
+      console.warn("checkoutModal not found in DOM.");
+      return;
+    }
+
+    // If using display:none style
+    modal.style.display = "flex";
+    modal.classList.add("active");
+
+    const totalEl = document.getElementById("modalCartTotal") || document.getElementById("checkoutTotal");
+    if (totalEl) totalEl.textContent = total.toFixed(2);
+
+    document.body.classList.add("no-scroll");
+  } catch (err) {
+    console.error("Open checkout failed:", err);
+    showNotification("Unable to open checkout", "error");
+  }
+}
+
+function closeCheckout() {
+  try {
+    const modal = document.getElementById("checkoutModal");
+    if (modal) {
+      modal.style.display = "none";
+      modal.classList.remove("active");
+    }
+    document.body.classList.remove("no-scroll");
+  } catch (err) {
+    console.error("Close checkout failed:", err);
+  }
+}
+
+async function submitOrder(event) {
+  if (event && event.preventDefault) event.preventDefault();
+
+  const cart  = loadCart();
+  const total = cartTotal(cart);
+  if (!Object.keys(cart).length || total <= 0) {
+    showNotification("Your cart is empty", "error");
+    return;
+  }
+
+  if (!validateCheckoutFormSimple()) return;
+
+  const btn = document.getElementById("checkoutSubmitBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+  }
+
+  const name    = document.getElementById("checkoutName")?.value.trim()    || "";
+  const email   = document.getElementById("checkoutEmail")?.value.trim()   || "";
+  const phone   = document.getElementById("checkoutPhone")?.value.trim()   || "";
+  const address = document.getElementById("checkoutAddress")?.value.trim() || "";
+
+  const orderId = "EMS-" + Date.now();
+  const order   = {
+    orderId,
+    date:   new Date().toISOString(),
+    name,
+    email,
+    phone,
+    address,
+    items: cart,
+    total
+  };
+
+  // Save for admin page (ems_orders)
+  try {
+    const existing = JSON.parse(localStorage.getItem("ems_orders") || "[]");
+    existing.push(order);
+    localStorage.setItem("ems_orders", JSON.stringify(existing));
+  } catch (err) {
+    console.error("Saving order failed:", err);
+  }
+
+  // Send confirmation email through EmailJS
+  try {
+    ensureEmailInitialized();
+
+    const itemsText = Object.entries(order.items)
+      .map(([id, qty]) => `${PRODUCT_MAP[id]?.name || id} × ${qty}`)
+      .join("\n");
+
+    await emailjs.send(
+      EMAILJS_CONFIG.serviceId,
+      EMAILJS_CONFIG.templateId,
+      {
+        customer_name:    order.name,
+        customer_email:   order.email,
+        customer_phone:   order.phone,
+        customer_address: order.address,
+        order_id:         order.orderId,
+        order_date:       new Date(order.date).toLocaleString("en-IN"),
+        order_items:      itemsText || "No item details",
+        order_total:      `$${order.total.toFixed(2)}`
+      }
+    );
+
+    showNotification(`Order ${orderId} confirmed! Email sent.`, "success");
+  } catch (err) {
+    console.error("EmailJS error:", err);
+    showNotification(`Order ${orderId} saved, but email failed.`, "info");
+    setCheckoutError("Order saved, but confirmation email could not be sent.");
+  }
+
+  // Clear cart + reset UI
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (err) {
+    console.error("Cart clear failed:", err);
+  }
+  updateCartBadge();
+  renderCart();
+  closeCheckout();
+  document.getElementById("checkoutForm")?.reset();
+
+  if (btn) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Place Order & Send Email';
+  }
+}
+const checkoutForm = document.getElementById("checkoutForm");
+if (checkoutForm) {
+  checkoutForm.addEventListener("submit", submitOrder);
+}
