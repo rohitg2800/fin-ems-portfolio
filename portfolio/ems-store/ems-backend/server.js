@@ -31,6 +31,7 @@ const SMTP_PASS = process.env.SMTP_PASS;
 const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER || 'no-reply@emsluxe.com';
 let auditTableReady = null;
 let mailer = null;
+let productsSeeded = false;
 
 // FIX 1: Configured Helmet to allow external images (iStock, Unsplash)
 app.use(helmet({
@@ -114,6 +115,26 @@ async function ensureAdminUser() {
     console.log(`Admin user ensured for ${ADMIN_EMAIL}`);
   } catch (err) {
     console.error('Admin bootstrap failed:', err.message);
+  }
+}
+
+async function ensureProductsSeeded() {
+  try {
+    const hasProductsTable = await knex.schema.hasTable('products');
+    if (!hasProductsTable) return;
+    const [{ count }] = await knex('products').count({ count: '*' });
+    if (Number(count || 0) > 0) {
+      productsSeeded = true;
+      return;
+    }
+    const seed = require('./seeds/01_products');
+    if (seed && typeof seed.seed === 'function') {
+      await seed.seed(knex);
+      productsSeeded = true;
+      console.log('Products table was empty — seeded default catalog.');
+    }
+  } catch (err) {
+    console.error('Product seeding check failed:', err.message);
   }
 }
 
@@ -696,6 +717,7 @@ process.on('SIGTERM', async () => {
 
 async function startServer() {
   await ensureAdminUser();
+  await ensureProductsSeeded();
   app.listen(PORT, () => {
     console.log(`🚀 EMS-LUXY Server running on port ${PORT}`);
   });
