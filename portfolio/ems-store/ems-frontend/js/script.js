@@ -336,6 +336,7 @@ function renderCart(options = {}) {
     checkoutBtn.disabled = false;
     checkoutBtn.removeAttribute("aria-disabled");
   }
+  renderCheckoutReview();
 }
 
 function changeCartQty(id, delta) {
@@ -356,6 +357,30 @@ function removeFromCart(id) {
   lastChangedProductId = id;
   updateCartBadge();
   renderCart();
+}
+
+function renderCheckoutReview() {
+  const list = $("#checkoutReviewList");
+  const totalEl = $("#checkoutReviewTotal");
+  if (!list || !totalEl) return;
+
+  const cart = loadCart();
+  const entries = Object.entries(cart);
+  if (!entries.length) {
+    list.innerHTML = `<li class="checkout-review-item" style="justify-content:center; color: var(--gray);">No items in cart.</li>`;
+    totalEl.textContent = "0.00";
+    return;
+  }
+
+  let total = 0;
+  list.innerHTML = entries.map(([id, qty]) => {
+    const p = PRODUCT_MAP[id];
+    if (!p) return "";
+    const line = Number(p.price || 0) * qty;
+    total += line;
+    return `<li class="checkout-review-item"><span>${safeText(p.name)} × ${qty}</span><span>${money(line)}</span></li>`;
+  }).join("");
+  totalEl.textContent = total.toFixed(2);
 }
 
 /* ---------- CHECKOUT ENGINE ---------- */

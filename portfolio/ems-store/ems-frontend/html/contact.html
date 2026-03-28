@@ -286,6 +286,22 @@
           <input id="checkoutEmail" type="email" placeholder="Email address" required>
           <input id="checkoutPhone" type="tel" placeholder="Phone number" required>
           <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
+
+          <div class="checkout-review">
+            <div class="checkout-review-head">
+              <div>
+                <div class="checkout-review-title">Review your order</div>
+                <div class="checkout-review-note">Quantities reflect your cart.</div>
+              </div>
+              <span class="checkout-review-pill">Live</span>
+            </div>
+            <ul id="checkoutReviewList" class="checkout-review-list"></ul>
+            <div class="checkout-review-total">
+              <span>Estimated Total</span>
+              <span>$<span id="checkoutReviewTotal">0.00</span></span>
+            </div>
+          </div>
+
           <div id="checkoutError" class="checkout-error"></div>
           <div class="checkout-total-box">Total: $<span id="modalCartTotal">0.00</span></div>
           <button id="checkoutSubmitBtn" type="submit" class="btn"><i class="fa-solid fa-lock"></i> Secure Checkout</button>

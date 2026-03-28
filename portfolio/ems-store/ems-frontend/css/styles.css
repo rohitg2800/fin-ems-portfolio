@@ -1449,6 +1449,35 @@ button {
   margin-bottom: 20px;
 }
 
+.status-confirmed,
+.status-pending,
+.status-cancelled {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.status-confirmed {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.status-pending {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.14);
+}
+
+.status-cancelled {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.12);
+}
+
 /* ---------- CHECKOUT ---------- */
 .checkout-form {
   display: flex;
@@ -1478,6 +1507,90 @@ button {
 
 #checkoutSubmitBtn {
   width: 100%;
+}
+
+/* ---------- CHECKOUT REVIEW ---------- */
+.checkout-review {
+  margin-top: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 241, 234, 0.9));
+  box-shadow: var(--shadow-soft, 0 8px 24px rgba(0,0,0,0.06));
+}
+
+[data-theme="dark"] .checkout-review {
+  background: linear-gradient(145deg, rgba(20, 16, 12, 0.92), rgba(14, 11, 9, 0.98));
+  border-color: rgba(255, 217, 119, 0.18);
+}
+
+.checkout-review-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checkout-review-title {
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.checkout-review-note {
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.checkout-review-pill {
+  background: rgba(188, 148, 55, 0.15);
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+}
+
+[data-theme="dark"] .checkout-review-pill {
+  background: rgba(255, 217, 119, 0.12);
+  color: #f8e1a8;
+}
+
+.checkout-review-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.checkout-review-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .checkout-review-item {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.checkout-review-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 800;
+  color: var(--text-color);
+  font-size: 15px;
+}
+
+[data-theme="dark"] .checkout-review-total span:last-child {
+  color: #f8e1a8;
 }
 
 /* ---------- NOTIFICATIONS ---------- */
