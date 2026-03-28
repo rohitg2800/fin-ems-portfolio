@@ -298,6 +298,22 @@ button {
   z-index: 300;
 }
 
+.nav-open a {
+  width: 100%;
+}
+
+.nav-open .auth-nav-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.nav-open .auth-nav-wrapper .btn {
+  width: 100%;
+}
+
 .icon-btn {
   background: none;
   border: 2px solid var(--accent);
@@ -1586,6 +1602,14 @@ footer {
 
   .menu-toggle {
     display: block;
+  }
+
+  .topbar-inner {
+    align-items: center;
+  }
+
+  .nav-open {
+    gap: 10px;
   }
 
   .grid,

@@ -173,7 +173,8 @@ async function hydrateProducts() {
     PRODUCTS = data.map(normalizeProduct).filter(Boolean);
     rebuildProductMap();
     renderGrids(activeCategory);
-    renderCart();
+    updateCartBadge({ cleanUnknown: true });
+    renderCart({ cleanUnknown: true });
   }
 }
 
@@ -200,11 +201,44 @@ function updateThemeUI(theme) {
 }
 
 /* ---------- CART ENGINE ---------- */
-function loadCart() { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
-function saveCart(cart) { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); }
+function normalizeCart(cart) {
+  if (!cart || typeof cart !== "object" || Array.isArray(cart)) return {};
 
-function updateCartBadge() {
-  const count = Object.values(loadCart()).reduce((sum, q) => sum + (parseInt(q, 10) || 0), 0);
+  return Object.fromEntries(
+    Object.entries(cart)
+      .map(([id, qty]) => [String(id), parseInt(qty, 10)])
+      .filter(([id, qty]) => id && Number.isFinite(qty) && qty > 0)
+  );
+}
+
+function loadCart() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const normalized = normalizeCart(parsed);
+    if (JSON.stringify(parsed) !== JSON.stringify(normalized)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    }
+    return normalized;
+  } catch (err) {
+    localStorage.removeItem(STORAGE_KEY);
+    return {};
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeCart(cart)));
+}
+
+function filterCartToKnownProducts(cart) {
+  return Object.fromEntries(
+    Object.entries(cart).filter(([id]) => Boolean(PRODUCT_MAP[id]))
+  );
+}
+
+function updateCartBadge(options = {}) {
+  const cart = options.cleanUnknown ? filterCartToKnownProducts(loadCart()) : loadCart();
+  if (options.cleanUnknown) saveCart(cart);
+  const count = Object.values(cart).reduce((sum, q) => sum + (parseInt(q, 10) || 0), 0);
   const badge = $("#cartBadge");
   if (badge) {
     badge.textContent = count;
@@ -221,13 +255,14 @@ function addToCart(productId, quantity = 1) {
   showNotification("Item added to cart", "success");
 }
 
-function renderCart() {
+function renderCart(options = {}) {
   const body = $("#cartItems");
   const totalEl = $("#cartTotal");
   const checkoutBtn = $("#checkoutBtn");
   if (!body || !totalEl) return;
 
-  const cart = loadCart();
+  const cart = options.cleanUnknown ? filterCartToKnownProducts(loadCart()) : loadCart();
+  if (options.cleanUnknown) saveCart(cart);
   const entries = Object.entries(cart);
 
   if (!entries.length) {
@@ -415,9 +450,53 @@ function showNotification(msg, type = "success") {
   setTimeout(() => n.remove(), 3000);
 }
 
+/* ---------- MOBILE NAV ---------- */
+function closeMobileMenu() {
+  const nav = $("#mainNav");
+  const toggle = $("#menuToggle");
+  if (!nav || !toggle) return;
+
+  nav.classList.remove("nav-open");
+  toggle.setAttribute("aria-expanded", "false");
+}
+
+function initMobileMenu() {
+  const nav = $("#mainNav");
+  const toggle = $("#menuToggle");
+  if (!nav || !toggle) return;
+
+  toggle.setAttribute("aria-expanded", "false");
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const shouldOpen = !nav.classList.contains("nav-open");
+    nav.classList.toggle("nav-open", shouldOpen);
+    toggle.setAttribute("aria-expanded", String(shouldOpen));
+  });
+
+  nav.addEventListener("click", (event) => {
+    if (event.target.closest("a, button")) {
+      closeMobileMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (window.innerWidth > 768 || !nav.classList.contains("nav-open")) return;
+    if (nav.contains(event.target) || toggle.contains(event.target)) return;
+    closeMobileMenu();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      closeMobileMenu();
+    }
+  });
+}
+
 /* ---------- INIT SYSTEM ---------- */
 document.addEventListener("DOMContentLoaded", async () => {
   initTheme();
+  initMobileMenu();
   renderGrids(activeCategory);
   updateCartBadge();
   renderCart();

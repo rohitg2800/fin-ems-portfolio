@@ -1,0 +1,657 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - button "Toggle navigation menu" [ref=e4] [cursor=pointer]
+      - link " EMS LUXE SUPPLY PREMIUM FIELD GEAR" [ref=e8] [cursor=pointer]:
+        - /url: ../index.html
+        - generic [ref=e10]: 
+        - generic [ref=e11]:
+          - generic [ref=e12]: EMS LUXE SUPPLY
+          - generic [ref=e13]: PREMIUM FIELD GEAR
+      - text:      
+      - button "Toggle dark mode" [ref=e14] [cursor=pointer]:
+        - generic [ref=e15]: 
+      - button "" [ref=e16] [cursor=pointer]:
+        - generic [ref=e17]: 
+  - main [ref=e18]:
+    - generic [ref=e21]:
+      - heading "The Complete Armory" [level=1] [ref=e22]
+      - paragraph [ref=e23]: Over 40+ pieces of professional-grade equipment. Filter below to find your specific deployment needs.
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - button "All Gear" [ref=e27] [cursor=pointer]
+        - button "Stethoscopes" [ref=e28] [cursor=pointer]
+        - button "Trauma & Kits" [ref=e29] [cursor=pointer]
+        - button "Apparel & Boots" [ref=e30] [cursor=pointer]
+        - button "Field Tools" [ref=e31] [cursor=pointer]
+        - button "Medicines & OTC" [ref=e32] [cursor=pointer]
+      - generic [ref=e33]:
+        - article [ref=e34]:
+          - generic [ref=e35]:
+            - img "Oral Glucose Gel (15g, 3-Pack)" [ref=e36]
+            - generic [ref=e37]: Medicines
+          - generic [ref=e38]:
+            - heading "Oral Glucose Gel (15g, 3-Pack)" [level=3] [ref=e39]
+            - paragraph [ref=e40]: Rapid-absorbing lemon flavored glucose gel for treating conscious patients ...
+            - generic [ref=e41]:
+              - generic [ref=e42]: $18.50
+              - generic [ref=e43]: "Stock: 150"
+            - generic [ref=e44]:
+              - button "Details" [ref=e45] [cursor=pointer]
+              - button "Add" [ref=e46] [cursor=pointer]
+        - article [ref=e47]:
+          - generic [ref=e48]:
+            - img "Chewable Baby Aspirin (81mg, 36ct)" [ref=e49]
+            - generic [ref=e50]: Medicines
+          - generic [ref=e51]:
+            - heading "Chewable Baby Aspirin (81mg, 36ct)" [level=3] [ref=e52]
+            - paragraph [ref=e53]: Standard 81mg chewable aspirin for early administration during suspected ac...
+            - generic [ref=e54]:
+              - generic [ref=e55]: $9.99
+              - generic [ref=e56]: "Stock: 210"
+            - generic [ref=e57]:
+              - button "Details" [ref=e58] [cursor=pointer]
+              - button "Add" [ref=e59] [cursor=pointer]
+        - article [ref=e60]:
+          - generic [ref=e61]:
+            - img "Naloxone (Narcan) Training Device" [ref=e62]
+            - generic [ref=e63]: Medicines
+          - generic [ref=e64]:
+            - heading "Naloxone (Narcan) Training Device" [level=3] [ref=e65]
+            - paragraph [ref=e66]: Inert, non-medicated training device that replicates the exact weight and m...
+            - generic [ref=e67]:
+              - generic [ref=e68]: $24.00
+              - generic [ref=e69]: "Stock: 85"
+            - generic [ref=e70]:
+              - button "Details" [ref=e71] [cursor=pointer]
+              - button "Add" [ref=e72] [cursor=pointer]
+        - article [ref=e73]:
+          - generic [ref=e74]:
+            - img "Activated Charcoal Suspension" [ref=e75]
+            - generic [ref=e76]: Medicines
+          - generic [ref=e77]:
+            - heading "Activated Charcoal Suspension" [level=3] [ref=e78]
+            - paragraph [ref=e79]: 25g/120mL aqueous suspension of activated charcoal for the emergency treatm...
+            - generic [ref=e80]:
+              - generic [ref=e81]: $22.00
+              - generic [ref=e82]: "Stock: 40"
+            - generic [ref=e83]:
+              - button "Details" [ref=e84] [cursor=pointer]
+              - button "Add" [ref=e85] [cursor=pointer]
+        - article [ref=e86]:
+          - generic [ref=e87]:
+            - img "Ammonia Inhalants (Box of 10)" [ref=e88]
+            - generic [ref=e89]: Medicines
+          - generic [ref=e90]:
+            - heading "Ammonia Inhalants (Box of 10)" [level=3] [ref=e91]
+            - paragraph [ref=e92]: Respiratory stimulant ampules (smelling salts) to treat and prevent faintin...
+            - generic [ref=e93]:
+              - generic [ref=e94]: $14.00
+              - generic [ref=e95]: "Stock: 300"
+            - generic [ref=e96]:
+              - button "Details" [ref=e97] [cursor=pointer]
+              - button "Add" [ref=e98] [cursor=pointer]
+        - article [ref=e99]:
+          - generic [ref=e100]:
+            - img "Triple Antibiotic Ointment (144 Packets)" [ref=e101]
+            - generic [ref=e102]: Medicines
+          - generic [ref=e103]:
+            - heading "Triple Antibiotic Ointment (144 Packets)" [level=3] [ref=e104]
+            - paragraph [ref=e105]: Single-use 0.9g foil packets of Bacitracin, Neomycin, and Polymyxin B for m...
+            - generic [ref=e106]:
+              - generic [ref=e107]: $26.50
+              - generic [ref=e108]: "Stock: 180"
+            - generic [ref=e109]:
+              - button "Details" [ref=e110] [cursor=pointer]
+              - button "Add" [ref=e111] [cursor=pointer]
+        - article [ref=e112]:
+          - generic [ref=e113]:
+            - img "Sterile Eye Wash Irrigant (4oz, 2-Pack)" [ref=e114]
+            - generic [ref=e115]: Medicines
+          - generic [ref=e116]:
+            - heading "Sterile Eye Wash Irrigant (4oz, 2-Pack)" [level=3] [ref=e117]
+            - paragraph [ref=e118]: Purified, isotonic buffered saline solution for flushing debris and chemica...
+            - generic [ref=e119]:
+              - generic [ref=e120]: $12.99
+              - generic [ref=e121]: "Stock: 220"
+            - generic [ref=e122]:
+              - button "Details" [ref=e123] [cursor=pointer]
+              - button "Add" [ref=e124] [cursor=pointer]
+        - article [ref=e125]:
+          - generic [ref=e126]:
+            - img "Water-Jel Burn Dressing (4x4, 5-Pack)" [ref=e127]
+            - generic [ref=e128]: Medicines
+          - generic [ref=e129]:
+            - heading "Water-Jel Burn Dressing (4x4, 5-Pack)" [level=3] [ref=e130]
+            - paragraph [ref=e131]: Medical-grade cooling gel infused into a sterile carrier dressing to halt b...
+            - generic [ref=e132]:
+              - generic [ref=e133]: $34.00
+              - generic [ref=e134]: "Stock: 95"
+            - generic [ref=e135]:
+              - button "Details" [ref=e136] [cursor=pointer]
+              - button "Add" [ref=e137] [cursor=pointer]
+        - article [ref=e138]:
+          - generic [ref=e139]:
+            - img "Classic Acoustic Stethoscope" [ref=e140]
+            - generic [ref=e141]: Stethoscopes
+          - generic [ref=e142]:
+            - heading "Classic Acoustic Stethoscope" [level=3] [ref=e143]
+            - paragraph [ref=e144]: Everyday acoustic performance for EMTs and students. Tunable diaphragm and ...
+            - generic [ref=e145]:
+              - generic [ref=e146]: $109.00
+              - generic [ref=e147]: "Stock: 45"
+            - generic [ref=e148]:
+              - button "Details" [ref=e149] [cursor=pointer]
+              - button "Add" [ref=e150] [cursor=pointer]
+        - article [ref=e151]:
+          - generic [ref=e152]:
+            - img "Electronic Noise-Reducing Stethoscope" [ref=e153]
+            - generic [ref=e154]: Stethoscopes
+          - generic [ref=e155]:
+            - heading "Electronic Noise-Reducing Stethoscope" [level=3] [ref=e156]
+            - paragraph [ref=e157]: Active noise reduction cuts through sirens and rotor wash....
+            - generic [ref=e158]:
+              - generic [ref=e159]: $289.00
+              - generic [ref=e160]: "Stock: 12"
+            - generic [ref=e161]:
+              - button "Details" [ref=e162] [cursor=pointer]
+              - button "Add" [ref=e163] [cursor=pointer]
+        - article [ref=e164]:
+          - generic [ref=e165]:
+            - img "Cardiology Pro III" [ref=e166]
+            - generic [ref=e167]: Stethoscopes
+          - generic [ref=e168]:
+            - heading "Cardiology Pro III" [level=3] [ref=e169]
+            - paragraph [ref=e170]: Advanced dual-frequency tuning for detailed cardiac and pulmonary assessmen...
+            - generic [ref=e171]:
+              - generic [ref=e172]: $199.00
+              - generic [ref=e173]: "Stock: 28"
+            - generic [ref=e174]:
+              - button "Details" [ref=e175] [cursor=pointer]
+              - button "Add" [ref=e176] [cursor=pointer]
+        - article [ref=e177]:
+          - generic [ref=e178]:
+            - img "Lightweight Student Model" [ref=e179]
+            - generic [ref=e180]: Stethoscopes
+          - generic [ref=e181]:
+            - heading "Lightweight Student Model" [level=3] [ref=e182]
+            - paragraph [ref=e183]: Perfect for skills labs and clinical rotations. Lightweight aluminum design...
+            - generic [ref=e184]:
+              - generic [ref=e185]: $59.00
+              - generic [ref=e186]: "Stock: 105"
+            - generic [ref=e187]:
+              - button "Details" [ref=e188] [cursor=pointer]
+              - button "Add" [ref=e189] [cursor=pointer]
+        - article [ref=e190]:
+          - generic [ref=e191]:
+            - img "Pediatric & Infant Dual Stethoscope" [ref=e192]
+            - generic [ref=e193]: Stethoscopes
+          - generic [ref=e194]:
+            - heading "Pediatric & Infant Dual Stethoscope" [level=3] [ref=e195]
+            - paragraph [ref=e196]: Specifically sized for pediatric and neonatal patients with exceptional aco...
+            - generic [ref=e197]:
+              - generic [ref=e198]: $145.00
+              - generic [ref=e199]: "Stock: 18"
+            - generic [ref=e200]:
+              - button "Details" [ref=e201] [cursor=pointer]
+              - button "Add" [ref=e202] [cursor=pointer]
+        - article [ref=e203]:
+          - generic [ref=e204]:
+            - img "Rig-Duty Hybrid Tactical" [ref=e205]
+            - generic [ref=e206]: Stethoscopes
+          - generic [ref=e207]:
+            - heading "Rig-Duty Hybrid Tactical" [level=3] [ref=e208]
+            - paragraph [ref=e209]: Blackout design with thicker acoustic tubing to block out highway noise....
+            - generic [ref=e210]:
+              - generic [ref=e211]: $169.00
+              - generic [ref=e212]: "Stock: 33"
+            - generic [ref=e213]:
+              - button "Details" [ref=e214] [cursor=pointer]
+              - button "Add" [ref=e215] [cursor=pointer]
+        - article [ref=e216]:
+          - generic [ref=e217]:
+            - img "Digital AI Stethoscope" [ref=e218]
+            - generic [ref=e219]: Stethoscopes
+          - generic [ref=e220]:
+            - heading "Digital AI Stethoscope" [level=3] [ref=e221]
+            - paragraph [ref=e222]: Visualizes waveforms on a built-in screen and detects murmurs using onboard...
+            - generic [ref=e223]:
+              - generic [ref=e224]: $349.00
+              - generic [ref=e225]: "Stock: 8"
+            - generic [ref=e226]:
+              - button "Details" [ref=e227] [cursor=pointer]
+              - button "Add" [ref=e228] [cursor=pointer]
+        - article [ref=e229]:
+          - generic [ref=e230]:
+            - img "Veterinary Responder Stethoscope" [ref=e231]
+            - generic [ref=e232]: Stethoscopes
+          - generic [ref=e233]:
+            - heading "Veterinary Responder Stethoscope" [level=3] [ref=e234]
+            - paragraph [ref=e235]: Longer 32-inch tubing to accommodate K9 and tactical animal rescue ops....
+            - generic [ref=e236]:
+              - generic [ref=e237]: $119.00
+              - generic [ref=e238]: "Stock: 20"
+            - generic [ref=e239]:
+              - button "Details" [ref=e240] [cursor=pointer]
+              - button "Add" [ref=e241] [cursor=pointer]
+        - article [ref=e242]:
+          - generic [ref=e243]:
+            - img "Rapid Response Jump Backpack" [ref=e244]
+            - generic [ref=e245]: Kits
+          - generic [ref=e246]:
+            - heading "Rapid Response Jump Backpack" [level=3] [ref=e247]
+            - paragraph [ref=e248]: Modular EMS backpack with internal organizers for airways, IV, and trauma g...
+            - generic [ref=e249]:
+              - generic [ref=e250]: $189.00
+              - generic [ref=e251]: "Stock: 22"
+            - generic [ref=e252]:
+              - button "Details" [ref=e253] [cursor=pointer]
+              - button "Add" [ref=e254] [cursor=pointer]
+        - article [ref=e255]:
+          - generic [ref=e256]:
+            - img "Advanced Stop-The-Bleed Kit" [ref=e257]
+            - generic [ref=e258]: Kits
+          - generic [ref=e259]:
+            - heading "Advanced Stop-The-Bleed Kit" [level=3] [ref=e260]
+            - paragraph [ref=e261]: Vacuum-sealed bleeding control kit containing CAT tourniquet and hemostatic...
+            - generic [ref=e262]:
+              - generic [ref=e263]: $85.00
+              - generic [ref=e264]: "Stock: 150"
+            - generic [ref=e265]:
+              - button "Details" [ref=e266] [cursor=pointer]
+              - button "Add" [ref=e267] [cursor=pointer]
+        - article [ref=e268]:
+          - generic [ref=e269]:
+            - img "ALS Airway Roll Kit" [ref=e270]
+            - generic [ref=e271]: Kits
+          - generic [ref=e272]:
+            - heading "ALS Airway Roll Kit" [level=3] [ref=e273]
+            - paragraph [ref=e274]: Roll-out airway kit with compartments for BVM, OPAs, NPAs, and intubation a...
+            - generic [ref=e275]:
+              - generic [ref=e276]: $129.00
+              - generic [ref=e277]: "Stock: 40"
+            - generic [ref=e278]:
+              - button "Details" [ref=e279] [cursor=pointer]
+              - button "Add" [ref=e280] [cursor=pointer]
+        - article [ref=e281]:
+          - generic [ref=e282]:
+            - img "Mass Casualty Triage Pack" [ref=e283]
+            - generic [ref=e284]: Kits
+          - generic [ref=e285]:
+            - heading "Mass Casualty Triage Pack" [level=3] [ref=e286]
+            - paragraph [ref=e287]: Complete MCI triage kit with tags, tape, and tools for rapid START/JumpSTAR...
+            - generic [ref=e288]:
+              - generic [ref=e289]: $149.00
+              - generic [ref=e290]: "Stock: 15"
+            - generic [ref=e291]:
+              - button "Details" [ref=e292] [cursor=pointer]
+              - button "Add" [ref=e293] [cursor=pointer]
+        - article [ref=e294]:
+          - generic [ref=e295]:
+            - img "EMT Student Starter Kit" [ref=e296]
+            - generic [ref=e297]: Kits
+          - generic [ref=e298]:
+            - heading "EMT Student Starter Kit" [level=3] [ref=e299]
+            - paragraph [ref=e300]: Includes shears, penlight, tape, pupil gauge, and BP cuff for clinicals....
+            - generic [ref=e301]:
+              - generic [ref=e302]: $59.00
+              - generic [ref=e303]: "Stock: 200"
+            - generic [ref=e304]:
+              - button "Details" [ref=e305] [cursor=pointer]
+              - button "Add" [ref=e306] [cursor=pointer]
+        - article [ref=e307]:
+          - generic [ref=e308]:
+            - img "Burn Management Module" [ref=e309]
+            - generic [ref=e310]: Kits
+          - generic [ref=e311]:
+            - heading "Burn Management Module" [level=3] [ref=e312]
+            - paragraph [ref=e313]: Specialized burn dressings, sterile water, and non-adherent wraps for therm...
+            - generic [ref=e314]:
+              - generic [ref=e315]: $95.00
+              - generic [ref=e316]: "Stock: 30"
+            - generic [ref=e317]:
+              - button "Details" [ref=e318] [cursor=pointer]
+              - button "Add" [ref=e319] [cursor=pointer]
+        - article [ref=e320]:
+          - generic [ref=e321]:
+            - img "O2 Cylinder Sling Bag" [ref=e322]
+            - generic [ref=e323]: Kits
+          - generic [ref=e324]:
+            - heading "O2 Cylinder Sling Bag" [level=3] [ref=e325]
+            - paragraph [ref=e326]: Padded shoulder sling designed specifically to carry a D-size oxygen cylind...
+            - generic [ref=e327]:
+              - generic [ref=e328]: $65.00
+              - generic [ref=e329]: "Stock: 60"
+            - generic [ref=e330]:
+              - button "Details" [ref=e331] [cursor=pointer]
+              - button "Add" [ref=e332] [cursor=pointer]
+        - article [ref=e333]:
+          - generic [ref=e334]:
+            - img "Infection Control PPE Kit" [ref=e335]
+            - generic [ref=e336]: Kits
+          - generic [ref=e337]:
+            - heading "Infection Control PPE Kit" [level=3] [ref=e338]
+            - paragraph [ref=e339]: Grab-and-go sealed PPE pack including N95, gown, face shield, and double gl...
+            - generic [ref=e340]:
+              - generic [ref=e341]: $45.00
+              - generic [ref=e342]: "Stock: 300"
+            - generic [ref=e343]:
+              - button "Details" [ref=e344] [cursor=pointer]
+              - button "Add" [ref=e345] [cursor=pointer]
+        - article [ref=e346]:
+          - generic [ref=e347]:
+            - img "5-in-1 Tactical EMS Pants" [ref=e348]
+            - generic [ref=e349]: Apparel
+          - generic [ref=e350]:
+            - heading "5-in-1 Tactical EMS Pants" [level=3] [ref=e351]
+            - paragraph [ref=e352]: Ripstop tactical pants with dedicated shears, radio, and glove pockets....
+            - generic [ref=e353]:
+              - generic [ref=e354]: $89.00
+              - generic [ref=e355]: "Stock: 120"
+            - generic [ref=e356]:
+              - button "Details" [ref=e357] [cursor=pointer]
+              - button "Add" [ref=e358] [cursor=pointer]
+        - article [ref=e359]:
+          - generic [ref=e360]:
+            - img "High-Vis Response Jacket" [ref=e361]
+            - generic [ref=e362]: Apparel
+          - generic [ref=e363]:
+            - heading "High-Vis Response Jacket" [level=3] [ref=e364]
+            - paragraph [ref=e365]: ANSI Class 3 certified waterproof jacket with zip-out fleece liner....
+            - generic [ref=e366]:
+              - generic [ref=e367]: $145.00
+              - generic [ref=e368]: "Stock: 40"
+            - generic [ref=e369]:
+              - button "Details" [ref=e370] [cursor=pointer]
+              - button "Add" [ref=e371] [cursor=pointer]
+        - article [ref=e372]:
+          - generic [ref=e373]:
+            - img "Station Duty Polo" [ref=e374]
+            - generic [ref=e375]: Apparel
+          - generic [ref=e376]:
+            - heading "Station Duty Polo" [level=3] [ref=e377]
+            - paragraph [ref=e378]: Moisture-wicking, anti-odor performance polo perfect for 24-hour shifts....
+            - generic [ref=e379]:
+              - generic [ref=e380]: $45.00
+              - generic [ref=e381]: "Stock: 250"
+            - generic [ref=e382]:
+              - button "Details" [ref=e383] [cursor=pointer]
+              - button "Add" [ref=e384] [cursor=pointer]
+        - article [ref=e385]:
+          - generic [ref=e386]:
+            - img "Side-Zip Tactical Boots (8-Inch)" [ref=e387]
+            - generic [ref=e388]: Apparel
+          - generic [ref=e389]:
+            - heading "Side-Zip Tactical Boots (8-Inch)" [level=3] [ref=e390]
+            - paragraph [ref=e391]: Blood-borne pathogen resistant composite toe boots with rapid side-zipper....
+            - generic [ref=e392]:
+              - generic [ref=e393]: $135.00
+              - generic [ref=e394]: "Stock: 80"
+            - generic [ref=e395]:
+              - button "Details" [ref=e396] [cursor=pointer]
+              - button "Add" [ref=e397] [cursor=pointer]
+        - article [ref=e398]:
+          - generic [ref=e399]:
+            - img "Mil-Spec Cargo Shorts" [ref=e400]
+            - generic [ref=e401]: Apparel
+          - generic [ref=e402]:
+            - heading "Mil-Spec Cargo Shorts" [level=3] [ref=e403]
+            - paragraph [ref=e404]: For hot weather deployments and bike medics. 8 pockets and gusseted crotch....
+            - generic [ref=e405]:
+              - generic [ref=e406]: $54.00
+              - generic [ref=e407]: "Stock: 90"
+            - generic [ref=e408]:
+              - button "Details" [ref=e409] [cursor=pointer]
+              - button "Add" [ref=e410] [cursor=pointer]
+        - article [ref=e411]:
+          - generic [ref=e412]:
+            - img "Fleece-Lined Winter Pants" [ref=e413]
+            - generic [ref=e414]: Apparel
+          - generic [ref=e415]:
+            - heading "Fleece-Lined Winter Pants" [level=3] [ref=e416]
+            - paragraph [ref=e417]: Softshell exterior stops wind and rain, micro-fleece interior keeps you war...
+            - generic [ref=e418]:
+              - generic [ref=e419]: $110.00
+              - generic [ref=e420]: "Stock: 35"
+            - generic [ref=e421]:
+              - button "Details" [ref=e422] [cursor=pointer]
+              - button "Add" [ref=e423] [cursor=pointer]
+        - article [ref=e424]:
+          - generic [ref=e425]:
+            - img "Reflective PT Vest" [ref=e426]
+            - generic [ref=e427]: Apparel
+          - generic [ref=e428]:
+            - heading "Reflective PT Vest" [level=3] [ref=e429]
+            - paragraph [ref=e430]: Break-away safety vest for roadside incidents. Meets public safety standard...
+            - generic [ref=e431]:
+              - generic [ref=e432]: $25.00
+              - generic [ref=e433]: "Stock: 150"
+            - generic [ref=e434]:
+              - button "Details" [ref=e435] [cursor=pointer]
+              - button "Add" [ref=e436] [cursor=pointer]
+        - article [ref=e437]:
+          - generic [ref=e438]:
+            - img "Moisture-Wicking Base Layer" [ref=e439]
+            - generic [ref=e440]: Apparel
+          - generic [ref=e441]:
+            - heading "Moisture-Wicking Base Layer" [level=3] [ref=e442]
+            - paragraph [ref=e443]: Compression fit base layer shirt designed to be worn under body armor....
+            - generic [ref=e444]:
+              - generic [ref=e445]: $30.00
+              - generic [ref=e446]: "Stock: 200"
+            - generic [ref=e447]:
+              - button "Details" [ref=e448] [cursor=pointer]
+              - button "Add" [ref=e449] [cursor=pointer]
+        - article [ref=e450]:
+          - generic [ref=e451]:
+            - img "EMS Duty Belt" [ref=e452]
+            - generic [ref=e453]: Apparel
+          - generic [ref=e454]:
+            - heading "EMS Duty Belt" [level=3] [ref=e455]
+            - paragraph [ref=e456]: Rigid nylon web belt that supports holsters, radio clips, and heavy gear....
+            - generic [ref=e457]:
+              - generic [ref=e458]: $35.00
+              - generic [ref=e459]: "Stock: 110"
+            - generic [ref=e460]:
+              - button "Details" [ref=e461] [cursor=pointer]
+              - button "Add" [ref=e462] [cursor=pointer]
+        - article [ref=e463]:
+          - generic [ref=e464]:
+            - img "Ballistic Trauma Shears" [ref=e465]
+            - generic [ref=e466]: Tools
+          - generic [ref=e467]:
+            - heading "Ballistic Trauma Shears" [level=3] [ref=e468]
+            - paragraph [ref=e469]: Titanium-coated blades that cut through leather, denim, and pennies....
+            - generic [ref=e470]:
+              - generic [ref=e471]: $25.00
+              - generic [ref=e472]: "Stock: 400"
+            - generic [ref=e473]:
+              - button "Details" [ref=e474] [cursor=pointer]
+              - button "Add" [ref=e475] [cursor=pointer]
+        - article [ref=e476]:
+          - generic [ref=e477]:
+            - img "Folding Rescue Multitool" [ref=e478]
+            - generic [ref=e479]: Tools
+          - generic [ref=e480]:
+            - heading "Folding Rescue Multitool" [level=3] [ref=e481]
+            - paragraph [ref=e482]: Features shears, strap cutter, glass breaker, and oxygen tank wrench in one...
+            - generic [ref=e483]:
+              - generic [ref=e484]: $85.00
+              - generic [ref=e485]: "Stock: 60"
+            - generic [ref=e486]:
+              - button "Details" [ref=e487] [cursor=pointer]
+              - button "Add" [ref=e488] [cursor=pointer]
+        - article [ref=e489]:
+          - generic [ref=e490]:
+            - img "LED Pupil Penlight" [ref=e491]
+            - generic [ref=e492]: Tools
+          - generic [ref=e493]:
+            - heading "LED Pupil Penlight" [level=3] [ref=e494]
+            - paragraph [ref=e495]: Warm-white LED optimized for neuro exams without blinding the patient....
+            - generic [ref=e496]:
+              - generic [ref=e497]: $15.00
+              - generic [ref=e498]: "Stock: 500"
+            - generic [ref=e499]:
+              - button "Details" [ref=e500] [cursor=pointer]
+              - button "Add" [ref=e501] [cursor=pointer]
+        - article [ref=e502]:
+          - generic [ref=e503]:
+            - img "Spring-Loaded Window Punch" [ref=e504]
+            - generic [ref=e505]: Tools
+          - generic [ref=e506]:
+            - heading "Spring-Loaded Window Punch" [level=3] [ref=e507]
+            - paragraph [ref=e508]: One-handed center punch for rapid vehicle extrication....
+            - generic [ref=e509]:
+              - generic [ref=e510]: $18.00
+              - generic [ref=e511]: "Stock: 150"
+            - generic [ref=e512]:
+              - button "Details" [ref=e513] [cursor=pointer]
+              - button "Add" [ref=e514] [cursor=pointer]
+        - article [ref=e515]:
+          - generic [ref=e516]:
+            - img "Fingertip Pulse Oximeter" [ref=e517]
+            - generic [ref=e518]: Tools
+          - generic [ref=e519]:
+            - heading "Fingertip Pulse Oximeter" [level=3] [ref=e520]
+            - paragraph [ref=e521]: Clinical grade SPO2 and pulse rate monitor with multi-directional OLED....
+            - generic [ref=e522]:
+              - generic [ref=e523]: $45.00
+              - generic [ref=e524]: "Stock: 80"
+            - generic [ref=e525]:
+              - button "Details" [ref=e526] [cursor=pointer]
+              - button "Add" [ref=e527] [cursor=pointer]
+        - article [ref=e528]:
+          - generic [ref=e529]:
+            - img "Aneroid Sphygmomanometer" [ref=e530]
+            - generic [ref=e531]: Tools
+          - generic [ref=e532]:
+            - heading "Aneroid Sphygmomanometer" [level=3] [ref=e533]
+            - paragraph [ref=e534]: Manual blood pressure cuff with adult and large-adult cuffs included....
+            - generic [ref=e535]:
+              - generic [ref=e536]: $55.00
+              - generic [ref=e537]: "Stock: 110"
+            - generic [ref=e538]:
+              - button "Details" [ref=e539] [cursor=pointer]
+              - button "Add" [ref=e540] [cursor=pointer]
+        - article [ref=e541]:
+          - generic [ref=e542]:
+            - img "Manual Ring Cutter" [ref=e543]
+            - generic [ref=e544]: Tools
+          - generic [ref=e545]:
+            - heading "Manual Ring Cutter" [level=3] [ref=e546]
+            - paragraph [ref=e547]: Used in trauma situations to safely remove swollen rings from fingers....
+            - generic [ref=e548]:
+              - generic [ref=e549]: $35.00
+              - generic [ref=e550]: "Stock: 40"
+            - generic [ref=e551]:
+              - button "Details" [ref=e552] [cursor=pointer]
+              - button "Add" [ref=e553] [cursor=pointer]
+        - article [ref=e554]:
+          - generic [ref=e555]:
+            - img "Aluminum Oxygen Key" [ref=e556]
+            - generic [ref=e557]: Tools
+          - generic [ref=e558]:
+            - heading "Aluminum Oxygen Key" [level=3] [ref=e559]
+            - paragraph [ref=e560]: Essential universal key for opening D and E size oxygen cylinders....
+            - generic [ref=e561]:
+              - generic [ref=e562]: $8.00
+              - generic [ref=e563]: "Stock: 600"
+            - generic [ref=e564]:
+              - button "Details" [ref=e565] [cursor=pointer]
+              - button "Add" [ref=e566] [cursor=pointer]
+        - article [ref=e567]:
+          - generic [ref=e568]:
+            - img "Tactical Headlamp (400 Lumen)" [ref=e569]
+            - generic [ref=e570]: Tools
+          - generic [ref=e571]:
+            - heading "Tactical Headlamp (400 Lumen)" [level=3] [ref=e572]
+            - paragraph [ref=e573]: Hands-free illumination with white, red, and flashing modes for night opera...
+            - generic [ref=e574]:
+              - generic [ref=e575]: $65.00
+              - generic [ref=e576]: "Stock: 90"
+            - generic [ref=e577]:
+              - button "Details" [ref=e578] [cursor=pointer]
+              - button "Add" [ref=e579] [cursor=pointer]
+        - article [ref=e580]:
+          - generic [ref=e581]:
+            - img "Digital Tympanic Thermometer" [ref=e582]
+            - generic [ref=e583]: Tools
+          - generic [ref=e584]:
+            - heading "Digital Tympanic Thermometer" [level=3] [ref=e585]
+            - paragraph [ref=e586]: Rapid 1-second infrared ear thermometer with hygienic probe covers....
+            - generic [ref=e587]:
+              - generic [ref=e588]: $49.00
+              - generic [ref=e589]: "Stock: 130"
+            - generic [ref=e590]:
+              - button "Details" [ref=e591] [cursor=pointer]
+              - button "Add" [ref=e592] [cursor=pointer]
+  - complementary [ref=e593]:
+    - generic [ref=e594]:
+      - heading "Your Cart" [level=3] [ref=e595]
+      - button "×" [ref=e596] [cursor=pointer]
+    - generic [ref=e598]:
+      - generic [ref=e599]: 
+      - generic [ref=e600]: Your cart is empty
+      - generic [ref=e601]: Add field gear to start checkout.
+    - generic [ref=e602]:
+      - generic [ref=e603]:
+        - generic [ref=e604]: Total
+        - generic [ref=e605]: $0.00
+      - button " Proceed to Checkout" [disabled] [ref=e606] [cursor=pointer]:
+        - generic [ref=e607]: 
+        - text: Proceed to Checkout
+  - text:        
+  - contentinfo [ref=e608]:
+    - generic [ref=e609]:
+      - generic [ref=e610]:
+        - generic [ref=e611]:
+          - heading " EMS LUXE SUPPLY" [level=4] [ref=e612]:
+            - generic [ref=e613]: 
+            - text: EMS LUXE SUPPLY
+          - paragraph [ref=e614]: Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.
+        - generic [ref=e615]:
+          - heading "Quick Links" [level=4] [ref=e616]
+          - paragraph [ref=e617]:
+            - link " Home" [ref=e618] [cursor=pointer]:
+              - /url: ../index.html
+              - generic [ref=e619]: 
+              - text: Home
+          - paragraph [ref=e620]:
+            - link " Shop All" [ref=e621] [cursor=pointer]:
+              - /url: shop.html
+              - generic [ref=e622]: 
+              - text: Shop All
+          - paragraph [ref=e623]:
+            - link " Stethoscopes" [ref=e624] [cursor=pointer]:
+              - /url: stethoscopes.html
+              - generic [ref=e625]: 
+              - text: Stethoscopes
+          - paragraph [ref=e626]:
+            - link " Trust & Quality" [ref=e627] [cursor=pointer]:
+              - /url: trust.html
+              - generic [ref=e628]: 
+              - text: Trust & Quality
+          - paragraph [ref=e629]:
+            - link " FAQs" [ref=e630] [cursor=pointer]:
+              - /url: faq.html
+              - generic [ref=e631]: 
+              - text: FAQs
+        - generic [ref=e632]:
+          - heading "Contact Us" [level=4] [ref=e633]
+          - paragraph [ref=e634]:
+            - generic [ref=e635]: 
+            - text: support@emsluxe.com
+          - paragraph [ref=e636]:
+            - generic [ref=e637]: 
+            - text: 1-800-EMS-LUXE
+          - link " Admin Portal" [ref=e639] [cursor=pointer]:
+            - /url: ems_orders.html
+            - generic [ref=e640]: 
+            - text: Admin Portal
+      - paragraph [ref=e642]:
+        - text: © 2026 EMS Luxe Supply. All rights reserved. |
+        - link "Privacy Policy" [ref=e643] [cursor=pointer]:
+          - /url: privacy.html
+        - text: "|"
+        - link "Terms of Service" [ref=e644] [cursor=pointer]:
+          - /url: terms.html
