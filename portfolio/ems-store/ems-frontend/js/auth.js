@@ -158,8 +158,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data.success) {
-          Auth.setSession(data.token, data.user);
-          window.location.reload();
+          alert("Registered successfully. Please log in to continue.");
+          const loginTab = document.getElementById("tabLogin");
+          const signupTab = document.getElementById("tabSignup");
+          const loginFormEl = document.getElementById("loginForm");
+          const signupFormEl = document.getElementById("signupForm");
+          if (loginTab && signupTab && loginFormEl && signupFormEl) {
+            loginTab.classList.add("active");
+            signupTab.classList.remove("active");
+            signupFormEl.style.display = "none";
+            loginFormEl.style.display = "block";
+          }
+          const loginEmailInput = document.getElementById("loginEmail");
+          const loginPasswordInput = document.getElementById("loginPassword");
+          if (loginEmailInput) loginEmailInput.value = email;
+          if (loginPasswordInput) loginPasswordInput.value = password;
         } else {
           alert(data.message || "Registration failed");
         }

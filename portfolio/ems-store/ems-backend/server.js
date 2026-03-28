@@ -304,8 +304,8 @@ app.post('/api/checkout/session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       customer_email: email,
-      success_url: 'https://fin-ems-frontend.onrender.com/html/thank-you.html',
-      cancel_url: 'https://fin-ems-frontend.onrender.com/html/shop.html',
+      success_url: 'https://fin-ems-frontend.onrender.com/html/thank-you.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://fin-ems-frontend.onrender.com/html/shop.html?status=cancel',
       metadata: {
         order_id: orderId,
         user_id: authUser?.id || '',
@@ -326,6 +326,26 @@ app.post('/api/checkout/session', async (req, res) => {
     }
     const statusCode = err.message.includes('stock') || err.message.includes('not found') ? 400 : 500;
     res.status(statusCode).json({ error: err.message });
+  }
+});
+
+// Fetch Checkout Session details (for receipt display)
+app.get('/api/checkout/session/:id', async (req, res) => {
+  if (!STRIPE) return res.status(500).json({ error: 'Stripe is not configured' });
+  try {
+    const session = await STRIPE.checkout.sessions.retrieve(req.params.id);
+    const orderId = session.metadata?.order_id;
+    const order = orderId ? await knex('orders').where({ id: orderId }).first() : null;
+    res.json({
+      status: session.payment_status,
+      amount_total: session.amount_total,
+      currency: session.currency,
+      order,
+      email: order?.email || session.customer_details?.email || session.metadata?.email || null
+    });
+  } catch (err) {
+    console.error('Fetch checkout session failed:', err.message);
+    res.status(400).json({ error: 'Unable to fetch session' });
   }
 });
 

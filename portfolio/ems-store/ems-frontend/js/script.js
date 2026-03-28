@@ -265,6 +265,7 @@ function renderCart(options = {}) {
   const body = $("#cartItems");
   const totalEl = $("#cartTotal");
   const checkoutBtn = $("#checkoutBtn");
+  const modalTotal = $("#modalCartTotal");
   if (!body || !totalEl) return;
 
   const cart = options.cleanUnknown ? filterCartToKnownProducts(loadCart()) : loadCart();
@@ -284,6 +285,7 @@ function renderCart(options = {}) {
       checkoutBtn.disabled = true;
       checkoutBtn.setAttribute("aria-disabled", "true");
     }
+    if (modalTotal) modalTotal.textContent = "0.00";
     return;
   }
 
@@ -329,6 +331,7 @@ function renderCart(options = {}) {
     lastChangedProductId = null;
   }
   totalEl.textContent = money(total);
+  if (modalTotal) modalTotal.textContent = (total || 0).toFixed(2);
   if (checkoutBtn) {
     checkoutBtn.disabled = false;
     checkoutBtn.removeAttribute("aria-disabled");
@@ -412,6 +415,7 @@ async function submitOrder(e) {
     }
 
     if (errorEl) errorEl.textContent = "";
+    showNotification("Stock confirmed. Redirecting to secure payment...", "success");
     window.location.href = data.url;
   } catch (err) {
     if (errorEl) errorEl.textContent = "Network error. Please try again.";
@@ -528,4 +532,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#modalBackdrop").classList.remove("active");
     document.body.classList.remove("no-scroll");
   });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("status") === "cancel") {
+    showNotification("Checkout canceled. No charges were made.", "danger");
+    params.delete("status");
+    const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+    window.history.replaceState({}, "", newUrl);
+  }
 });

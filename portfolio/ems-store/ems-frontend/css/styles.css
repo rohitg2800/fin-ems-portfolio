@@ -1648,6 +1648,11 @@ footer {
     font-size: 18px;
   }
 
+  .icon-btn i,
+  .theme-toggle i {
+    font-size: 18px;
+  }
+
   .contact-form .form-row {
     flex-direction: column;
   }
