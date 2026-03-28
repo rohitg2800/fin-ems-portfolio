@@ -21,7 +21,10 @@ module.exports = {
   // Staging and Production can stay here for when you deploy to Render/AWS
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL, // Common for Render/Heroku deployments
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    },
     pool: {
       min: 2,
       max: 10
