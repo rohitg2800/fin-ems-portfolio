@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
@@ -14,6 +15,9 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const FRONTEND_DIR = path.join(__dirname, '..', 'ems-frontend');
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@emsluxe.com').toLowerCase();
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin@12345';
+const ADMIN_NAME = process.env.ADMIN_NAME || 'EMS Admin';
 let auditTableReady = null;
 
 // FIX 1: Configured Helmet to allow external images (iStock, Unsplash)
@@ -69,6 +73,36 @@ async function logAudit(action, user, req, metadata = {}) {
     });
   } catch (err) {
     console.error('Audit log failed:', err.message);
+  }
+}
+
+async function ensureAdminUser() {
+  try {
+    const hasUsersTable = await knex.schema.hasTable('users');
+    if (!hasUsersTable) return;
+
+    const password_hash = await bcrypt.hash(ADMIN_PASSWORD, 12);
+
+    await knex('users')
+      .insert({
+        name: ADMIN_NAME,
+        email: ADMIN_EMAIL,
+        password_hash,
+        role: 'admin',
+        created_at: knex.fn.now(),
+        updated_at: knex.fn.now()
+      })
+      .onConflict('email')
+      .merge({
+        name: ADMIN_NAME,
+        password_hash,
+        role: 'admin',
+        updated_at: knex.fn.now()
+      });
+
+    console.log(`Admin user ensured for ${ADMIN_EMAIL}`);
+  } catch (err) {
+    console.error('Admin bootstrap failed:', err.message);
   }
 }
 
@@ -265,6 +299,11 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 EMS-LUXY Server running on port ${PORT}`);
-});
+async function startServer() {
+  await ensureAdminUser();
+  app.listen(PORT, () => {
+    console.log(`🚀 EMS-LUXY Server running on port ${PORT}`);
+  });
+}
+
+startServer();

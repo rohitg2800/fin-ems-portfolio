@@ -23,6 +23,12 @@ services:
           property: connectionString
       - key: JWT_SECRET
         sync: false
+      - key: ADMIN_NAME
+        value: EMS Admin
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
 
   - type: web
     name: fin-ems-frontend
