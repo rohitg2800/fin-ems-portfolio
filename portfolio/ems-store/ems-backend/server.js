@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const stripeLib = require('stripe');
 
 const environment = process.env.NODE_ENV || 'development';
 const knexConfig = require('./knexfile')[environment];
@@ -18,6 +19,9 @@ const FRONTEND_DIR = path.join(__dirname, '..', 'ems-frontend');
 const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@emsluxe.com').toLowerCase();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin@12345';
 const ADMIN_NAME = process.env.ADMIN_NAME || 'EMS Admin';
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+const STRIPE = STRIPE_SECRET_KEY ? stripeLib(STRIPE_SECRET_KEY) : null;
 let auditTableReady = null;
 
 // FIX 1: Configured Helmet to allow external images (iStock, Unsplash)
@@ -27,7 +31,6 @@ app.use(helmet({
 }));
 
 app.use(cors({ origin: '*' }));
-app.use(express.json({ limit: '10mb' }));
 app.use(express.static(FRONTEND_DIR));
 
 function getAuthUser(req) {
@@ -106,6 +109,111 @@ async function ensureAdminUser() {
   }
 }
 
+async function handleStripeCheckoutCompleted(session) {
+  if (!session?.metadata?.items) return;
+  const items = JSON.parse(session.metadata.items || "{}");
+  const entries = Object.entries(items || {});
+  if (!entries.length) return;
+
+  const name = session.metadata?.name || session.customer_details?.name || null;
+  const email = session.customer_details?.email || session.metadata?.email || null;
+  const phone = session.metadata?.phone || session.customer_details?.phone || null;
+  const address = session.metadata?.address || (session.customer_details?.address ? JSON.stringify(session.customer_details.address) : null);
+  const userId = session.metadata?.user_id || null;
+  const existingOrderId = session.metadata?.order_id;
+
+  await knex.transaction(async (trx) => {
+    let serverCalculatedTotal = 0;
+    const orderItemsToInsert = [];
+
+    for (const [productId, qty] of entries) {
+      const product = await trx('products').where({ id: productId }).first();
+      if (!product) throw new Error(`Product ${productId} not found`);
+      if (product.stock_level < qty) throw new Error(`Insufficient stock for ${product.name}`);
+
+      const itemTotal = Number(product.price) * qty;
+      serverCalculatedTotal += itemTotal;
+
+      orderItemsToInsert.push({
+        product_id: productId,
+        quantity: qty,
+        unit_price: product.price
+      });
+    }
+
+    let orderId = existingOrderId;
+
+    if (existingOrderId) {
+      const existing = await trx('orders').where({ id: existingOrderId }).first();
+      if (existing && existing.status === 'paid') return;
+
+      await trx('orders')
+        .where({ id: existingOrderId })
+        .update({
+          total: serverCalculatedTotal,
+          status: 'paid',
+          name,
+          email,
+          phone,
+          address,
+          updated_at: knex.fn.now()
+        });
+    } else {
+      const [newOrder] = await trx('orders')
+        .insert({
+          user_id: userId || null,
+          name,
+          email,
+          phone,
+          address,
+          total: serverCalculatedTotal,
+          status: 'paid',
+          created_at: knex.fn.now()
+        })
+        .returning('id');
+      orderId = newOrder.id || newOrder;
+    }
+
+    await trx('order_items').where({ order_id: orderId }).del();
+    const itemsWithOrderId = orderItemsToInsert.map(item => ({ ...item, order_id: orderId }));
+    await trx('order_items').insert(itemsWithOrderId);
+
+    for (const { product_id, quantity } of itemsWithOrderId) {
+      await trx('products').where({ id: product_id }).decrement('stock_level', quantity);
+    }
+  });
+}
+
+// Stripe webhook must use raw body
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!STRIPE || !STRIPE_WEBHOOK_SECRET) {
+    return res.status(400).send('Stripe not configured');
+  }
+
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = STRIPE.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('Stripe webhook signature failed:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  try {
+    if (event.type === 'checkout.session.completed') {
+      await handleStripeCheckoutCompleted(event.data.object);
+    }
+    res.json({ received: true });
+  } catch (err) {
+    console.error('Stripe webhook handling failed:', err.message);
+    res.status(500).send('Webhook handler failed');
+  }
+});
+
+// JSON parser for all other routes
+app.use(express.json({ limit: '10mb' }));
+
 // Health check
 app.get('/api/health', async (req, res) => {
   try {
@@ -118,6 +226,98 @@ app.get('/api/health', async (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes);
+
+// Create Stripe Checkout Session
+app.post('/api/checkout/session', async (req, res) => {
+  if (!STRIPE) return res.status(500).json({ error: 'Stripe is not configured' });
+
+  const { items, name, email, phone, address } = req.body || {};
+  const authUser = getAuthUser(req);
+
+  if (!items || !Object.keys(items).length) {
+    return res.status(400).json({ error: 'Cart is empty' });
+  }
+
+  let orderId;
+  let lineItems = [];
+  let serverCalculatedTotal = 0;
+
+  try {
+    await knex.transaction(async (trx) => {
+      const orderItemsToInsert = [];
+
+      for (const [productId, qty] of Object.entries(items)) {
+        const product = await trx('products').where({ id: productId }).first();
+        if (!product) throw new Error(`Product ${productId} not found`);
+        if (product.stock_level < qty) throw new Error(`Insufficient stock for ${product.name}`);
+
+        const itemTotal = Number(product.price) * qty;
+        serverCalculatedTotal += itemTotal;
+
+        orderItemsToInsert.push({
+          product_id: productId,
+          quantity: qty,
+          unit_price: product.price
+        });
+
+        lineItems.push({
+          quantity: qty,
+          price_data: {
+            currency: 'usd',
+            product_data: { name: product.name },
+            unit_amount: Math.round(Number(product.price) * 100)
+          }
+        });
+      }
+
+      const [newOrder] = await trx('orders')
+        .insert({
+          user_id: authUser?.id || null,
+          name,
+          email,
+          phone,
+          address,
+          total: serverCalculatedTotal,
+          status: 'pending',
+          created_at: knex.fn.now()
+        })
+        .returning('id');
+
+      orderId = newOrder.id || newOrder;
+
+      const itemsWithOrderId = orderItemsToInsert.map(item => ({ ...item, order_id: orderId }));
+      await trx('order_items').insert(itemsWithOrderId);
+    });
+
+    const session = await STRIPE.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      customer_email: email,
+      success_url: 'https://fin-ems-frontend.onrender.com/html/thank-you.html',
+      cancel_url: 'https://fin-ems-frontend.onrender.com/html/shop.html',
+      metadata: {
+        order_id: orderId,
+        user_id: authUser?.id || '',
+        name: name || '',
+        email: email || '',
+        phone: phone || '',
+        address: address || '',
+        items: JSON.stringify(items)
+      }
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('Create checkout session failed:', err.message);
+    if (orderId) {
+      await knex('orders').where({ id: orderId }).del();
+      await knex('order_items').where({ order_id: orderId }).del();
+    }
+    const statusCode = err.message.includes('stock') || err.message.includes('not found') ? 400 : 500;
+    res.status(statusCode).json({ error: err.message });
+  }
+});
 
 // GET /api/products
 app.get('/api/products', async (req, res) => {

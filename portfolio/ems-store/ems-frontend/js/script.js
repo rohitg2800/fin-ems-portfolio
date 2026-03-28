@@ -391,7 +391,7 @@ async function submitOrder(e) {
       user_id: user?.id || null
     };
 
-    const res = await fetch(`${resolveApiBase()}/orders`, {
+    const res = await fetch(`${resolveApiBase()}/checkout/session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -402,7 +402,7 @@ async function submitOrder(e) {
 
     const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
+    if (!res.ok || !data.url) {
       if (res.status === 401 || res.status === 403) {
         if (errorEl) errorEl.textContent = "Please log in to complete checkout.";
       } else {
@@ -411,14 +411,8 @@ async function submitOrder(e) {
       return;
     }
 
-    localStorage.removeItem(STORAGE_KEY);
-    updateCartBadge();
-    renderCart();
-    $("#checkoutModal")?.classList.remove("active");
     if (errorEl) errorEl.textContent = "";
-
-    // REDIRECT FIX: Using root-relative path to prevent /html/html/ errors
-    window.location.href = "/html/thank-you.html";
+    window.location.href = data.url;
   } catch (err) {
     if (errorEl) errorEl.textContent = "Network error. Please try again.";
   } finally {
