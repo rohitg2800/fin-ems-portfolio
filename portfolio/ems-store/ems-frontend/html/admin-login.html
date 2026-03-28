@@ -28,6 +28,10 @@
         const API_BASE = (() => {
             const origin = window.location?.origin;
             if (origin && origin.startsWith("http")) {
+                const host = window.location?.host;
+                if (host === "fin-ems-frontend.onrender.com") {
+                    return "https://fin-ems-backend.onrender.com/api";
+                }
                 const isLocal = /localhost|127\.0\.0\.1/.test(origin);
                 const port = window.location?.port;
                 if (isLocal && port && port !== "3000" && port !== "4000") {

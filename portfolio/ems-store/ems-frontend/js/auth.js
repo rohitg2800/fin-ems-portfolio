@@ -1,8 +1,14 @@
 // ems-frontend/js/auth.js
 function resolveAuthBase() {
+  const PROD_API_BASE = "https://fin-ems-backend.onrender.com/api";
+  const FRONTEND_HOSTS = new Set(["fin-ems-frontend.onrender.com"]);
   if (window.EMS_API_BASE) return window.EMS_API_BASE;
   const origin = window.location?.origin;
   if (origin && origin.startsWith("http")) {
+    const host = window.location?.host;
+    if (host && FRONTEND_HOSTS.has(host)) {
+      return PROD_API_BASE;
+    }
     const isLocal = /localhost|127\.0\.0\.1/.test(origin);
     const port = window.location?.port;
     if (isLocal && port && port !== "3000" && port !== "4000") {
