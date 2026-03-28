@@ -28,7 +28,7 @@ services:
     name: fin-ems-frontend
     runtime: static
     rootDir: portfolio/ems-store/ems-frontend
-    staticPublishPath: portfolio/ems-store/ems-frontend
+    staticPublishPath: .
     routes:
       - type: rewrite
         source: /api/*
