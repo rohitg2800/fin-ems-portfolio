@@ -13,12 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <link rel="stylesheet" href="../css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    window.EMAILJS_SERVICE_ID = "service_nx14von";
-    window.EMAILJS_TEMPLATE_ID = "template_jet6l4g";
-    window.EMAILJS_PUBLIC_KEY = "N5mzHg4TQmKz_T-1Z";
-  </script>
   
   <style>
     /* =========================================
@@ -204,48 +198,88 @@
 
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
+      const orderIdQuery = params.get('order_id');
+      const apiBase = (window.location.host === 'fin-ems-frontend.onrender.com')
+        ? 'https://fin-ems-backend.onrender.com'
+        : '';
+      const box = document.getElementById('receiptBox');
+      const content = document.getElementById('receiptContent');
+
+      function renderReceipt(receipt) {
+        if (!box || !content) return;
+        const order = receipt.order || {};
+        const totals = receipt.totals || {};
+        const items = Array.isArray(receipt.items) ? receipt.items : [];
+        const currency = "USD";
+        const status = String(order.status || 'pending').toUpperCase();
+        const itemsHtml = items.length
+          ? `<table style="width:100%; border-collapse: collapse; margin-top: 10px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left; border-bottom:1px solid var(--border-color); padding:6px 4px;">Item</th>
+                  <th style="text-align:center; border-bottom:1px solid var(--border-color); padding:6px 4px;">Qty</th>
+                  <th style="text-align:right; border-bottom:1px solid var(--border-color); padding:6px 4px;">Line</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${items.map((item) => `
+                  <tr>
+                    <td style="padding:6px 4px;">${item.name}</td>
+                    <td style="padding:6px 4px; text-align:center;">${item.quantity}</td>
+                    <td style="padding:6px 4px; text-align:right;">$${Number(item.line_total || 0).toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>`
+          : '<div style="margin-top:8px;">No line items found.</div>';
+
+        content.innerHTML = `
+          <div><strong>Order:</strong> #${order.id || '—'}</div>
+          <div><strong>Status:</strong> ${status}</div>
+          <div><strong>Email:</strong> ${order.email || '—'}</div>
+          <div><strong>Total:</strong> ${currency} $${Number(totals.grand_total || order.total || 0).toFixed(2)}</div>
+          ${itemsHtml}
+        `;
+        box.style.display = 'block';
+      }
+
+      function fetchReceipt(orderId, emailHint) {
+        const emailQuery = emailHint ? `?email=${encodeURIComponent(emailHint)}` : '';
+        return fetch(`${apiBase}/api/orders/${orderId}/receipt${emailQuery}`).then(r => r.json());
+      }
+
+      const localOrder = JSON.parse(localStorage.getItem('ems_last_order') || 'null');
+
       if (sessionId) {
-        const apiBase = (window.location.host === 'fin-ems-frontend.onrender.com')
-          ? 'https://fin-ems-backend.onrender.com'
-          : '';
         fetch(`${apiBase}/api/checkout/session/${sessionId}`)
           .then(r => r.json())
-          .then(data => {
-            const box = document.getElementById('receiptBox');
-            const content = document.getElementById('receiptContent');
-            if (!content || !box) return;
-            if (data.error) {
-              content.textContent = 'Unable to load receipt. Please check your email for confirmation.';
-            } else {
-              const amount = data.amount_total ? (data.amount_total / 100).toFixed(2) : '—';
-              const currency = (data.currency || 'usd').toUpperCase();
-              const status = (data.order?.status || data.status || 'pending').toUpperCase();
-              const orderId = data.order?.id ? `#${data.order.id}` : '—';
-              content.innerHTML = `
-                <div><strong>Order:</strong> ${orderId}</div>
-                <div><strong>Total Paid:</strong> ${currency} ${amount}</div>
-                <div><strong>Status:</strong> ${status}</div>
-              `;
-              box.style.display = 'block';
-
-              // Optional EmailJS send (configure EMAILJS_* globals to enable)
-              if (window.emailjs && window.EMAILJS_SERVICE_ID && window.EMAILJS_TEMPLATE_ID && window.EMAILJS_PUBLIC_KEY && data.email) {
-                window.emailjs.init(window.EMAILJS_PUBLIC_KEY);
-                window.emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
-                  to_email: data.email,
-                  order_id: orderId,
-                  amount: `${currency} ${amount}`,
-                  status
-                }).catch(() => {
-                  /* silent fail */
-                });
-              }
-            }
+          .then((data) => {
+            const orderId = data?.order?.id;
+            if (!orderId) throw new Error('No order id found');
+            return fetchReceipt(orderId, data?.email);
+          })
+          .then((receipt) => {
+            if (receipt?.error) throw new Error(receipt.error);
+            renderReceipt(receipt);
           })
           .catch(() => {
-            const content = document.getElementById('receiptContent');
             if (content) content.textContent = 'Unable to load receipt right now.';
           });
+        return;
+      }
+
+      const fallbackOrderId = orderIdQuery || localOrder?.orderId;
+      if (fallbackOrderId && localOrder?.email) {
+        fetchReceipt(fallbackOrderId, localOrder.email)
+          .then((receipt) => {
+            if (receipt?.error) throw new Error(receipt.error);
+            renderReceipt(receipt);
+          })
+          .catch(() => {
+            if (content) content.textContent = 'Unable to load receipt right now.';
+          });
+      } else if (content) {
+        content.textContent = 'Receipt unavailable. Please contact support with your order details.';
       }
     });
   </script>

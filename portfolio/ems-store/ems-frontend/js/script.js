@@ -384,17 +384,15 @@ async function submitOrder(e) {
 
   try {
     const token = window.Auth?.getToken?.();
-    const user = window.Auth?.getUser?.();
     const payload = {
       name,
       email,
       phone,
       address,
-      items: cart,
-      user_id: user?.id || null
+      items: cart
     };
 
-    const res = await fetch(`${resolveApiBase()}/checkout/session`, {
+    const res = await fetch(`${resolveApiBase()}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -405,18 +403,29 @@ async function submitOrder(e) {
 
     const data = await res.json().catch(() => ({}));
 
-    if (!res.ok || !data.url) {
+    if (!res.ok) {
       if (res.status === 401 || res.status === 403) {
         if (errorEl) errorEl.textContent = "Please log in to complete checkout.";
       } else {
-        if (errorEl) errorEl.textContent = data.error || data.message || "Checkout failed. Please try again.";
+        if (errorEl) errorEl.textContent = data.error || data.message || "Order failed. Please try again.";
       }
       return;
     }
 
+    localStorage.removeItem(STORAGE_KEY);
+    updateCartBadge();
+    renderCart();
+    $("#checkoutModal")?.classList.remove("active");
     if (errorEl) errorEl.textContent = "";
-    showNotification("Stock confirmed. Redirecting to secure payment...", "success");
-    window.location.href = data.url;
+    showNotification("Stock confirmed. Order placed. Redirecting...", "success");
+    localStorage.setItem("ems_last_order", JSON.stringify({
+      orderId: data?.orderId || null,
+      total: Number(data?.secureTotal || 0),
+      email,
+      status: "PENDING"
+    }));
+    const orderId = data?.orderId ? `?order_id=${encodeURIComponent(data.orderId)}` : "";
+    window.location.href = `/html/thank-you.html${orderId}`;
   } catch (err) {
     if (errorEl) errorEl.textContent = "Network error. Please try again.";
   } finally {
@@ -527,6 +536,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#checkoutBtn")?.addEventListener("click", () => { $("#checkoutModal").classList.add("active"); });
   $("#checkoutForm")?.addEventListener("submit", submitOrder);
 
+  const checkoutBtn = $("#checkoutBtn");
+  if (checkoutBtn) checkoutBtn.innerHTML = '<i class="fa-solid fa-clipboard-check"></i> Review Order';
+  const checkoutSubmitBtn = $("#checkoutSubmitBtn");
+  if (checkoutSubmitBtn) checkoutSubmitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Place Order';
+
   $("#modalAddToCart")?.addEventListener("click", () => {
     addToCart($("#productModal").dataset.productId, 1);
     $("#modalBackdrop").classList.remove("active");
@@ -535,7 +549,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const params = new URLSearchParams(window.location.search);
   if (params.get("status") === "cancel") {
-    showNotification("Checkout canceled. No charges were made.", "danger");
+    showNotification("Checkout canceled. Your order was not placed.", "danger");
     params.delete("status");
     const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
     window.history.replaceState({}, "", newUrl);

@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const stripeLib = require('stripe');
 
 const environment = process.env.NODE_ENV || 'development';
@@ -22,7 +23,14 @@ const ADMIN_NAME = process.env.ADMIN_NAME || 'EMS Admin';
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const STRIPE = STRIPE_SECRET_KEY ? stripeLib(STRIPE_SECRET_KEY) : null;
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
+const SMTP_SECURE = String(process.env.SMTP_SECURE || 'false') === 'true';
+const SMTP_USER = process.env.SMTP_USER;
+const SMTP_PASS = process.env.SMTP_PASS;
+const SMTP_FROM = process.env.SMTP_FROM || SMTP_USER || 'no-reply@emsluxe.com';
 let auditTableReady = null;
+let mailer = null;
 
 // FIX 1: Configured Helmet to allow external images (iStock, Unsplash)
 app.use(helmet({
@@ -109,6 +117,122 @@ async function ensureAdminUser() {
   }
 }
 
+function getMailer() {
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) return null;
+  if (mailer) return mailer;
+  mailer = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_SECURE,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS
+    }
+  });
+  return mailer;
+}
+
+function toMoney(value) {
+  return Number(value || 0).toFixed(2);
+}
+
+async function buildOrderReceipt(orderId) {
+  const order = await knex('orders').where({ id: orderId }).first();
+  if (!order) return null;
+
+  const rows = await knex('order_items')
+    .leftJoin('products', 'order_items.product_id', 'products.id')
+    .where('order_items.order_id', orderId)
+    .select(
+      'order_items.product_id',
+      'order_items.quantity',
+      'order_items.unit_price',
+      'products.name as product_name',
+      'products.sku as product_sku'
+    );
+
+  const items = rows.map((row) => {
+    const unitPrice = Number(row.unit_price || 0);
+    const quantity = Number(row.quantity || 0);
+    return {
+      product_id: row.product_id,
+      name: row.product_name || row.product_id,
+      sku: row.product_sku || '',
+      quantity,
+      unit_price: unitPrice,
+      line_total: Number((unitPrice * quantity).toFixed(2))
+    };
+  });
+
+  const subtotal = Number(items.reduce((sum, item) => sum + item.line_total, 0).toFixed(2));
+  return {
+    order: {
+      id: order.id,
+      user_id: order.user_id,
+      name: order.name,
+      email: order.email,
+      phone: order.phone,
+      address: order.address,
+      status: order.status,
+      created_at: order.created_at,
+      total: Number(order.total || subtotal)
+    },
+    items,
+    totals: {
+      subtotal,
+      grand_total: Number(order.total || subtotal)
+    }
+  };
+}
+
+function canAccessReceipt(order, authUser, emailHint) {
+  if (authUser?.role === 'admin') return true;
+  if (authUser?.id && order.user_id && String(authUser.id) === String(order.user_id)) return true;
+  if (authUser?.email && order.email && authUser.email.toLowerCase() === String(order.email).toLowerCase()) return true;
+  if (emailHint && order.email && String(emailHint).toLowerCase() === String(order.email).toLowerCase()) return true;
+  return false;
+}
+
+async function sendOrderConfirmationEmail(receipt) {
+  const transport = getMailer();
+  if (!transport || !receipt?.order?.email) return;
+
+  const orderId = receipt.order.id;
+  const status = String(receipt.order.status || 'pending').toUpperCase();
+  const itemsText = receipt.items
+    .map((item) => `- ${item.name} x${item.quantity} @ $${toMoney(item.unit_price)} = $${toMoney(item.line_total)}`)
+    .join('\n');
+  const itemsHtml = receipt.items
+    .map((item) => `<tr><td style="padding:6px 8px;border-bottom:1px solid #eee;">${item.name}</td><td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td><td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">$${toMoney(item.unit_price)}</td><td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">$${toMoney(item.line_total)}</td></tr>`)
+    .join('');
+
+  await transport.sendMail({
+    from: SMTP_FROM,
+    to: receipt.order.email,
+    subject: `EMS Luxe Order #${orderId} Confirmation`,
+    text: `Thanks for your order!\n\nOrder: #${orderId}\nStatus: ${status}\nTotal: $${toMoney(receipt.totals.grand_total)}\n\nItems:\n${itemsText}\n\nWe appreciate your business.`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;">
+        <h2>EMS Luxe Supply Order Confirmation</h2>
+        <p>Thanks for your order, ${receipt.order.name || 'Customer'}.</p>
+        <p><strong>Order:</strong> #${orderId}<br><strong>Status:</strong> ${status}<br><strong>Total:</strong> $${toMoney(receipt.totals.grand_total)}</p>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:6px 8px;border-bottom:2px solid #ddd;">Item</th>
+              <th style="text-align:center;padding:6px 8px;border-bottom:2px solid #ddd;">Qty</th>
+              <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #ddd;">Unit</th>
+              <th style="text-align:right;padding:6px 8px;border-bottom:2px solid #ddd;">Line Total</th>
+            </tr>
+          </thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        <p>If you need help, reply to this email.</p>
+      </div>
+    `
+  });
+}
+
 async function handleStripeCheckoutCompleted(session) {
   if (!session?.metadata?.items) return;
   const items = JSON.parse(session.metadata.items || "{}");
@@ -121,6 +245,7 @@ async function handleStripeCheckoutCompleted(session) {
   const address = session.metadata?.address || (session.customer_details?.address ? JSON.stringify(session.customer_details.address) : null);
   const userId = session.metadata?.user_id || null;
   const existingOrderId = session.metadata?.order_id;
+  let finalizedOrderId = null;
 
   await knex.transaction(async (trx) => {
     let serverCalculatedTotal = 0;
@@ -158,6 +283,7 @@ async function handleStripeCheckoutCompleted(session) {
           address,
           updated_at: knex.fn.now()
         });
+      finalizedOrderId = existingOrderId;
     } else {
       const [newOrder] = await trx('orders')
         .insert({
@@ -172,6 +298,7 @@ async function handleStripeCheckoutCompleted(session) {
         })
         .returning('id');
       orderId = newOrder.id || newOrder;
+      finalizedOrderId = orderId;
     }
 
     await trx('order_items').where({ order_id: orderId }).del();
@@ -182,6 +309,15 @@ async function handleStripeCheckoutCompleted(session) {
       await trx('products').where({ id: product_id }).decrement('stock_level', quantity);
     }
   });
+
+  if (finalizedOrderId) {
+    const receipt = await buildOrderReceipt(finalizedOrderId);
+    if (receipt) {
+      sendOrderConfirmationEmail(receipt).catch((err) => {
+        console.error(`Stripe order email failed for #${finalizedOrderId}:`, err.message);
+      });
+    }
+  }
 }
 
 async function handleStripeCheckoutCanceled(session) {
@@ -370,6 +506,7 @@ app.post('/api/orders', async (req, res) => {
   }
 
   try {
+    let createdOrderId = null;
     await knex.transaction(async (trx) => {
       let serverCalculatedTotal = 0;
       const orderItemsToInsert = [];
@@ -406,6 +543,7 @@ app.post('/api/orders', async (req, res) => {
         .returning('id');
 
       const orderId = newOrder.id || newOrder; 
+      createdOrderId = orderId;
 
       const itemsWithOrderId = orderItemsToInsert.map(item => ({
         ...item,
@@ -422,10 +560,37 @@ app.post('/api/orders', async (req, res) => {
       });
     });
 
+    if (createdOrderId) {
+      const receipt = await buildOrderReceipt(createdOrderId);
+      if (receipt) {
+        sendOrderConfirmationEmail(receipt).catch((err) => {
+          console.error(`Order email failed for #${createdOrderId}:`, err.message);
+        });
+      }
+    }
+
   } catch (err) {
     console.error('Secure Order Transaction Failed:', err.message);
     const statusCode = err.message.includes('stock') || err.message.includes('found') ? 400 : 500;
     res.status(statusCode).json({ error: err.message });
+  }
+});
+
+// GET /api/orders/:id/receipt
+app.get('/api/orders/:id/receipt', async (req, res) => {
+  try {
+    const authUser = getAuthUser(req);
+    const emailHint = req.query.email;
+    const receipt = await buildOrderReceipt(req.params.id);
+
+    if (!receipt) return res.status(404).json({ error: 'Order not found' });
+    if (!canAccessReceipt(receipt.order, authUser, emailHint)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    res.json(receipt);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

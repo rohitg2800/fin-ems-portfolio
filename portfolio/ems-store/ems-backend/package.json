@@ -22,6 +22,7 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.2.6",
+    "nodemailer": "^6.9.14",
     "pg": "^8.20.0",
     "stripe": "^14.24.0"
   },
