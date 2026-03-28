@@ -9,25 +9,122 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <link rel="stylesheet" href="../css/styles.css">
+
+  <style>
+    /* =========================================
+       ELEGANT CONTACT PAGE STYLING
+       ========================================= */
+    .contact-hero {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Premium Form Inputs */
+    .premium-form-group {
+      margin-bottom: 24px;
+    }
+    .premium-form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.95rem;
+    }
+    .premium-input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-soft);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .premium-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(188, 148, 55, 0.15);
+      outline: none;
+      background: var(--card-bg, #fff);
+    }
+    [data-theme="dark"] .premium-input:focus { background: #111; box-shadow: 0 0 0 4px rgba(255, 217, 119, 0.1); }
+    
+    .form-row-double {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 600px) {
+      .form-row-double { grid-template-columns: 1fr; gap: 0; }
+    }
+
+    /* Elegant Info Card */
+    .info-card {
+      background: linear-gradient(145deg, var(--card-bg, #fff) 0%, var(--bg-soft) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+    [data-theme="dark"] .info-card { background: linear-gradient(145deg, #16120e 0%, #0a0806 100%); }
+
+    .contact-info-list {
+      list-style: none;
+      padding: 0;
+      margin: 30px 0;
+    }
+    .contact-info-list li {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 24px;
+      font-size: 1.05rem;
+      color: var(--text-color);
+    }
+    
+    .contact-icon-wrapper {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(188, 148, 55, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      transition: 0.3s ease;
+    }
+    [data-theme="dark"] .contact-icon-wrapper { background: rgba(255, 217, 119, 0.1); color: var(--accent); }
+    .contact-info-list li:hover .contact-icon-wrapper { transform: scale(1.1); background: var(--primary); color: white; }
+    [data-theme="dark"] .contact-info-list li:hover .contact-icon-wrapper { background: var(--accent); color: #111; }
+  </style>
 </head>
 
 <body data-theme="light">
   <header class="topbar">
     <div class="container topbar-inner">
       <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
 
       <a class="brand" href="../index.html" aria-label="EMS Luxe Supply Home">
-        <div class="brand-mark" aria-hidden="true">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+        <div class="brand-mark" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
         <div>
           <div class="brand-title">EMS LUXE SUPPLY</div>
           <div class="fine">PREMIUM FIELD GEAR</div>
@@ -41,6 +138,8 @@
         <a href="trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
         <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="contact.html" aria-current="page"><i class="fa-solid fa-envelope"></i> Contact</a>
+        
+        <div id="authNavSection" class="auth-nav-wrapper"></div>
       </nav>
 
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
@@ -55,278 +154,194 @@
     </div>
   </header>
 
-  <div class="container" style="margin-top: 20px; text-align: center;">
-    <a href="../index.html" class="btn">
-      <i class="fa-solid fa-house"></i> Main Page
-    </a>
-  </div>
-
   <main>
-    <section class="hero hero-compact" aria-labelledby="contact-hero-title">
+    <section class="hero hero-compact contact-hero">
       <div class="container">
-        <div class="hero-card">
-          <h1 id="contact-hero-title" class="hero-title">Contact EMS Luxe Supply</h1>
-          <p class="hero-sub">
-            Have a question about gear, orders, or bulk outfitting? Send us a message and our team will respond as soon as possible.
+        <div class="hero-card" style="background: transparent; box-shadow: none; padding: 20px 0;">
+          <h1 class="hero-title" style="color: var(--text-color);">Get in Touch</h1>
+          <p class="hero-sub" style="color: var(--gray); margin: 0 auto; max-width: 600px;">
+            Whether you need gear recommendations, bulk outfitting, or warranty support, our dedicated team is ready to assist you.
           </p>
         </div>
       </div>
     </section>
 
-    <section style="padding: 60px 0 40px;">
+    <section style="padding: 20px 0 80px;">
       <div class="container">
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: flex-start; gap: 32px;">
+        <div class="contact-grid">
 
-          <article class="card" style="padding: 24px 22px;">
-            <h2 class="section-title" style="margin-top: 0; font-size: 1.6rem; text-align: left;">
-              Send Us a Message
-            </h2>
-            <p style="color: var(--gray); font-size: 0.95rem; margin-bottom: 20px;">
-              Fill out the form below and we’ll get back to you within one business day.
-            </p>
+          <article class="card" style="padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.04);">
+            <h2 style="font-family: 'Cinzel', serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-color);">Send Us a Message</h2>
+            <p style="color: var(--gray); margin-bottom: 30px;">Fill out the form below and we’ll respond within 24 hours.</p>
 
             <form class="contact-form" action="https://formspree.io/f/mdawpzkq" method="post">
-              <input type="hidden" name="_subject" value="New EMS Luxe contact message">
-              <input type="hidden" name="_next" value="https://your-domain.com/html/thank-you.html">
+              <input type="hidden" name="_next" value="/html/thank-you.html">
               <input type="text" name="_gotcha" style="display:none">
 
-              <div class="form-row">
-                <div class="form-group">
+              <div class="form-row-double">
+                <div class="premium-form-group">
                   <label for="name">Full Name</label>
-                  <input type="text" id="name" name="name" placeholder="Your name" required>
+                  <input type="text" id="name" name="name" class="premium-input" placeholder="Paramedic Jane Doe" required>
                 </div>
-
-                <div class="form-group">
+                <div class="premium-form-group">
                   <label for="email">Email Address</label>
-                  <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                  <input type="email" id="email" name="email" class="premium-input" placeholder="jane@agency.com" required>
                 </div>
               </div>
 
-              <div class="form-row">
-                <div class="form-group">
+              <div class="form-row-double">
+                <div class="premium-form-group">
                   <label for="topic">Topic</label>
-                  <select id="topic" name="topic" required>
+                  <select id="topic" name="topic" class="premium-input" required style="cursor: pointer;">
                     <option value="">Select a topic</option>
-                    <option value="order">Order question</option>
-                    <option value="product">Product recommendation</option>
-                    <option value="bulk">Bulk / agency pricing</option>
-                    <option value="warranty">Warranty / return</option>
-                    <option value="other">Other</option>
+                    <option value="order">Order Support / Tracking</option>
+                    <option value="product">Product Recommendation</option>
+                    <option value="bulk">Agency / Bulk Pricing</option>
+                    <option value="warranty">Warranty / Return Request</option>
+                    <option value="other">Other Inquiry</option>
                   </select>
                 </div>
-
-                <div class="form-group">
-                  <label for="orderId">Order ID (optional)</label>
-                  <input type="text" id="orderId" name="orderId" placeholder="#EMS-12345">
+                <div class="premium-form-group">
+                  <label for="orderId">Order ID (Optional)</label>
+                  <input type="text" id="orderId" name="orderId" class="premium-input" placeholder="#EMS-12345">
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="5" placeholder="How can we help?" required></textarea>
+              <div class="premium-form-group">
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" class="premium-input" rows="6" placeholder="How can we help you today?" required style="resize: vertical;"></textarea>
               </div>
 
-              <div class="form-footer">
-                <button type="submit" class="btn">
-                  <i class="fa-solid fa-paper-plane"></i> Send Message
-                </button>
-                <p class="form-note" style="margin-top: 12px; color: var(--gray); font-size: 0.9rem;">
-                  By submitting, you agree to be contacted about your inquiry. We never sell your data.
-                </p>
-              </div>
+              <button type="submit" class="btn" style="width: 100%; padding: 16px; font-size: 1.1rem; margin-top: 10px;">
+                <i class="fa-solid fa-paper-plane"></i> Send Message
+              </button>
             </form>
           </article>
 
-          <article class="card-soft">
-            <i class="fa-solid fa-headset card-icon" aria-hidden="true"></i>
-            <h3>Need faster help?</h3>
-            <p style="margin-bottom: 16px;">
-              For urgent gear or order issues, you can also reach us through the channels below.
-            </p>
+          <article class="info-card">
+            <h3 style="font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--text-color);">Direct Contact</h3>
+            <p style="color: var(--gray); font-size: 0.95rem;">Prefer reaching out directly? Use the channels below for immediate assistance.</p>
 
-            <ul style="list-style: none; padding-left: 0; font-size: 0.95rem; color: var(--gray);">
-              <li style="margin-bottom: 10px;">
-                <i class="fa-solid fa-envelope" style="width: 24px;"></i>
-                <strong>Email:</strong> support@emsluxe.com
+            <ul class="contact-info-list">
+              <li>
+                <div class="contact-icon-wrapper"><i class="fa-solid fa-envelope"></i></div>
+                <div>
+                  <div style="font-size: 0.85rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Email Support</div>
+                  <strong style="color: var(--text-color);">support@emsluxe.com</strong>
+                </div>
               </li>
-              <li style="margin-bottom: 10px;">
-                <i class="fa-solid fa-phone" style="width: 24px;"></i>
-                <strong>Phone:</strong> 1-800-EMS-LUXE (Mon–Fri, 8 AM–8 PM EST)
+              <li>
+                <div class="contact-icon-wrapper"><i class="fa-solid fa-phone"></i></div>
+                <div>
+                  <div style="font-size: 0.85rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Toll-Free</div>
+                  <strong style="color: var(--text-color);">1-800-EMS-LUXE</strong>
+                  <div style="font-size: 0.85rem; color: var(--gray); margin-top: 2px;">Mon–Fri, 8 AM–8 PM EST</div>
+                </div>
               </li>
-              <li style="margin-bottom: 10px;">
-                <i class="fa-solid fa-location-dot" style="width: 24px;"></i>
-                1001 Medical Lane, Trauma City
+              <li>
+                <div class="contact-icon-wrapper"><i class="fa-solid fa-location-dot"></i></div>
+                <div>
+                  <div style="font-size: 0.85rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Headquarters</div>
+                  <strong style="color: var(--text-color);">1001 Medical Lane</strong>
+                  <div style="font-size: 0.85rem; color: var(--gray); margin-top: 2px;">Trauma City, TC 12345</div>
+                </div>
               </li>
             </ul>
 
-            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 18px 0;">
+            <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
 
-            <h4 style="font-family: 'Cinzel', serif; margin-bottom: 10px;">Common topics</h4>
-            <ul style="list-style: disc; padding-left: 20px; font-size: 0.9rem; color: var(--gray);">
-              <li>Order status or tracking issues</li>
-              <li>Help choosing stethoscopes or kits for students</li>
-              <li>Bulk pricing for EMS agencies and schools</li>
-              <li>Warranty or replacement for damaged gear</li>
-            </ul>
-
-            <p style="margin-top: 18px; font-size: 0.9rem; color: var(--gray);">
-              For quick answers, you can also visit our
-              <a href="faq.html" style="color: var(--accent); text-decoration: none;">FAQs</a>
-              or
-              <a href="trust.html" style="color: var(--accent); text-decoration: none;">Trust & Safety</a>
-              page.
-            </p>
+            <div style="text-align: center;">
+              <p style="font-size: 0.95rem; color: var(--gray); margin-bottom: 15px;">Looking for quick answers?</p>
+              <a href="faq.html" class="btn secondary" style="width: 100%;">
+                <i class="fa-solid fa-book-open"></i> Browse Knowledge Base
+              </a>
+            </div>
           </article>
 
         </div>
       </div>
     </section>
 
-    <section class="prefooter-benefits" aria-labelledby="benefits-title">
-      <div class="container">
-        <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
-        <div class="benefit-grid">
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-truck-fast"></i>
-            </div>
-            <h3>Fast Shipping</h3>
-            <p>Free shipping on orders over $50. Same-day dispatch available for in-stock items.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <h3>Quality Guaranteed</h3>
-            <p>All products field-tested by working EMS professionals. Lifetime warranty on select items.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-headset"></i>
-            </div>
-            <h3>24/7 Support</h3>
-            <p>Expert help whenever you need it. Live chat, phone, and email support available.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-rotate-left"></i>
-            </div>
-            <h3>Easy Returns</h3>
-            <p>30-day hassle-free returns on non-sterile items. Your satisfaction is guaranteed.</p>
-          </article>
-
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- CART -->
   <div id="cartOverlay" class="cart-overlay"></div>
-
-  <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
-    <div class="cart-header">
-      <h3>Your Cart</h3>
-      <button id="cartClose" type="button" class="cart-close-btn" aria-label="Close cart">×</button>
-    </div>
-
-    <div id="cartItems" class="cart-body">
-      <div class="empty-cart">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <p>Your cart is empty</p>
-      </div>
-    </div>
-
+  <aside id="cartDrawer" class="cart-drawer">
+    <div class="cart-header"><h3>Your Cart</h3><button id="cartClose" class="cart-close-btn">×</button></div>
+    <div id="cartItems" class="cart-body"></div>
     <div class="cart-footer">
-      <div class="cart-total-row">
-        <span>Total</span>
-        <span id="cartTotal">$0.00</span>
-      </div>
-
-      <button id="checkoutBtn" type="button" class="btn" style="width: 100%;">
-        <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
-      </button>
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button id="checkoutBtn" class="btn"><i class="fa-solid fa-credit-card"></i> Proceed to Checkout</button>
     </div>
   </aside>
 
-  <!-- PRODUCT MODAL -->
-  <div id="modalBackdrop" class="modal-backdrop" aria-labelledby="modalProductName">
-    <div id="productModal" class="modal-card">
-      <div class="modal-header">
-        <h2 id="modalProductName" class="modal-title">Product Details</h2>
-        <button id="modalClose" type="button" class="modal-close-btn" aria-label="Close product details">×</button>
-      </div>
-
-      <div class="modal-body">
-        <div class="product-modal-grid">
-          <div>
-            <img
-              id="modalProductImage"
-              src="https://placehold.co/800x600/572403/ffd977?text=Product"
-              alt="Product image"
-              loading="lazy"
-            >
-          </div>
-
-          <div>
-            <div id="modalProductBadge" class="pill" style="display: none;">New</div>
-            <div id="modalProductPrice" class="price">$0.00</div>
-            <p style="font-size: 13px; color: var(--gray); margin-bottom: 15px;">
-              SKU: <span id="modalProductSku">---</span>
-            </p>
-            <p id="modalProductDescription" style="color: var(--text-color); line-height: 1.7; margin-bottom: 25px;">
-              Product description will appear here...
-            </p>
-
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 12px; font-family: 'Cinzel', serif;">
-                <i class="fa-solid fa-star"></i> Key Features
-              </h4>
-              <ul id="modalProductFeatures" style="color: var(--text-color); line-height: 1.8; padding-left: 20px;"></ul>
-            </div>
-
-            <div class="modal-product-actions">
-              <button type="button" class="btn secondary" onclick="closeProductModal()">
-                <i class="fa-solid fa-arrow-left"></i> Continue Shopping
-              </button>
-              <button type="button" class="btn" id="modalAddToCart">
-                <i class="fa-solid fa-cart-plus"></i> Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">Checkout</h3>
-        <button id="checkoutClose" type="button" class="modal-close-btn" aria-label="Close checkout">×</button>
+        <button id="checkoutClose" type="button" class="modal-close-btn">×</button>
       </div>
-
       <div class="modal-body">
         <form id="checkoutForm" class="checkout-form">
           <input id="checkoutName" type="text" placeholder="Full name" required>
           <input id="checkoutEmail" type="email" placeholder="Email address" required>
           <input id="checkoutPhone" type="tel" placeholder="Phone number" required>
           <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
-
           <div id="checkoutError" class="checkout-error"></div>
-
-          <div class="checkout-total-box">
-            Total: $<span id="modalCartTotal">0.00</span>
-          </div>
-
-          <button id="checkoutSubmitBtn" type="submit" class="btn">
-            <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
-          </button>
+          <div class="checkout-total-box">Total: $<span id="modalCartTotal">0.00</span></div>
+          <button id="checkoutSubmitBtn" type="submit" class="btn"><i class="fa-solid fa-lock"></i> Secure Checkout</button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-card auth-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+        <button id="authClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="ordersModal" class="modal-backdrop">
+    <div class="modal-card orders-wide-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Your Order History</h3>
+        <button id="ordersClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="ordersList" class="orders-container" style="max-height: 400px; overflow-y: auto;"></div>
       </div>
     </div>
   </div>
@@ -338,7 +353,6 @@
           <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
           <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
         </div>
-
         <div class="footer-col">
           <h4>Quick Links</h4>
           <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
@@ -346,23 +360,25 @@
           <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
           <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
           <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
-          <p><a href="contact.html"><i class="fa-solid fa-chevron-right"></i> Contact</a></p>
         </div>
-
         <div class="footer-col">
-          <h4>Contact</h4>
+          <h4>Contact Us</h4>
           <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
           <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
         </div>
       </div>
-
       <div class="footer-bottom">
-        © 2026 EMS Luxe Supply. All rights reserved.
+        <p>
+          © 2026 EMS Luxe Supply. All rights reserved. |
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Service</a>
+        </p>
       </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="../js/api.js" defer></script>
+  <script src="../js/auth.js" defer></script>
   <script src="../js/script.js" defer></script>
 </body>
 </html>

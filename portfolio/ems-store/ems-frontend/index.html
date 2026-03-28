@@ -5,60 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>EMS Luxe Supply — Premium Field Gear for Medical Professionals</title>
-  <meta
-    name="description"
-    content="Professional-grade EMS equipment trusted by paramedics worldwide. Shop tactical gear, stethoscopes, and medical supplies built by medics, for medics."
-  />
-  <meta
-    name="keywords"
-    content="EMS gear, paramedic equipment, tactical medical supplies, best stethoscope for EMTs, Littmann stethoscope, medical field gear"
-  />
+  <meta name="description" content="Professional-grade EMS equipment trusted by paramedics worldwide. Shop tactical gear, stethoscopes, and medical supplies built by medics, for medics." />
+  <meta name="keywords" content="EMS gear, paramedic equipment, tactical medical supplies, best stethoscope for EMTs, Littmann stethoscope, medical field gear" />
 
   <meta property="og:title" content="EMS Luxe Supply — Premium Field Gear" />
-  <meta
-    property="og:description"
-    content="Professional-grade equipment trusted by EMTs and paramedics worldwide."
-  />
+  <meta property="og:description" content="Professional-grade equipment trusted by EMTs and paramedics worldwide." />
   <meta property="og:type" content="website" />
-  <meta
-    property="og:image"
-    content="https://placehold.co/1200x630/572403/ffd977?text=EMS+Luxe+Supply"
-  />
+  <meta property="og:image" content="https://placehold.co/1200x630/572403/ffd977?text=EMS+Luxe+Supply" />
 
-  <link
-    rel="icon"
-    type="image/svg+xml"
-    href="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛡️%3C/text%3E%3C/svg%3E"
-  />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛡️%3C/text%3E%3C/svg%3E" />
 
   <link rel="preload" href="css/styles.css" as="style" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body data-theme="light">
-  <!-- HEADER -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <button
-        id="menuToggle"
-        class="menu-toggle"
-        aria-label="Toggle navigation menu"
-        aria-expanded="false"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
+      <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
 
       <a class="brand" href="index.html" aria-label="EMS Luxe Supply Home">
@@ -72,12 +42,14 @@
       </a>
 
       <nav class="nav" id="mainNav" aria-label="Main navigation">
-        <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="index.html" aria-current="page"><i class="fa-solid fa-house"></i> Home</a>
         <a href="html/shop.html"><i class="fa-solid fa-store"></i> Shop</a>
         <a href="html/stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
         <a href="html/trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
         <a href="html/faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="html/contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        
+        <div id="authNavSection" class="auth-nav-wrapper"></div>
       </nav>
 
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
@@ -92,7 +64,6 @@
     </div>
   </header>
 
-  <!-- MAIN -->
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="container">
@@ -113,7 +84,6 @@
         <h2 id="featured-title" class="section-title">Featured Products</h2>
         <p class="section-sub">Handpicked essentials for the modern EMS professional</p>
 
-        <!-- JS renders products here -->
         <div id="productGrid" class="grid" role="list"></div>
 
         <div style="text-align: center; margin-top: 30px;">
@@ -129,78 +99,75 @@
         <h2 id="why-us-title" class="section-title">Why EMS Professionals Choose Us</h2>
         <p class="section-sub">Built by medics, for medics</p>
 
-        <div class="grid">
-          <article class="card">
-            <i class="fa-solid fa-user-doctor" aria-hidden="true"></i>
-            <h3>Medic-Approved</h3>
-            <p>Every product tested and approved by working EMS professionals in real-world conditions.</p>
-          </article>
-
-          <article class="card">
-            <i class="fa-solid fa-medal" aria-hidden="true"></i>
-            <h3>Premium Quality</h3>
-            <p>We only stock equipment that meets the highest standards for durability and performance.</p>
-          </article>
-
-          <article class="card">
-            <i class="fa-solid fa-hand-holding-dollar" aria-hidden="true"></i>
-            <h3>Best Value</h3>
-            <p>Competitive pricing without compromising on quality. Bulk discounts available for departments.</p>
-          </article>
+       <section class="features-premium">
+  <div class="container">
+    <div class="feature-grid">
+      <article class="feature-card">
+        <div class="icon-box">
+          <i class="fa-solid fa-user-doctor"></i>
         </div>
+        <h3>Medic-Approved</h3>
+        <p>Every product tested and approved by working EMS professionals in real-world conditions.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="icon-box">
+          <i class="fa-solid fa-medal"></i>
+        </div>
+        <h3>Premium Quality</h3>
+        <p>We only stock equipment that meets the highest standards for durability and performance.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="icon-box">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+        <h3>Best Value</h3>
+        <p>Competitive pricing without compromising on quality. Bulk discounts available for departments.</p>
+      </article>
+    </div>
+  </div>
+</section>
       </div>
     </section>
+
   </main>
 
-  <!-- CART OVERLAY -->
   <div id="cartOverlay" class="cart-overlay"></div>
-
-  <!-- CART DRAWER -->
   <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
     <div class="cart-header">
       <h3>Your Cart</h3>
-      <button id="cartClose" type="button" aria-label="Close cart">×</button>
+      <button id="cartClose" type="button" class="cart-close-btn" aria-label="Close cart">×</button>
     </div>
-
     <div id="cartItems" class="cart-body"></div>
-
     <div class="cart-footer">
       <div class="cart-total-row">
         <span>Total</span>
         <span id="cartTotal">$0.00</span>
       </div>
-
       <button id="checkoutBtn" type="button" class="btn">
         <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
       </button>
     </div>
   </aside>
 
-  <!-- PRODUCT MODAL -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div id="productModal" class="modal-card">
       <div class="modal-header">
-        <h3 id="modalProductName">Product</h3>
-        <button id="modalClose" type="button" aria-label="Close product modal">×</button>
+        <h3 id="modalProductName" class="modal-title">Product</h3>
+        <button id="modalClose" type="button" class="modal-close-btn" aria-label="Close product modal">×</button>
       </div>
-
       <div class="modal-body">
         <div class="product-modal-grid">
           <div>
-            <img
-              id="modalProductImage"
-              src="https://placehold.co/800x600/572403/ffd977?text=EMS"
-              alt="Product image"
-            />
+            <img id="modalProductImage" src="https://placehold.co/800x600/572403/ffd977?text=EMS" alt="Product image" />
           </div>
-
           <div>
             <div id="modalProductBadge" class="pill"></div>
             <div id="modalProductSku"></div>
             <div id="modalProductPrice"></div>
             <p id="modalProductDescription"></p>
             <ul id="modalProductFeatures"></ul>
-
             <button id="modalAddToCart" type="button" class="btn">
               <i class="fa-solid fa-cart-plus"></i> Add to Cart
             </button>
@@ -210,82 +177,131 @@
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Checkout</h3>
-        <button id="checkoutClose" type="button" aria-label="Close checkout">×</button>
+        <h3 class="modal-title">Checkout</h3>
+        <button id="checkoutClose" type="button" class="modal-close-btn" aria-label="Close checkout">×</button>
       </div>
-
       <div class="modal-body">
-        <form id="checkoutForm">
+        <form id="checkoutForm" class="checkout-form">
           <input id="checkoutName" type="text" placeholder="Full name" required />
           <input id="checkoutEmail" type="email" placeholder="Email address" required />
           <input id="checkoutPhone" type="tel" placeholder="Phone number" required />
           <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
-
-          <div id="checkoutError"></div>
-
+          
+          <div id="checkoutError" class="checkout-error"></div>
+          
           <div class="checkout-total-box">
             Total: $<span id="modalCartTotal">0.00</span>
           </div>
-
+          
           <button id="checkoutSubmitBtn" type="submit" class="btn">
-            <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
+            <i class="fa-solid fa-lock"></i> Secure Checkout
           </button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer>
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-card auth-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+        <button id="authClose" type="button" class="modal-close-btn">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="ordersModal" class="modal-backdrop">
+    <div class="modal-card orders-wide-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Your Order History</h3>
+        <button id="ordersClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="ordersList" class="orders-container" style="max-height: 400px; overflow-y: auto;">
+          <p class="loading-text" style="text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching your history...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-main">
     <div class="container">
-      <div class="footer-grid">
-        <div>
+      <div class="footer-columns">
+        <div class="footer-col">
           <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
-          <p>
-            Premium field-ready gear for medical professionals.
-            Trusted by EMTs, paramedics, and first responders worldwide.
-          </p>
+          <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
         </div>
 
-        <div>
+        <div class="footer-col">
           <h4>Quick Links</h4>
-          <p><a href="index.html">Home</a></p>
-          <p><a href="html/shop.html">Shop All</a></p>
-          <p><a href="html/stethoscopes.html">Stethoscopes</a></p>
-          <p><a href="html/trust.html">Trust & Quality</a></p>
-          <p><a href="html/faq.html">FAQs</a></p>
+          <p><a href="index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
+          <p><a href="html/shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
+          <p><a href="html/stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
+          <p><a href="html/trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
+          <p><a href="html/faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
         </div>
 
-        <div>
+        <div class="footer-col">
           <h4>Contact Us</h4>
           <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
           <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
-          <p><i class="fa-solid fa-location-dot"></i> 1001 Medical Lane, Trauma City</p>
-          <p><i class="fa-solid fa-clock"></i> Mon-Fri: 8AM-8PM EST</p>
+          <div class="admin-link-wrap" style="margin-top: 15px;">
+            <a href="html/ems_orders.html" target="_blank" class="btn" style="background: var(--surface-2); color: var(--text); padding: 8px 12px; font-size: 0.85rem;">
+              <i class="fa-solid fa-user-tie"></i> Admin Portal
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="admin-link-wrap">
-        <a href="html/ems_orders.html" target="_blank" class="btn">
-          <i class="fa-solid fa-list-check"></i> Admin Orders
-        </a>
-      </div>
-
-      <div class="copyright">
+      <div class="footer-bottom">
         <p>
           © 2026 EMS Luxe Supply. All rights reserved. |
-          <a href="#">Privacy Policy</a> |
-          <a href="#">Terms of Service</a>
+          <a href="html/privacy.html">Privacy Policy</a> |
+          <a href="html/terms.html">Terms of Service</a>
         </p>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/auth.js" defer></script>
   <script src="js/script.js" defer></script>
 </body>
 </html>

@@ -40,6 +40,8 @@
         <a href="trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
         <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        
+        <div id="authNavSection" class="auth-nav-wrapper"></div>
       </nav>
 
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
@@ -75,31 +77,10 @@
       </div>
     </section>
 
-    <section class="filter-section" aria-labelledby="filter-title">
-      <div class="container">
-        <h2 id="filter-title" class="section-title">Find Your Perfect Stethoscope</h2>
-        <p class="section-sub">Filter by training level, environment, and comfort.</p>
-
-        <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all" aria-pressed="true" type="button">
-            <i class="fa-solid fa-list"></i> All Models
-          </button>
-          <button class="filter-btn" data-filter="students" aria-pressed="false" type="button">
-            <i class="fa-solid fa-graduation-cap"></i> For Students
-          </button>
-          <button class="filter-btn" data-filter="loud" aria-pressed="false" type="button">
-            <i class="fa-solid fa-volume-high"></i> Loud Environments
-          </button>
-          <button class="filter-btn" data-filter="comfort" aria-pressed="false" type="button">
-            <i class="fa-solid fa-cloud"></i> Comfort Focus
-          </button>
-        </div>
-      </div>
-    </section>
-
     <section aria-labelledby="steth-products-title">
       <div class="container">
         <h2 id="steth-products-title" class="sr-only">Stethoscope Products</h2>
+        
         <div id="stethGrid" class="grid" role="list"></div>
 
         <div style="text-align: center; margin-top: 40px;">
@@ -142,33 +123,25 @@
         <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
         <div class="benefit-grid">
           <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-truck-fast"></i>
-            </div>
+            <div class="benefit-icon" aria-hidden="true"><i class="fa-solid fa-truck-fast"></i></div>
             <h3>Fast Shipping</h3>
             <p>Free shipping on orders over $50. Same-day dispatch available for in-stock items.</p>
           </article>
 
           <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
+            <div class="benefit-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
             <h3>Quality Guaranteed</h3>
             <p>All stethoscopes field-tested by working EMS professionals. Warranty coverage on premium lines.</p>
           </article>
 
           <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-headset"></i>
-            </div>
+            <div class="benefit-icon" aria-hidden="true"><i class="fa-solid fa-headset"></i></div>
             <h3>24/7 Support</h3>
             <p>Need help picking a model? Our gear specialists are available by chat, email, or phone.</p>
           </article>
 
           <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-rotate-left"></i>
-            </div>
+            <div class="benefit-icon" aria-hidden="true"><i class="fa-solid fa-rotate-left"></i></div>
             <h3>Easy Returns</h3>
             <p>30-day hassle-free returns on eligible items so you can test gear with confidence.</p>
           </article>
@@ -177,88 +150,109 @@
     </section>
   </main>
 
-  <!-- CART -->
   <div id="cartOverlay" class="cart-overlay"></div>
-
   <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
     <div class="cart-header">
       <h3>Your Cart</h3>
       <button id="cartClose" type="button" class="cart-close-btn" aria-label="Close cart">×</button>
     </div>
-
     <div id="cartItems" class="cart-body"></div>
-
     <div class="cart-footer">
-      <div class="cart-total-row">
-        <span>Total</span>
-        <span id="cartTotal">$0.00</span>
-      </div>
-
-      <button id="checkoutBtn" type="button" class="btn">
-        <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
-      </button>
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button id="checkoutBtn" type="button" class="btn"><i class="fa-solid fa-credit-card"></i> Proceed to Checkout</button>
     </div>
   </aside>
 
-  <!-- PRODUCT MODAL -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div id="productModal" class="modal-card">
       <div class="modal-header">
         <h3 id="modalProductName" class="modal-title">Product</h3>
         <button id="modalClose" type="button" class="modal-close-btn" aria-label="Close product modal">×</button>
       </div>
-
       <div class="modal-body">
         <div class="product-modal-grid">
-          <div>
-            <img
-              id="modalProductImage"
-              src="https://placehold.co/800x600/572403/ffd977?text=EMS"
-              alt="Product image"
-            >
-          </div>
-
+          <div><img id="modalProductImage" src="" alt="Product image"></div>
           <div>
             <div id="modalProductBadge" class="pill"></div>
             <div id="modalProductSku"></div>
             <div id="modalProductPrice"></div>
             <p id="modalProductDescription"></p>
             <ul id="modalProductFeatures"></ul>
-
-            <button id="modalAddToCart" type="button" class="btn">
-              <i class="fa-solid fa-cart-plus"></i> Add to Cart
-            </button>
+            <button id="modalAddToCart" type="button" class="btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">Checkout</h3>
         <button id="checkoutClose" type="button" class="modal-close-btn" aria-label="Close checkout">×</button>
       </div>
-
       <div class="modal-body">
         <form id="checkoutForm" class="checkout-form">
           <input id="checkoutName" type="text" placeholder="Full name" required>
           <input id="checkoutEmail" type="email" placeholder="Email address" required>
           <input id="checkoutPhone" type="tel" placeholder="Phone number" required>
           <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
-
           <div id="checkoutError" class="checkout-error"></div>
-
-          <div class="checkout-total-box">
-            Total: $<span id="modalCartTotal">0.00</span>
-          </div>
-
-          <button id="checkoutSubmitBtn" type="submit" class="btn">
-            <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
-          </button>
+          <div class="checkout-total-box">Total: $<span id="modalCartTotal">0.00</span></div>
+          <button id="checkoutSubmitBtn" type="submit" class="btn"><i class="fa-solid fa-lock"></i> Secure Checkout</button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-card auth-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+        <button id="authClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="ordersModal" class="modal-backdrop">
+    <div class="modal-card orders-wide-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>Order History</h3>
+        <button id="ordersClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="ordersList" style="max-height: 400px; overflow-y: auto;"></div>
       </div>
     </div>
   </div>
@@ -270,7 +264,6 @@
           <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
           <p>Premium stethoscopes and field gear for medical professionals. Trusted by EMTs, paramedics, and first responders.</p>
         </div>
-
         <div class="footer-col">
           <h4>Quick Links</h4>
           <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
@@ -279,21 +272,24 @@
           <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
           <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
         </div>
-
         <div class="footer-col">
           <h4>Contact</h4>
           <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
           <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
         </div>
       </div>
-
       <div class="footer-bottom">
-        © 2026 EMS Luxe Supply. All rights reserved.
+        <p>
+          © 2026 EMS Luxe Supply. All rights reserved. |
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Service</a>
+        </p>
       </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="../js/api.js" defer></script>
+  <script src="../js/auth.js" defer></script>
   <script src="../js/script.js" defer></script>
 </body>
 </html>

@@ -4,311 +4,361 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>FAQs — EMS Luxe Supply</title>
-  <meta name="description"
-        content="Frequently asked questions about EMS Luxe Supply shipping, returns, warranties, bulk orders, payments, and data privacy.">
+  <title>Knowledge Base — EMS Luxe Supply</title>
+  <meta name="description" content="Find answers to common questions about EMS gear, shipping, and agency accounts.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <style>
+    /* =========================================
+       PREMIUM FAQ & KNOWLEDGE BASE STYLING
+       ========================================= */
+    .faq-container {
+      max-width: 900px;
+      margin: 40px auto 100px;
+      padding: 0 20px;
+    }
+
+    /* Quick Jump Pills */
+    .faq-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 60px;
+      position: sticky;
+      top: 100px;
+      z-index: 10;
+    }
+    .faq-nav-link {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: 0.3s ease;
+    }
+    .faq-nav-link:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+    [data-theme="dark"] .faq-nav-link { background: #1a1613; }
+
+    /* Category Headers with Icon Box */
+    .faq-cat-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 80px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border);
+    }
+    .faq-cat-icon {
+      width: 54px;
+      height: 54px;
+      background: rgba(188, 148, 55, 0.1);
+      color: var(--primary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    [data-theme="dark"] .faq-cat-icon { background: rgba(255, 217, 119, 0.1); color: var(--accent); }
+    
+    .faq-cat-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    /* Elegant Accordion Items */
+    .faq-item {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    .faq-item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(87, 36, 3, 0.05);
+    }
+    [data-theme="dark"] .faq-item { background: #16120e; }
+
+    .faq-item summary {
+      padding: 22px 25px;
+      list-style: none;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      color: var(--text-color);
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    /* Indicator Icon */
+    .faq-item summary::after {
+      content: '\f078';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 0.9rem;
+      transition: 0.4s ease;
+      color: var(--muted);
+    }
+    .faq-item[open] summary::after {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .faq-body {
+      padding: 0 25px 25px 25px;
+      line-height: 1.8;
+      color: var(--gray);
+      font-size: 0.95rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
+
 <body data-theme="light">
-  <!-- ========== NAVIGATION ========== -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <a class="brand" href="../index.html" aria-label="EMS Luxe Supply Home">
-        <div class="brand-mark" aria-hidden="true">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+      <button id="menuToggle" class="menu-toggle"><span></span><span></span><span></span></button>
+      <a class="brand" href="../index.html">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
         <div>
           <div class="brand-title">EMS LUXE SUPPLY</div>
           <div class="fine">PREMIUM FIELD GEAR</div>
         </div>
       </a>
-
-      <nav class="nav" id="mainNav" aria-label="Main navigation">
+      <nav class="nav" id="mainNav">
         <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
         <a href="shop.html"><i class="fa-solid fa-store"></i> Shop</a>
         <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust</a>
-        <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
-        <a href="contact.html" aria-current="page"><i class="fa-solid fa-envelope"></i> Contact</a>
+        <a href="trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
+        <a href="faq.html" aria-current="page"><i class="fa-solid fa-circle-question"></i> FAQs</a>
+        <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        <div id="authNavSection" class="auth-nav-wrapper"></div>
       </nav>
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
         <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
         <span id="themeText">Dark</span>
       </button>
-
-      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart, 0 items">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
-      </button>
+      <button id="cartBtn" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="badge">0</span></button>
     </div>
   </header>
 
-  <!-- Optional main-page button -->
-  <div class="container" style="margin-top: 20px; text-align: center;">
-    <a href="../index.html" class="btn">
-      <i class="fa-solid fa-house"></i> Main Page
-    </a>
-  </div>
-
-  <!-- ========== HERO ========== -->
   <main>
-    <section class="hero hero-compact" aria-labelledby="faq-hero-title">
+    <section class="hero hero-compact">
       <div class="container">
-        <div class="hero-card">
-          <h1 id="faq-hero-title" class="hero-title">Frequently Asked Questions</h1>
-          <p class="hero-sub">
-            Answers to the most common questions about orders, shipping, returns, warranties, and bulk EMS gear.
-          </p>
+        <div class="hero-card" style="text-align: center;">
+          <h1 class="hero-title">Support & FAQ</h1>
+          <p class="hero-sub" style="margin: 0 auto;">Everything you need to know about our field-grade equipment, secure logistics, and professional services.</p>
         </div>
       </div>
     </section>
 
-    <!-- ========== FAQ SECTIONS ========== -->
-    <section style="padding: 60px 0 20px;">
-      <div class="container">
+    <div class="faq-container">
+      
+      <nav class="faq-nav">
+        <a href="#orders" class="faq-nav-link">Ordering</a>
+        <a href="#shipping" class="faq-nav-link">Shipping</a>
+        <a href="#returns" class="faq-nav-link">Returns</a>
+        <a href="#agency" class="faq-nav-link">Agency/Bulk</a>
+        <a href="#security" class="faq-nav-link">Security</a>
+      </nav>
 
-        <!-- Ordering & Payments -->
-        <h2 class="section-title">Ordering & Payments</h2>
-        <p class="section-sub">How to place orders, pay securely, and track your purchase.</p>
-
-        <details class="faq-item">
-          <summary>Which payment methods do you accept?</summary>
-          <p>
-            We support credit and debit cards (Visa, MasterCard, RuPay, Amex), UPI, and net banking.
-            Approved agencies can also request purchase-order terms for bulk orders.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can I change or cancel my order after placing it?</summary>
-          <p>
-            Orders can be changed or cancelled within a short window before they enter the packing queue.
-            Contact support@emsluxe.com or use live chat with your order ID as soon as possible.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Is my payment information secure?</summary>
-          <p>
-            Yes. All payments are processed through PCI‑DSS Level 1 compliant gateways using TLS 1.3 encryption.
-            We never store full card details on our servers.
-          </p>
-        </details>
-
-        <!-- Shipping -->
-        <h2 class="section-title">Shipping & Delivery</h2>
-        <p class="section-sub">Timelines, tracking, and international options.</p>
-
-        <details class="faq-item">
-          <summary>How long does shipping usually take?</summary>
-          <p>
-            Most in‑stock domestic orders ship within 48 hours and arrive in 3–7 business days.
-            Express and international options are available at checkout with estimated delivery windows.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do you ship internationally?</summary>
-          <p>
-            Yes. We ship to most regions worldwide. Duties or import taxes may be charged by your local customs
-            office depending on your country’s regulations.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I track my order?</summary>
-          <p>
-            Once your order ships, you’ll receive a tracking link by email and SMS (where available).
-            You can also view tracking information on your account order history page.
-          </p>
-        </details>
-
-        <!-- Returns & Warranty -->
-        <h2 class="section-title">Returns & Warranty</h2>
-        <p class="section-sub">What’s covered, what isn’t, and how to start a return.</p>
-
-        <details class="faq-item">
-          <summary>What is your return policy?</summary>
-          <p>
-            Unused, non‑sterile items can be returned or exchanged within 30 days of delivery.
-            Items must be in resellable condition with original packaging and contents included.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I start a return?</summary>
-          <p>
-            Email returns@emsluxe.com with your order ID and the item you’d like to return.
-            We’ll send a prepaid label for eligible domestic orders or guide you to the nearest return hub.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do your products include a warranty?</summary>
-          <p>
-            Most tools include a 12‑month warranty against manufacturing defects.
-            Some premium lines (like select stethoscopes and shears) offer extended or lifetime replacement coverage.
-          </p>
-        </details>
-
-        <!-- Bulk & Agencies -->
-        <h2 class="section-title">Agencies, Schools & Bulk Orders</h2>
-        <p class="section-sub">Support for EMS agencies, hospitals, and training programs.</p>
-
-        <details class="faq-item">
-          <summary>Do you offer bulk or agency pricing?</summary>
-          <p>
-            Yes. Tiered discounts typically start at 10 units per SKU, with deeper discounts for agency‑wide outfitting.
-            Contact sales@emsluxe.com with your gear list for a custom quote.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can you build custom kits for our department or school?</summary>
-          <p>
-            We regularly build custom trauma, airway, and student starter kits for fire/EMS agencies and education programs.
-            Send your checklist or syllabus, and we’ll propose an itemized kit.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do you accept purchase orders?</summary>
-          <p>
-            Verified agencies, hospitals, and accredited schools can be approved for purchase‑order terms
-            after a short account review. Email ap@emsluxe.com to start the process.
-          </p>
-        </details>
-
-        <!-- Product & Sizing -->
-        <h2 class="section-title">Products & Sizing</h2>
-        <p class="section-sub">Choosing the right model, fit, and configuration.</p>
-
-        <details class="faq-item">
-          <summary>Which stethoscope is best for EMT or paramedic students?</summary>
-          <p>
-            Our Classic Acoustic and Lightweight Student models are optimized for training labs and early ride‑alongs.
-            For advanced cardiac work, consider the Cardiology Pro line.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I choose the right size for pants or apparel?</summary>
-          <p>
-            Each apparel item includes a detailed size guide on its product page.
-            When between sizes, we recommend sizing up to allow for layering and movement onscene.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Are your trauma kits supplied with medications or IV fluids?</summary>
-          <p>
-            No. Due to regulatory requirements, we only provide hardware and consumables such as bandages and tools.
-            Medications and IV fluids must be sourced through appropriate medical supply channels.
-          </p>
-        </details>
-
-        <!-- Security & Privacy -->
-        <h2 class="section-title">Security & Privacy</h2>
-        <p class="section-sub">How we handle your data and keep your account safe.</p>
-
-        <details class="faq-item">
-          <summary>How is my personal data protected?</summary>
-          <p>
-            We encrypt account data at rest and in transit. We never sell personal data, and we honor GDPR/CCPA
-            requests to export or delete your profile when submitted through our privacy portal.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>Can I delete my account?</summary>
-          <p>
-            Yes. Contact privacy@emsluxe.com from your registered email address, and we’ll guide you through
-            verification and permanent account deletion.
-          </p>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I contact support if my question isn’t listed here?</summary>
-          <p>
-            You can reach us anytime at support@emsluxe.com, via the contact form on the Trust page,
-            or through live chat during business hours.
-          </p>
-        </details>
-
+      <div id="orders" class="faq-cat-header">
+        <div class="faq-cat-icon"><i class="fa-solid fa-credit-card"></i></div>
+        <h2>Ordering & Payments</h2>
       </div>
-    </section>
 
-    <!-- ========== PRE-FOOTER BENEFITS ========== -->
-    <section class="prefooter-benefits" aria-labelledby="benefits-title">
-      <div class="container">
-        <h2 id="benefits-title" class="sr-only">Customer Benefits</h2>
-        <div class="benefit-grid">
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-truck-fast"></i>
-            </div>
-            <h3>Fast Shipping</h3>
-            <p>Free shipping on orders over $50. Same-day dispatch available for in-stock items.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <h3>Quality Guaranteed</h3>
-            <p>All products field-tested by working EMS professionals. Lifetime warranty on select items.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-headset"></i>
-            </div>
-            <h3>24/7 Support</h3>
-            <p>Expert help whenever you need it. Live chat, phone, and email support available.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon" aria-hidden="true">
-              <i class="fa-solid fa-rotate-left"></i>
-            </div>
-            <h3>Easy Returns</h3>
-            <p>30-day hassle-free returns on non-sterile items. Your satisfaction is guaranteed.</p>
-          </article>
-
+      <details class="faq-item">
+        <summary>Which payment methods do you accept?</summary>
+        <div class="faq-body">
+          We support all major credit/debit cards (Visa, MasterCard, Amex), UPI, and secure Net Banking. For verified EMS agencies, we also offer Net-30 purchase order terms.
         </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I modify an order after it is placed?</summary>
+        <div class="faq-body">
+          Because we aim for rapid field deployment, orders enter our fulfillment queue within 2 hours. If you need to make changes, please contact support immediately with your Order ID.
+        </div>
+      </details>
+
+      <div id="shipping" class="faq-cat-header">
+        <div class="faq-cat-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <h2>Shipping & Logistics</h2>
       </div>
-    </section>
+
+      <details class="faq-item">
+        <summary>How fast is domestic shipping?</summary>
+        <div class="faq-body">
+          Most domestic orders are processed within 24-48 hours. Standard shipping typically takes 3-5 business days, while Express Deployment shipping takes 1-2 business days.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do you ship to APO/FPO addresses?</summary>
+        <div class="faq-body">
+          Yes. As a dedicated EMS supplier, we proudly ship to all military APO, FPO, and DPO addresses worldwide to support our deployed responders.
+        </div>
+      </details>
+
+      <div id="returns" class="faq-cat-header">
+        <div class="faq-cat-icon"><i class="fa-solid fa-rotate-left"></i></div>
+        <h2>Returns & Warranty</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>What is your professional return policy?</summary>
+        <div class="faq-body">
+          We offer a 30-day "Field-Ready" guarantee. Unused and non-sterile items can be returned for a full refund. Note that opened medical consumables cannot be returned due to biohazard safety protocols.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do stethoscopes come with a warranty?</summary>
+        <div class="faq-body">
+          Yes. Our premium diagnostic lines include a 5-year manufacturer warranty covering acoustic performance and tubing integrity. Select "Cardiology" models include lifetime replacement parts.
+        </div>
+      </details>
+
+      <div id="agency" class="faq-cat-header">
+        <div class="faq-cat-icon"><i class="fa-solid fa-building-shield"></i></div>
+        <h2>Agency & Bulk Orders</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>Do you offer discounts for entire departments?</summary>
+        <div class="faq-body">
+          Absolutely. We provide tiered volume pricing for EMS agencies, Fire Departments, and Hospital systems. Contact our Sales team for a customized bulk quotation.
+        </div>
+      </details>
+
+      <div id="security" class="faq-cat-header">
+        <div class="faq-cat-icon"><i class="fa-solid fa-user-lock"></i></div>
+        <h2>Security & Privacy</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>How is my personal data handled?</summary>
+        <div class="faq-body">
+          We utilize AES-256 bank-level encryption for all data at rest. We never store full credit card details on our servers, and we never sell your professional data to third-party advertisers.
+        </div>
+      </details>
+
+    </div>
   </main>
 
-  <!-- ========== FOOTER ========== -->
+  <div id="cartOverlay" class="cart-overlay"></div>
+  <aside id="cartDrawer" class="cart-drawer">
+    <div class="cart-header"><h3>Your Cart</h3><button id="cartClose" class="cart-close-btn">×</button></div>
+    <div id="cartItems" class="cart-body"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button id="checkoutBtn" class="btn"><i class="fa-solid fa-credit-card"></i> Checkout</button>
+    </div>
+  </aside>
+
+  <div id="checkoutModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header"><h3>Checkout</h3><button id="checkoutClose" class="modal-close-btn">×</button></div>
+      <div class="modal-body">
+        <form id="checkoutForm" class="checkout-form">
+          <input id="checkoutName" type="text" placeholder="Full name" required>
+          <input id="checkoutEmail" type="email" placeholder="Email" required>
+          <input id="checkoutPhone" type="tel" placeholder="Phone" required>
+          <textarea id="checkoutAddress" rows="3" placeholder="Address" required></textarea>
+          <div class="checkout-total-box">Total: $<span id="modalCartTotal">0.00</span></div>
+          <button id="checkoutSubmitBtn" type="submit" class="btn">Secure Checkout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-card auth-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+        <button id="authClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="ordersModal" class="modal-backdrop">
+    <div class="modal-card orders-wide-card" style="max-width: 600px;">
+      <div class="modal-header"><h3>Order History</h3><button id="ordersClose" class="modal-close-btn">×</button></div>
+      <div class="modal-body"><div id="ordersList" class="orders-container"></div></div>
+    </div>
+  </div>
+
   <footer class="footer-main">
     <div class="container">
       <div class="footer-columns">
         <div class="footer-col">
           <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
-          <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
+          <p>Premium field-ready gear for medical professionals.</p>
         </div>
         <div class="footer-col">
           <h4>Quick Links</h4>
-          <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
-          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
-          <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
-          <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
-          <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
+          <p><a href="../index.html">Home</a></p>
+          <p><a href="shop.html">Shop All</a></p>
+          <p><a href="contact.html">Contact</a></p>
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
@@ -317,11 +367,17 @@
         </div>
       </div>
       <div class="footer-bottom">
-        © 2026 EMS Luxe Supply. All rights reserved.
+        <p>
+          © 2026 EMS Luxe Supply. All rights reserved. |
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Service</a>
+        </p>
       </div>
     </div>
   </footer>
 
-<script src="../js/script.js" defer></script>
+  <script src="../js/api.js" defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/script.js" defer></script>
 </body>
 </html>

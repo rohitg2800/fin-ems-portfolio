@@ -1,211 +1,42 @@
-// Updated api.js - Connect to your EMS backend
-const API_BASE_URL = 'http://localhost:4000'; // Adjust port if needed
+// ems-frontend/js/api.js
 
-// Get CSRF token if your backend requires it
-async function getCSRFToken() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/csrf-token`, {
-            method: 'GET',
-            credentials: 'include'
-        });
-        const data = await response.json();
-        return data.token;
-    } catch (error) {
-        console.log('No CSRF token endpoint found');
-        return null;
+function resolveApiBase() {
+  if (window.EMS_API_BASE) return window.EMS_API_BASE;
+  const origin = window.location?.origin;
+  if (origin && origin.startsWith("http")) {
+    const isLocal = /localhost|127\.0\.0\.1/.test(origin);
+    const port = window.location?.port;
+    if (isLocal && port && port !== "3000" && port !== "4000") {
+      return "http://localhost:4000/api";
     }
+    return `${origin}/api`;
+  }
+  return "http://localhost:4000/api";
 }
 
-// Login function
-async function login(username, password) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-            credentials: 'include'
-        });
+const API_BASE_URL = resolveApiBase();
+window.EMS_API_BASE = API_BASE_URL;
 
-        if (response.ok) {
-            const data = await response.json();
-            return { success: true, data };
-        } else {
-            const error = await response.json();
-            return { success: false, error: error.message };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
+/**
+ * Defensive Fetch: Wraps the native fetch to handle 
+ * network errors and non-JSON responses.
+ */
+async function getProductsFromDB() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Critical: Backend API unreachable.", error);
+    // Return null so the UI can show a 'Maintenance' message
+    return null; 
+  }
 }
 
-// Get all employees
-async function getEmployees() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/employees`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const employees = await response.json();
-            return { success: true, data: employees };
-        } else {
-            return { success: false, error: 'Failed to fetch employees' };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Get employee by ID
-async function getEmployeeById(id) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/employees/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const employee = await response.json();
-            return { success: true, data: employee };
-        } else {
-            return { success: false, error: 'Employee not found' };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Add new employee
-async function addEmployee(employeeData) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/employees`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(employeeData),
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const employee = await response.json();
-            return { success: true, data: employee };
-        } else {
-            const error = await response.json();
-            return { success: false, error: error.message };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Update employee
-async function updateEmployee(id, employeeData) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/employees/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(employeeData),
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const employee = await response.json();
-            return { success: true, data: employee };
-        } else {
-            const error = await response.json();
-            return { success: false, error: error.message };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Delete employee
-async function deleteEmployee(id) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/employees/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            return { success: true, message: 'Employee deleted successfully' };
-        } else {
-            const error = await response.json();
-            return { success: false, error: error.message };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Search employees
-async function searchEmployees(query = '', department = '') {
-    try {
-        const params = new URLSearchParams();
-        if (query) params.append('q', query);
-        if (department) params.append('department', department);
-
-        const response = await fetch(`${API_BASE_URL}/api/employees/search?${params}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        if (response.ok) {
-            const employees = await response.json();
-            return { success: true, data: employees };
-        } else {
-            return { success: false, error: 'Failed to search employees' };
-        }
-    } catch (error) {
-        return { success: false, error: 'Network error' };
-    }
-}
-
-// Logout
-async function logout() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/logout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        return response.ok;
-    } catch (error) {
-        console.error('Logout error:', error);
-        return false;
-    }
-}
-
-// Export all functions
-window.API = {
-    login,
-    getEmployees,
-    getEmployeeById,
-    addEmployee,
-    updateEmployee,
-    deleteEmployee,
-    searchEmployees,
-    logout
-};
+// Expose for other scripts
+window.getProductsFromDB = getProductsFromDB;

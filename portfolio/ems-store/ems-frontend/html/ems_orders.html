@@ -3,1407 +3,357 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EMS Luxe Supply — Admin Orders</title>
+  <title>Employee Portal — EMS Luxe Supply</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
 
   <style>
+    /* Specific Admin Overrides to ensure the dashboard remains highly readable */
     :root {
-      --primary: #572403;
-      --primary-2: #7a3a0a;
-      --accent: #bc9437;
-      --accent-2: #ffd977;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --info: #2563eb;
-
       --bg: #f7f4ef;
-      --bg-soft: #fffaf0;
-      --card: rgba(255, 255, 255, 0.9);
       --card-strong: #ffffff;
-      --text: #1f1a17;
-      --muted: #6b7280;
       --border: rgba(87, 36, 3, 0.12);
-      --header: linear-gradient(135deg, #1d1209 0%, #572403 100%);
-      --shadow: 0 10px 30px rgba(87, 36, 3, 0.10);
-      --shadow-lg: 0 18px 50px rgba(87, 36, 3, 0.16);
-      --radius: 18px;
-      --radius-sm: 12px;
-      --radius-pill: 999px;
     }
-
     [data-theme="dark"] {
       --bg: #0b0a08;
-      --bg-soft: #15110d;
-      --card: rgba(23, 18, 16, 0.95);
       --card-strong: #171210;
-      --text: #f5efe2;
-      --muted: #c0b4a1;
-      --border: rgba(255, 217, 119, 0.12);
-      --header: linear-gradient(135deg, #171210 0%, #2b1b10 50%, #3d2717 100%);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.45);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
     }
 
     body {
+      background-color: var(--bg);
       font-family: 'Poppins', sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(188, 148, 55, 0.10), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(87, 36, 3, 0.08), transparent 24%),
-        var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
     }
 
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    .container {
-      width: min(1400px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .topbar {
-      background: var(--header);
-      color: white;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-
-    .topbar-inner {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: white;
-      text-decoration: none;
-    }
-
-    .brand-mark {
-      width: 46px;
-      height: 46px;
+    .admin-stats-container {
       display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.14);
-      font-size: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
     }
 
-    .brand-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .fine {
-      font-size: 12px;
-      opacity: 0.85;
-      letter-spacing: 1.8px;
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .ghost-btn,
-    .theme-toggle,
-    .btn {
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.25s ease;
-    }
-
-    .ghost-btn,
-    .theme-toggle {
-      padding: 10px 14px;
-      color: white;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.14);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .ghost-btn:hover,
-    .theme-toggle:hover {
-      background: rgba(255,255,255,0.16);
-      transform: translateY(-1px);
-    }
-
-    .hero {
-      padding: 34px 0 12px;
-    }
-
-    .hero-card {
-      background: linear-gradient(135deg, rgba(87, 36, 3, 0.96) 0%, rgba(122, 58, 10, 0.96) 100%);
-      color: #fff8ea;
-      border-radius: 26px;
-      padding: 28px;
-      box-shadow: var(--shadow-lg);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at top right, rgba(255, 217, 119, 0.22), transparent 26%),
-        radial-gradient(circle at bottom left, rgba(255,255,255,0.08), transparent 24%);
-      pointer-events: none;
-    }
-
-    .hero-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .hero h1 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      opacity: 0.92;
-      max-width: 760px;
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .hero-chip {
-      background: rgba(255,255,255,0.12);
-      color: #fff6db;
-      border: 1px solid rgba(255,255,255,0.14);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section {
-      padding: 24px 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px 20px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: "";
-      position: absolute;
-      inset: auto -20px -20px auto;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(188, 148, 55, 0.18), transparent 70%);
-      pointer-events: none;
-    }
-
-    .stat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: rgba(188, 148, 55, 0.14);
-      color: var(--primary);
-      font-size: 16px;
-    }
-
-    [data-theme="dark"] .stat-icon {
-      color: var(--accent-2);
-      background: rgba(255, 217, 119, 0.10);
-    }
-
-    .stat-number {
-      font-size: clamp(1.7rem, 3vw, 2.2rem);
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1.1;
-    }
-
-    [data-theme="dark"] .stat-number {
-      color: var(--accent-2);
-    }
-
-    .stat-sub {
-      margin-top: 6px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .panel-header {
-      padding: 22px 22px 0;
-    }
-
-    .panel-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .panel-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.4rem;
-    }
-
-    .panel-sub {
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: 14px;
-    }
-
-    .controls-wrap {
-      padding: 20px 22px 22px;
-    }
-
-    .controls-bar {
-      display: grid;
-      grid-template-columns: 1.4fr 0.8fr 0.8fr auto auto;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .field {
-      position: relative;
-    }
-
-    .field i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
-
-    .input,
-    .select {
-      width: 100%;
-      padding: 12px 14px 12px 40px;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 14px;
-      outline: none;
-      transition: 0.2s ease;
-    }
-
-    .select {
-      padding-left: 14px;
-    }
-
-    .input:focus,
-    .select:focus {
-      border-color: rgba(188, 148, 55, 0.7);
-      box-shadow: 0 0 0 4px rgba(188, 148, 55, 0.12);
-    }
-
-    .btn {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
-      color: white;
-      padding: 12px 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: 600;
-      min-height: 46px;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.96;
-    }
-
-    .btn.alt {
-      background: linear-gradient(135deg, var(--accent) 0%, #d7ab49 100%);
-      color: #2b1806;
-    }
-
-    .table-wrap {
-      padding: 0 22px 22px;
-    }
-
-    .table-shell {
-      overflow: auto;
-      border-radius: 18px;
-      border: 1px solid var(--border);
+    .admin-stat-card {
       background: var(--card-strong);
+      padding: 25px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .admin-table-container {
+      background: var(--card-strong);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.04);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 980px;
     }
 
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      background: linear-gradient(180deg, rgba(188,148,55,0.16), rgba(188,148,55,0.08));
-      color: var(--text);
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
-    }
-
-    th, td {
-      padding: 16px 14px;
+    th {
+      background: rgba(188, 148, 55, 0.05);
+      padding: 18px;
       text-align: left;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-
-    tbody tr {
-      transition: background 0.2s ease;
-    }
-
-    tbody tr:hover {
-      background: rgba(188, 148, 55, 0.06);
-    }
-
-    .mono {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    .order-id {
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    [data-theme="dark"] .order-id {
-      color: var(--accent-2);
-    }
-
-    .customer-name {
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .customer-sub {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .amount {
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    [data-theme="dark"] .amount {
-      color: var(--accent-2);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      white-space: nowrap;
+      letter-spacing: 1px;
+      color: var(--primary);
     }
 
-    .badge.confirmed {
-      background: rgba(22, 163, 74, 0.14);
-      color: var(--success);
+    td {
+      padding: 18px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .order-id-badge {
+      font-family: monospace;
+      font-weight: bold;
+      color: var(--primary);
+      background: rgba(188, 148, 55, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
     }
 
-    .mini-btn {
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-      color: var(--text);
+    .status-confirmed {
+      color: #16a34a;
+      background: rgba(22, 163, 74, 0.1);
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      background: rgba(220, 38, 38, 0.1);
+      color: #dc2626;
+      border: 1px solid #dc2626;
+      padding: 8px 16px;
       border-radius: 10px;
-      padding: 8px 10px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      transition: 0.2s ease;
+      transition: 0.3s;
     }
 
-    .mini-btn:hover {
-      border-color: rgba(188, 148, 55, 0.5);
-      background: rgba(188, 148, 55, 0.08);
-    }
-
-    .empty-state {
-      display: none;
-      padding: 68px 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .empty-icon {
-      width: 78px;
-      height: 78px;
-      margin: 0 auto 16px;
-      border-radius: 24px;
-      display: grid;
-      place-items: center;
-      background: rgba(188, 148, 55, 0.12);
-      color: var(--accent);
-      font-size: 30px;
-    }
-
-    .empty-state h3 {
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .footer-note {
-      padding: 0 22px 22px;
-      color: var(--muted);
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transition: 0.25s ease;
-      z-index: 1000;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal-backdrop.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .modal {
-      width: min(760px, 100%);
-      max-height: 90vh;
-      overflow: auto;
-      background: var(--card-strong);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow-lg);
-      transform: translateY(16px) scale(0.98);
-      transition: 0.25s ease;
-    }
-
-    .modal-backdrop.active .modal {
-      transform: translateY(0) scale(1);
-    }
-
-    .modal-header {
-      padding: 22px 24px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: var(--card-strong);
-      z-index: 2;
-    }
-
-    .modal-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
-    }
-
-    .modal-close {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-      color: var(--text);
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    .modal-close:hover {
-      background: rgba(188, 148, 55, 0.08);
-    }
-
-    .modal-body {
-      padding: 24px;
-    }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 20px;
-    }
-
-    .detail-card {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .detail-card h4 {
-      font-size: 13px;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .detail-main {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .detail-sub {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 4px;
-      word-break: break-word;
-    }
-
-    .items-card {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .items-card h4 {
-      margin-bottom: 12px;
-      font-size: 13px;
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .item-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .item-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 14px;
-      background: var(--card-strong);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-    }
-
-    .item-name {
-      font-weight: 600;
-      word-break: break-word;
-    }
-
-    .item-meta {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .modal-total {
-      display: flex;
-      justify-content: flex-end;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    [data-theme="dark"] .modal-total {
-      color: var(--accent-2);
-    }
-
-    .toast {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      background: var(--card-strong);
-      color: var(--text);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      border-radius: 14px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1200;
-      min-width: 240px;
-      max-width: 340px;
-      transform: translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transition: 0.25s ease;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .toast i {
-      color: var(--success);
-    }
-
-    @media (max-width: 1100px) {
-      .controls-bar {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .controls-bar > *:last-child,
-      .controls-bar > *:nth-last-child(2) {
-        width: 100%;
-      }
-
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-meta {
-        justify-content: flex-start;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 720px) {
-      .container {
-        width: min(100% - 20px, 1400px);
-      }
-
-      .topbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 12px 0;
-      }
-
-      .topbar-actions {
-        justify-content: space-between;
-      }
-
-      .hero-card {
-        padding: 22px;
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .controls-bar {
-        grid-template-columns: 1fr;
-      }
-
-      .details-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .modal-body,
-      .modal-header,
-      .panel-header,
-      .controls-wrap,
-      .table-wrap,
-      .footer-note {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      table {
-        min-width: 860px;
-      }
+    .logout-btn:hover {
+      background: #dc2626;
+      color: white;
     }
   </style>
+
+  <script>
+    // --- ADMINISTRATIVE GUARD (RUNS IMMEDIATELY) ---
+    (function protectPage() {
+      const token = localStorage.getItem('ems_admin_token');
+      if (!token) {
+        window.location.href = 'admin-login.html';
+      }
+    })();
+  </script>
 </head>
 <body>
 
   <header class="topbar">
-    <div class="container">
-      <div class="topbar-inner">
-        <a href="../index.html" class="brand">
-          <div class="brand-mark">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <div>
-            <div class="brand-title">EMS LUXE SUPPLY</div>
-            <div class="fine">ADMIN ORDERS</div>
-          </div>
-        </a>
-
-        <div class="topbar-actions">
-          <a href="../index.html" class="ghost-btn">
-            <i class="fa-solid fa-store"></i>
-            Back to Store
-          </a>
-          <button id="themeToggle" class="theme-toggle" type="button">
-            <i class="fa-solid fa-moon" id="themeIcon"></i>
-            <span id="themeText">Dark</span>
-          </button>
+    <div class="container topbar-inner">
+      <a href="../index.html" class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div>
+          <div class="brand-title">EMS LUXE SUPPLY</div>
+          <div class="fine">ADMINISTRATIVE PORTAL</div>
         </div>
+      </a>
+
+      <div class="topbar-actions">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
+          <span id="themeText">Dark</span>
+        </button>
+        <button onclick="adminLogout()" class="logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
       </div>
     </div>
   </header>
 
-  <section class="hero">
-    <div class="container">
-      <div class="hero-card">
-        <div class="hero-grid">
-          <div>
-            <h1>Orders Dashboard</h1>
-            <p>Monitor customer purchases, review order details, search instantly, and export clean CSV reports from one premium admin panel.</p>
-          </div>
+  <main class="container" style="padding: 40px 0;">
+    
+    <div class="hero-card" style="margin-bottom: 40px; background: linear-gradient(135deg, var(--primary), var(--primary-2));">
+       <h1 style="color: white; font-family: 'Cinzel';">Executive Dashboard</h1>
+       <p style="color: rgba(255,255,255,0.8);">Real-time monitoring of global inventory transactions and customer fulfillment.</p>
+    </div>
 
-          <div class="hero-meta">
-            <div class="hero-chip">
-              <i class="fa-solid fa-rotate"></i>
-              <span id="lastUpdated">Updated just now</span>
-            </div>
-            <div class="hero-chip">
-              <i class="fa-solid fa-database"></i>
-              Local Storage Sync
-            </div>
-            <div class="hero-chip">
-              <i class="fa-solid fa-file-export"></i>
-              CSV Export Ready
-            </div>
-          </div>
-        </div>
+    <div class="admin-stats-container">
+      <div class="admin-stat-card">
+        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 700;">TOTAL REVENUE</div>
+        <div id="totalRevenue" style="font-size: 2rem; font-weight: 700; color: var(--primary);">$0.00</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 700;">TOTAL ORDERS</div>
+        <div id="totalOrders" style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 700;">SYSTEM STATUS</div>
+        <div style="color: #16a34a; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Encrypted & Live</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 700;">TOP SKUS</div>
+        <div id="topSkusList" style="margin-top: 12px; display: grid; gap: 10px;"></div>
       </div>
     </div>
-  </section>
 
-  <main class="container">
-    <section class="section">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">Total Orders</div>
-            <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
-          </div>
-          <div class="stat-number" id="totalOrders">0</div>
-          <div class="stat-sub">All-time orders stored locally</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">Revenue</div>
-            <div class="stat-icon"><i class="fa-solid fa-dollar-sign"></i></div>
-          </div>
-          <div class="stat-number" id="totalRevenue">$0.00</div>
-          <div class="stat-sub">Combined value of all orders</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">Avg Order</div>
-            <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
-          </div>
-          <div class="stat-number" id="avgOrder">$0.00</div>
-          <div class="stat-sub">Average order value</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-top">
-            <div class="stat-label">Today</div>
-            <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
-          </div>
-          <div class="stat-number" id="todayOrders">0</div>
-          <div class="stat-sub">Orders created today</div>
-        </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 25px; align-items: center;">
+      <div style="flex: 1; position: relative;">
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 15px; color: var(--muted);"></i>
+        <input type="text" id="searchInput" placeholder="Search by name, email, or order ID..." style="width: 100%; padding: 12px 12px 12px 45px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-strong); color: var(--text);">
       </div>
-    </section>
+      <button class="btn alt" onclick="exportToCSV()"><i class="fa-solid fa-file-csv"></i> Export Data</button>
+    </div>
 
-    <section class="section">
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title-row">
-            <div>
-              <div class="panel-title">Order Management</div>
-              <div class="panel-sub">Search, sort, inspect, and export your EMS Luxe Supply orders.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="controls-wrap">
-          <div class="controls-bar">
-            <div class="field">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input id="searchInput" class="input" type="text" placeholder="Search by order ID, customer name, email, or phone">
-            </div>
-
-            <select id="sortSelect" class="select">
-              <option value="newest">Sort: Newest first</option>
-              <option value="oldest">Sort: Oldest first</option>
-              <option value="highest">Sort: Highest total</option>
-              <option value="lowest">Sort: Lowest total</option>
-              <option value="name">Sort: Customer name</option>
-            </select>
-
-            <select id="dateFilter" class="select">
-              <option value="all">Filter: All dates</option>
-              <option value="today">Today</option>
-              <option value="7">Last 7 days</option>
-              <option value="30">Last 30 days</option>
-            </select>
-
-            <button class="btn" id="refreshBtn" type="button">
-              <i class="fa-solid fa-rotate"></i>
-              Refresh
-            </button>
-
-            <button class="btn alt" id="exportBtn" type="button">
-              <i class="fa-solid fa-file-csv"></i>
-              Export CSV
-            </button>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-          <div class="table-shell">
-            <table id="ordersTable">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date</th>
-                  <th>Customer</th>
-                  <th>Items</th>
-                  <th>Total</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="ordersBody"></tbody>
-            </table>
-          </div>
-
-          <div id="emptyState" class="empty-state">
-            <div class="empty-icon">
-              <i class="fa-solid fa-box-open"></i>
-            </div>
-            <h3>No Orders Found</h3>
-            <p>Try changing your search or filters, or place a test order from the storefront.</p>
-          </div>
-        </div>
-
-        <div class="footer-note">
-          <span id="resultsText">Showing 0 orders</span>
-          <span>Auto-refresh every 30 seconds</span>
-        </div>
-      </div>
-    </section>
+    <div class="admin-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody">
+          </tbody>
+      </table>
+    </div>
   </main>
 
-  <div id="orderModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+  <div id="orderModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 600px;">
       <div class="modal-header">
-        <h3 class="modal-title" id="orderModalTitle">Order Details</h3>
-        <button class="modal-close" id="orderModalClose" type="button" aria-label="Close modal">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <h3 id="modalTitle">Order Details</h3>
+        <button id="closeModal" class="modal-close-btn">×</button>
       </div>
-      <div class="modal-body" id="orderModalBody"></div>
+      <div class="modal-body" id="modalContent"></div>
     </div>
-  </div>
-
-  <div id="toast" class="toast">
-    <i class="fa-solid fa-circle-check"></i>
-    <span id="toastText">Done</span>
   </div>
 
   <script>
-    const THEME_KEY = 'ems_admin_theme';
-    const ORDERS_KEY = 'ems_orders';
+    const API_BASE = (() => {
+      const origin = window.location?.origin;
+      if (origin && origin.startsWith("http")) {
+        const isLocal = /localhost|127\.0\.0\.1/.test(origin);
+        const port = window.location?.port;
+        if (isLocal && port && port !== "3000" && port !== "4000") {
+          return "http://localhost:4000/api";
+        }
+        return `${origin}/api`;
+      }
+      return "http://localhost:4000/api";
+    })();
     let allOrders = [];
-    let filteredOrders = [];
+    let statsLoaded = false;
 
-    const $ = (id) => document.getElementById(id);
-
-    function escapeHTML(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    function adminLogout() {
+      localStorage.removeItem('ems_admin_token');
+      window.location.href = 'admin-login.html';
     }
 
-    function showToast(message) {
-      const toast = $('toast');
-      const text = $('toastText');
-      text.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2200);
-    }
-
-    function initTheme() {
-      const saved = localStorage.getItem(THEME_KEY) || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
-      updateThemeUI(saved);
-    }
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem(THEME_KEY, next);
-      updateThemeUI(next);
-    }
-
-    function updateThemeUI(theme) {
-      $('themeIcon').className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-      $('themeText').textContent = theme === 'dark' ? 'Light' : 'Dark';
-    }
-
-    function loadOrders() {
+    async function fetchLiveOrders() {
+      const token = localStorage.getItem('ems_admin_token');
+      const body = document.getElementById('ordersBody');
+      
       try {
-        const raw = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
-        return Array.isArray(raw) ? raw : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function formatMoney(n) {
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(Number(n) || 0);
-    }
-
-    function formatDate(dateStr) {
-      try {
-        const d = new Date(dateStr);
-        if (Number.isNaN(d.getTime())) return 'Invalid date';
-        return d.toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+        const res = await fetch(`${API_BASE}/admin/orders`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
-      } catch {
-        return 'Invalid date';
+        
+        if (res.status === 401 || res.status === 403) return adminLogout();
+
+        allOrders = await res.json();
+        renderTable(allOrders);
+        if (!statsLoaded) {
+          updateStats(allOrders);
+        }
+      } catch (err) {
+        body.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:40px;">Failed to connect to Secure Database.</td></tr>`;
       }
     }
 
-    function getItemCount(order) {
-      return Object.values(order.items || {}).reduce((sum, qty) => {
-        return sum + (parseInt(qty, 10) || 0);
-      }, 0);
+    function renderTable(orders) {
+      const body = document.getElementById('ordersBody');
+      body.innerHTML = orders.map(o => `
+        <tr>
+          <td><span class="order-id-badge">#${o.id || o.orderId}</span></td>
+          <td>
+            <div style="font-weight:600;">${o.name || o.user_name}</div>
+            <div style="font-size:0.8rem; color:var(--muted);">${o.email}</div>
+          </td>
+          <td style="font-size:0.9rem;">${new Date(o.created_at || o.date).toLocaleDateString()}</td>
+          <td style="font-weight:700; color:var(--primary);">$${parseFloat(o.total).toFixed(2)}</td>
+          <td><span class="status-confirmed">Confirmed</span></td>
+          <td>
+            <button class="btn secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="viewDetails(${o.id || o.orderId})">View Details</button>
+          </td>
+        </tr>
+      `).join('');
     }
 
-    function updateLastUpdated() {
-      const now = new Date();
-      $('lastUpdated').textContent = `Updated ${now.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-      })}`;
+    function updateStats(orders) {
+      const total = orders.reduce((sum, o) => sum + parseFloat(o.total), 0);
+      document.getElementById('totalRevenue').textContent = `$${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+      document.getElementById('totalOrders').textContent = orders.length;
     }
 
-    function renderStats(orders) {
-      const totalOrders = orders.length;
-      const totalRevenue = orders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
-      const avgOrder = totalOrders ? totalRevenue / totalOrders : 0;
-      const today = new Date().toDateString();
-      const todayOrders = orders.filter(order => {
-        const d = new Date(order.date);
-        return !Number.isNaN(d.getTime()) && d.toDateString() === today;
-      }).length;
-
-      $('totalOrders').textContent = totalOrders;
-      $('totalRevenue').textContent = formatMoney(totalRevenue);
-      $('avgOrder').textContent = formatMoney(avgOrder);
-      $('todayOrders').textContent = todayOrders;
-    }
-
-    function sortOrders(orders, sortBy) {
-      const sorted = [...orders];
-      switch (sortBy) {
-        case 'oldest':
-          sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
-          break;
-        case 'highest':
-          sorted.sort((a, b) => (Number(b.total) || 0) - (Number(a.total) || 0));
-          break;
-        case 'lowest':
-          sorted.sort((a, b) => (Number(a.total) || 0) - (Number(b.total) || 0));
-          break;
-        case 'name':
-          sorted.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
-          break;
-        case 'newest':
-        default:
-          sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
-      }
-      return sorted;
-    }
-
-    function filterOrders(orders) {
-      const query = $('searchInput').value.trim().toLowerCase();
-      const dateFilter = $('dateFilter').value;
-
-      let result = orders.filter(order => {
-        const haystack = [
-          order.orderId,
-          order.name,
-          order.email,
-          order.phone,
-          order.address
-        ]
-          .join(' ')
-          .toLowerCase();
-
-        return haystack.includes(query);
-      });
-
-      if (dateFilter !== 'all') {
-        const now = new Date();
-        result = result.filter(order => {
-          const d = new Date(order.date);
-          if (Number.isNaN(d.getTime())) return false;
-
-          if (dateFilter === 'today') {
-            return d.toDateString() === now.toDateString();
-          }
-
-          const days = Number(dateFilter);
-          const diff = now - d;
-          return diff <= days * 24 * 60 * 60 * 1000;
-        });
-      }
-
-      result = sortOrders(result, $('sortSelect').value);
-      return result;
-    }
-
-    function renderOrdersTable(orders) {
-      const tbody = $('ordersBody');
-      const table = $('ordersTable');
-      const empty = $('emptyState');
-      const resultsText = $('resultsText');
-
-      if (!orders.length) {
-        tbody.innerHTML = '';
-        table.style.display = 'none';
-        empty.style.display = 'block';
-        resultsText.textContent = 'Showing 0 orders';
+    function renderTopSkus(list) {
+      const container = document.getElementById('topSkusList');
+      if (!container) return;
+      if (!list || !list.length) {
+        container.innerHTML = `<div style="color: var(--muted); font-size: 0.85rem;">No sales yet.</div>`;
         return;
       }
 
-      table.style.display = 'table';
-      empty.style.display = 'block';
-      empty.style.display = 'none';
-      resultsText.textContent = `Showing ${orders.length} order${orders.length === 1 ? '' : 's'}`;
-
-      tbody.innerHTML = orders.map(order => {
-        const itemCount = getItemCount(order);
-        return `
-          <tr>
-            <td>
-              <div class="mono order-id">${escapeHTML(order.orderId || 'N/A')}</div>
-            </td>
-            <td>${escapeHTML(formatDate(order.date))}</td>
-            <td>
-              <div class="customer-name">${escapeHTML(order.name || 'Unknown')}</div>
-              <div class="customer-sub">${escapeHTML(order.email || 'No email')}</div>
-              <div class="customer-sub">${escapeHTML(order.phone || 'No phone')}</div>
-            </td>
-            <td>${itemCount}</td>
-            <td><span class="amount">${escapeHTML(formatMoney(order.total))}</span></td>
-            <td><span class="badge confirmed"><i class="fa-solid fa-circle-check"></i> Confirmed</span></td>
-            <td>
-              <div class="actions">
-                <button class="mini-btn" type="button" onclick="showOrderDetails('${escapeHTML(order.orderId)}')">
-                  <i class="fa-solid fa-eye"></i> View
-                </button>
-                <button class="mini-btn" type="button" onclick="copyOrderId('${escapeHTML(order.orderId)}')">
-                  <i class="fa-solid fa-copy"></i> Copy
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderItemRows(items) {
-      const entries = Object.entries(items || {});
-      if (!entries.length) {
-        return `<div class="item-row"><div class="item-name">No item details available</div></div>`;
-      }
-
-      return entries.map(([id, qty]) => `
-        <div class="item-row">
-          <div>
-            <div class="item-name">${escapeHTML(id)}</div>
-            <div class="item-meta">Product ID</div>
-          </div>
-          <div class="item-name">Qty: ${escapeHTML(qty)}</div>
+      container.innerHTML = list.map(item => `
+        <div style="display:flex; justify-content: space-between; gap: 12px; font-size: 0.9rem;">
+          <div style="font-weight: 600;">${item.name}</div>
+          <div style="color: var(--primary); font-weight: 700;">${item.units} sold</div>
         </div>
       `).join('');
     }
 
-    function showOrderDetails(orderId) {
-      const order = allOrders.find(o => o.orderId === orderId);
-      if (!order) return;
+    async function fetchAdminStats() {
+      const token = localStorage.getItem('ems_admin_token');
+      try {
+        const res = await fetch(`${API_BASE}/admin/stats`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Stats fetch failed');
+        const data = await res.json();
 
-      $('orderModalTitle').textContent = `Order ${order.orderId}`;
-      $('orderModalBody').innerHTML = `
-        <div class="details-grid">
-          <div class="detail-card">
-            <h4>Customer</h4>
-            <div class="detail-main">${escapeHTML(order.name || 'Unknown')}</div>
-            <div class="detail-sub">${escapeHTML(order.email || 'No email')}</div>
-            <div class="detail-sub">${escapeHTML(order.phone || 'No phone')}</div>
+        statsLoaded = true;
+        document.getElementById('totalRevenue').textContent =
+          `$${Number(data.totalRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        document.getElementById('totalOrders').textContent = Number(data.totalOrders || 0);
+        renderTopSkus(data.topSkus || []);
+      } catch (err) {
+        statsLoaded = false;
+        renderTopSkus([]);
+      }
+    }
+
+    // Search Filtering
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const val = e.target.value.toLowerCase();
+      const filtered = allOrders.filter(o => 
+        o.name?.toLowerCase().includes(val) || 
+        o.email?.toLowerCase().includes(val) || 
+        String(o.id).includes(val)
+      );
+      renderTable(filtered);
+    });
+
+    document.getElementById('closeModal').onclick = () => document.getElementById('orderModal').classList.remove('active');
+
+    window.viewDetails = (id) => {
+      const o = allOrders.find(order => (order.id || order.orderId) == id);
+      const modal = document.getElementById('orderModal');
+      const content = document.getElementById('modalContent');
+      
+      content.innerHTML = `
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <div>
+            <h4 style="margin-bottom:10px; color:var(--primary);">Customer Info</h4>
+            <p><strong>Phone:</strong> ${o.phone || 'N/A'}</p>
+            <p><strong>Address:</strong><br>${o.address || 'N/A'}</p>
           </div>
-
-          <div class="detail-card">
-            <h4>Order Info</h4>
-            <div class="detail-main mono">${escapeHTML(order.orderId || 'N/A')}</div>
-            <div class="detail-sub">${escapeHTML(formatDate(order.date))}</div>
-            <div class="detail-sub">Status: Confirmed</div>
+          <div>
+            <h4 style="margin-bottom:10px; color:var(--primary);">Order Timeline</h4>
+            <p><strong>Processed:</strong> ${new Date(o.created_at || o.date).toLocaleString()}</p>
+            <p><strong>Security:</strong> AES-256 Encrypted</p>
           </div>
-
-          <div class="detail-card" style="grid-column: 1 / -1;">
-            <h4>Delivery Address</h4>
-            <div class="detail-main">${escapeHTML(order.address || 'No address')}</div>
-          </div>
-        </div>
-
-        <div class="items-card">
-          <h4>Items Ordered</h4>
-          <div class="item-list">
-            ${renderItemRows(order.items)}
-          </div>
-        </div>
-
-        <div class="modal-total">
-          Total: ${escapeHTML(formatMoney(order.total))}
         </div>
       `;
-
-      $('orderModal').classList.add('active');
-      $('orderModal').setAttribute('aria-hidden', 'false');
-    }
-
-    function closeOrderModal() {
-      $('orderModal').classList.remove('active');
-      $('orderModal').setAttribute('aria-hidden', 'true');
-    }
-
-    async function copyOrderId(orderId) {
-      try {
-        await navigator.clipboard.writeText(orderId);
-        showToast(`Copied ${orderId}`);
-      } catch {
-        showToast('Unable to copy order ID');
-      }
-    }
-
-    function applyFiltersAndRender() {
-      filteredOrders = filterOrders(allOrders);
-      renderOrdersTable(filteredOrders);
-    }
-
-    function refreshData(showMessage = false) {
-      allOrders = loadOrders();
-      renderStats(allOrders);
-      applyFiltersAndRender();
-      updateLastUpdated();
-      if (showMessage) showToast('Orders refreshed');
-    }
+      modal.classList.add('active');
+    };
 
     function exportToCSV() {
-      const orders = filteredOrders.length ? filteredOrders : [];
-      if (!orders.length) {
-        showToast('No orders to export');
-        return;
-      }
-
-      const headers = [
-        'Order ID',
-        'Date',
-        'Name',
-        'Email',
-        'Phone',
-        'Address',
-        'Items',
-        'Item Count',
-        'Total',
-        'Status'
-      ];
-
-      const esc = (value) => {
-        const str = String(value ?? '').replace(/"/g, '""');
-        return `"${str}"`;
-      };
-
-      const rows = orders.map(order => {
-        const itemText = Object.entries(order.items || {})
-          .map(([id, qty]) => `${id} x ${qty}`)
-          .join(' | ');
-
-        return [
-          esc(order.orderId),
-          esc(order.date),
-          esc(order.name),
-          esc(order.email),
-          esc(order.phone),
-          esc((order.address || '').replace(/\s+/g, ' ').trim()),
-          esc(itemText),
-          esc(getItemCount(order)),
-          esc(Number(order.total || 0).toFixed(2)),
-          esc('Confirmed')
-        ].join(',');
-      });
-
-      const csv = [headers.map(esc).join(','), ...rows].join('\n');
-      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-
-      link.href = url;
-      link.download = `EMS_Orders_${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      showToast('CSV exported successfully');
+        const headers = ["Order ID", "Customer", "Email", "Total", "Date"];
+        const rows = allOrders.map(o => [o.id, o.name, o.email, o.total, o.created_at]);
+        let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "ems_luxe_orders.csv");
+        document.body.appendChild(link);
+        link.click();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      refreshData();
-
-      $('themeToggle').addEventListener('click', toggleTheme);
-      $('refreshBtn').addEventListener('click', () => refreshData(true));
-      $('exportBtn').addEventListener('click', exportToCSV);
-      $('searchInput').addEventListener('input', applyFiltersAndRender);
-      $('sortSelect').addEventListener('change', applyFiltersAndRender);
-      $('dateFilter').addEventListener('change', applyFiltersAndRender);
-      $('orderModalClose').addEventListener('click', closeOrderModal);
-
-      $('orderModal').addEventListener('click', (e) => {
-        if (e.target === $('orderModal')) closeOrderModal();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeOrderModal();
-      });
-
-      setInterval(() => refreshData(false), 30000);
+      fetchAdminStats();
+      fetchLiveOrders();
     });
   </script>
 </body>

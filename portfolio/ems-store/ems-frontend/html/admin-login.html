@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restricted Access — EMS Luxe Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="admin-login-page">
+    <div class="admin-login-card">
+        <i class="fa-solid fa-user-shield brand-icon"></i>
+        <h2 class="admin-login-title">Admin Portal</h2>
+        <p class="admin-login-subtitle">Employee Authorization Required</p>
+        <form id="adminLoginForm" class="auth-form-content">
+            <label class="auth-field">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="adminEmail" placeholder="Admin Email" required>
+            </label>
+            <label class="auth-field">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="adminPassword" placeholder="Secret Key" required>
+            </label>
+            <button type="submit" class="btn">Authorize Access</button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = (() => {
+            const origin = window.location?.origin;
+            if (origin && origin.startsWith("http")) {
+                const isLocal = /localhost|127\.0\.0\.1/.test(origin);
+                const port = window.location?.port;
+                if (isLocal && port && port !== "3000" && port !== "4000") {
+                    return "http://localhost:4000/api";
+                }
+                return `${origin}/api`;
+            }
+            return "http://localhost:4000/api";
+        })();
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (data.success && data.user.role === 'admin') {
+                    localStorage.setItem('ems_admin_token', data.token);
+                    window.location.href = 'ems_orders.html';
+                } else {
+                    alert('Access Denied: Invalid Admin Credentials');
+                }
+            } catch (err) {
+                alert('Server Error');
+            }
+        });
+    </script>
+</body>
+</html>

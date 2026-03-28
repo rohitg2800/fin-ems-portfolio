@@ -3,227 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>EMS Luxe Supply — Shop</title>
-
+  <title>Shop All Gear — EMS Luxe Supply</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* Premium Filter Bar Styling */
+    .shop-filters {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 40px 0;
+    }
+    .cat-btn {
+      padding: 10px 24px;
+      border: 2px solid var(--primary);
+      background: transparent;
+      color: var(--text-color);
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(87, 36, 3, 0.3);
+    }
+    [data-theme="dark"] .cat-btn { color: var(--text); border-color: var(--accent); }
+    [data-theme="dark"] .cat-btn.active, [data-theme="dark"] .cat-btn:hover { background: var(--accent); color: #111; }
+  </style>
 </head>
 
 <body data-theme="light">
   <header class="topbar">
     <div class="container topbar-inner">
       <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
 
-      <a class="brand" href="../index.html" aria-label="EMS Luxe Supply Home">
-        <div class="brand-mark" aria-hidden="true">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+      <a class="brand" href="../index.html">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
         <div>
           <div class="brand-title">EMS LUXE SUPPLY</div>
           <div class="fine">PREMIUM FIELD GEAR</div>
         </div>
       </a>
-
-      <nav class="nav" id="mainNav" aria-label="Main navigation">
+      <nav class="nav" id="mainNav">
         <a href="../index.html"><i class="fa-solid fa-house"></i> Home</a>
         <a href="shop.html" aria-current="page"><i class="fa-solid fa-store"></i> Shop</a>
         <a href="stethoscopes.html"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</a>
-        <a href="trust.html"><i class="fa-solid fa-shield-alt"></i> Trust</a>
+        <a href="trust.html"><i class="fa-solid fa-shield-halved"></i> Trust</a>
         <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
         <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+        <div id="authNavSection" class="auth-nav-wrapper"></div>
       </nav>
-
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
         <i class="fa-solid fa-moon" id="themeIcon" aria-hidden="true"></i>
         <span id="themeText">Dark</span>
       </button>
-
-      <button id="cartBtn" class="icon-btn" aria-label="Shopping cart">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span id="cartBadge" class="badge" aria-live="polite" aria-atomic="true">0</span>
-      </button>
+      <button id="cartBtn" class="icon-btn"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="badge">0</span></button>
     </div>
   </header>
-
-  <div class="container" style="margin-top: 20px; text-align: center;">
-    <a href="../index.html" class="btn">
-      <i class="fa-solid fa-house"></i> Main Page
-    </a>
-  </div>
 
   <main>
     <section class="hero hero-compact">
       <div class="container">
         <div class="hero-card">
-          <h1 class="hero-title">Shop All Products</h1>
-          <p class="hero-sub">
-            Field-tested stethoscopes, tactical kits, responder apparel, and mission-ready EMS tools built for performance and daily duty use.
-          </p>
+          <h1 class="hero-title">The Complete Armory</h1>
+          <p class="hero-sub">Over 40+ pieces of professional-grade equipment. Filter below to find your specific deployment needs.</p>
         </div>
       </div>
     </section>
 
-    <section id="stethoscopes">
+    <section>
       <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-stethoscope"></i> Stethoscopes</h2>
-        <p class="section-sub">Acoustic and electronic diagnostic tools for students and professionals.</p>
-        <div id="gridStethoscopes" class="grid" role="list"></div>
-      </div>
-    </section>
-
-    <section id="kits">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-kit-medical"></i> Kits</h2>
-        <p class="section-sub">Ready-to-carry trauma kits, student bundles, and tactical field solutions.</p>
-        <div id="gridKits" class="grid" role="list"></div>
-      </div>
-    </section>
-
-    <section id="apparel">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-shirt"></i> Apparel</h2>
-        <p class="section-sub">Professional tactical apparel engineered for mobility, durability, and shift comfort.</p>
-        <div id="gridApparel" class="grid" role="list"></div>
-      </div>
-    </section>
-
-    <section id="tools">
-      <div class="container">
-        <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Tools</h2>
-        <p class="section-sub">Essential trauma shears and practical field equipment for emergency response.</p>
-        <div id="gridTools" class="grid" role="list"></div>
-      </div>
-    </section>
-
-    <section class="prefooter-benefits">
-      <div class="container">
-        <div class="benefit-grid">
-          <article class="benefit-card">
-            <div class="benefit-icon">
-              <i class="fa-solid fa-truck-fast"></i>
-            </div>
-            <h3>Fast Shipping</h3>
-            <p>Free shipping on orders over $50. Same-day dispatch available.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <h3>Quality Guaranteed</h3>
-            <p>All products field-tested by working EMS professionals.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon">
-              <i class="fa-solid fa-headset"></i>
-            </div>
-            <h3>24/7 Support</h3>
-            <p>Expert help whenever you need it. We’re here for you.</p>
-          </article>
-
-          <article class="benefit-card">
-            <div class="benefit-icon">
-              <i class="fa-solid fa-rotate-left"></i>
-            </div>
-            <h3>Easy Returns</h3>
-            <p>30-day hassle-free returns. Your satisfaction guaranteed.</p>
-          </article>
+       <div class="shop-filters" id="categoryFilters">
+          <button class="cat-btn active" data-category="All">All Gear</button>
+          <button class="cat-btn" data-category="Stethoscopes">Stethoscopes</button>
+          <button class="cat-btn" data-category="Kits">Trauma & Kits</button>
+          <button class="cat-btn" data-category="Apparel">Apparel & Boots</button>
+          <button class="cat-btn" data-category="Tools">Field Tools</button>
+          <button class="cat-btn" data-category="Medicines">Medicines & OTC</button>
         </div>
+
+        <div id="unifiedShopGrid" class="grid" style="margin-bottom: 80px;"></div>
       </div>
     </section>
   </main>
 
-  <!-- CART -->
   <div id="cartOverlay" class="cart-overlay"></div>
-
-  <aside id="cartDrawer" class="cart-drawer" aria-label="Shopping cart">
-    <div class="cart-header">
-      <h3>Your Cart</h3>
-      <button id="cartClose" type="button" class="cart-close-btn" aria-label="Close cart">×</button>
-    </div>
-
+  <aside id="cartDrawer" class="cart-drawer">
+    <div class="cart-header"><h3>Your Cart</h3><button id="cartClose" class="cart-close-btn">×</button></div>
     <div id="cartItems" class="cart-body"></div>
-
     <div class="cart-footer">
-      <div class="cart-total-row">
-        <span>Total</span>
-        <span id="cartTotal">$0.00</span>
-      </div>
-
-      <button id="checkoutBtn" type="button" class="btn">
-        <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
-      </button>
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button id="checkoutBtn" class="btn"><i class="fa-solid fa-credit-card"></i> Proceed to Checkout</button>
     </div>
   </aside>
 
-  <!-- PRODUCT MODAL -->
   <div id="modalBackdrop" class="modal-backdrop">
     <div id="productModal" class="modal-card">
-      <div class="modal-header">
-        <h3 id="modalProductName" class="modal-title">Product</h3>
-        <button id="modalClose" type="button" class="modal-close-btn" aria-label="Close product modal">×</button>
-      </div>
-
+      <div class="modal-header"><h3 id="modalProductName">Product</h3><button id="modalClose" class="modal-close-btn">×</button></div>
       <div class="modal-body">
         <div class="product-modal-grid">
-          <div>
-            <img
-              id="modalProductImage"
-              src="https://placehold.co/800x600/572403/ffd977?text=EMS"
-              alt="Product image"
-            >
-          </div>
-
+          <div><img id="modalProductImage" src="" alt="Product"></div>
           <div>
             <div id="modalProductBadge" class="pill"></div>
             <div id="modalProductSku"></div>
             <div id="modalProductPrice"></div>
             <p id="modalProductDescription"></p>
             <ul id="modalProductFeatures"></ul>
-
-            <button id="modalAddToCart" type="button" class="btn">
-              <i class="fa-solid fa-cart-plus"></i> Add to Cart
-            </button>
+            <button id="modalAddToCart" class="btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
   <div id="checkoutModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">Checkout</h3>
         <button id="checkoutClose" type="button" class="modal-close-btn" aria-label="Close checkout">×</button>
       </div>
-
       <div class="modal-body">
         <form id="checkoutForm" class="checkout-form">
-          <input id="checkoutName" type="text" placeholder="Full name" required>
-          <input id="checkoutEmail" type="email" placeholder="Email address" required>
-          <input id="checkoutPhone" type="tel" placeholder="Phone number" required>
+          <input id="checkoutName" type="text" placeholder="Full name" required />
+          <input id="checkoutEmail" type="email" placeholder="Email address" required />
+          <input id="checkoutPhone" type="tel" placeholder="Phone number" required />
           <textarea id="checkoutAddress" rows="4" placeholder="Delivery address" required></textarea>
-
+          
           <div id="checkoutError" class="checkout-error"></div>
-
+          
           <div class="checkout-total-box">
             Total: $<span id="modalCartTotal">0.00</span>
           </div>
-
+          
           <button id="checkoutSubmitBtn" type="submit" class="btn">
-            <i class="fa-solid fa-paper-plane"></i> Place Order & Send Email
+            <i class="fa-solid fa-lock"></i> Secure Checkout
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal-backdrop">
+    <div class="modal-card auth-card">
+      <div class="modal-header">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+        <button id="authClose" type="button" class="modal-close-btn">×</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="ordersModal" class="modal-backdrop">
+    <div class="modal-card orders-wide-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Your Order History</h3>
+        <button id="ordersClose" type="button" class="modal-close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="ordersList" class="orders-container" style="max-height: 400px; overflow-y: auto;">
+          <p class="loading-text" style="text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching your history...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -233,32 +212,42 @@
       <div class="footer-columns">
         <div class="footer-col">
           <h4><i class="fa-solid fa-shield-halved"></i> EMS LUXE SUPPLY</h4>
-          <p>Premium field-ready gear for medical professionals.</p>
+          <p>Premium field-ready gear for medical professionals. Trusted by EMTs, paramedics, and first responders worldwide.</p>
         </div>
 
         <div class="footer-col">
           <h4>Quick Links</h4>
           <p><a href="../index.html"><i class="fa-solid fa-chevron-right"></i> Home</a></p>
-          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop</a></p>
+          <p><a href="shop.html"><i class="fa-solid fa-chevron-right"></i> Shop All</a></p>
           <p><a href="stethoscopes.html"><i class="fa-solid fa-chevron-right"></i> Stethoscopes</a></p>
-          <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust</a></p>
+          <p><a href="trust.html"><i class="fa-solid fa-chevron-right"></i> Trust & Quality</a></p>
           <p><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></p>
         </div>
 
         <div class="footer-col">
-          <h4>Contact</h4>
+          <h4>Contact Us</h4>
           <p><i class="fa-solid fa-envelope"></i> support@emsluxe.com</p>
           <p><i class="fa-solid fa-phone"></i> 1-800-EMS-LUXE</p>
+          <div class="admin-link-wrap" style="margin-top: 15px;">
+            <a href="ems_orders.html" target="_blank" class="btn" style="background: var(--surface-2); color: var(--text); padding: 8px 12px; font-size: 0.85rem;">
+              <i class="fa-solid fa-user-tie"></i> Admin Portal
+            </a>
+          </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        © 2026 EMS Luxe Supply. All rights reserved.
+        <p>
+          © 2026 EMS Luxe Supply. All rights reserved. |
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms of Service</a>
+        </p>
       </div>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="../js/api.js" defer></script>
+  <script src="../js/auth.js" defer></script>
   <script src="../js/script.js" defer></script>
 </body>
 </html>
