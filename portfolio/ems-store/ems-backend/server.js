@@ -184,6 +184,14 @@ async function handleStripeCheckoutCompleted(session) {
   });
 }
 
+async function handleStripeCheckoutCanceled(session) {
+  const orderId = session?.metadata?.order_id;
+  if (!orderId) return;
+  await knex('orders')
+    .where({ id: orderId, status: 'pending' })
+    .update({ status: 'canceled', updated_at: knex.fn.now() });
+}
+
 // Stripe webhook must use raw body
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   if (!STRIPE || !STRIPE_WEBHOOK_SECRET) {
@@ -203,6 +211,8 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
   try {
     if (event.type === 'checkout.session.completed') {
       await handleStripeCheckoutCompleted(event.data.object);
+    } else if (event.type === 'checkout.session.expired' || event.type === 'checkout.session.async_payment_failed') {
+      await handleStripeCheckoutCanceled(event.data.object);
     }
     res.json({ received: true });
   } catch (err) {
