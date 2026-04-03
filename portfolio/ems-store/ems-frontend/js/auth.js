@@ -21,6 +21,7 @@ const Auth = {
 };
 
 window.Auth = Auth;
+const FIRST_VISIT_AUTH_PROMPT_KEY = "ems_first_visit_auth_prompt_seen_v1";
 
 function showOrdersMessage(list, message, color = "var(--muted)") {
   if (!list) return;
@@ -50,8 +51,19 @@ function setActiveAuthTab(mode) {
   if (signupForm) signupForm.style.display = isLogin ? "none" : "block";
 }
 
-window.openAuthModal = function openAuthModal() {
+function closeAuthModal() {
+  document.getElementById("authModal")?.classList.remove("active");
+  document.body.classList.remove("no-scroll");
+}
+
+function showAuthModal(mode = "login") {
+  setActiveAuthTab(mode);
   document.getElementById("authModal")?.classList.add("active");
+  document.body.classList.add("no-scroll");
+}
+
+window.openAuthModal = function openAuthModal(mode = "login") {
+  showAuthModal(mode);
 };
 
 window.openOrderHistory = async function openOrderHistory() {
@@ -115,7 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   authClose?.addEventListener("click", () => {
-    authModal?.classList.remove("active");
+    closeAuthModal();
+  });
+
+  authModal?.addEventListener("click", (event) => {
+    if (event.target === authModal) {
+      closeAuthModal();
+    }
   });
 
   if (authNav) {
@@ -126,6 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ` : `
       <button class="btn secondary" type="button" onclick="openAuthModal()">Login / Register</button>
     `;
+  }
+
+  if (authModal && !Auth.getUser() && !localStorage.getItem(FIRST_VISIT_AUTH_PROMPT_KEY)) {
+    localStorage.setItem(FIRST_VISIT_AUTH_PROMPT_KEY, "true");
+    showAuthModal("signup");
   }
 
   if (loginForm) {
@@ -142,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await window.EMSApi.auth.login({ email, password });
         if (data?.success) {
           Auth.setSession(data.token, data.user);
+          closeAuthModal();
           window.location.reload();
           return;
         }
