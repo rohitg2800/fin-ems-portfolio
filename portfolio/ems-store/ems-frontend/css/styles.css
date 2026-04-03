@@ -1388,6 +1388,9 @@ button {
 
 #authModal.auth-gate {
   padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow-y: auto;
   background:
     radial-gradient(circle at top left, rgba(188, 148, 55, 0.22), transparent 34%),
     radial-gradient(circle at bottom right, rgba(87, 36, 3, 0.28), transparent 32%),
@@ -1398,8 +1401,10 @@ button {
 #authModal.auth-gate .auth-gate-shell {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: minmax(320px, 1.08fr) minmax(360px, 0.92fr);
+  overflow-y: auto;
 }
 
 #authModal.auth-gate .auth-gate-brand-panel {
@@ -1501,10 +1506,13 @@ button {
   align-self: stretch;
   width: 100%;
   max-width: none;
+  max-height: none;
   margin: 0;
   border: 0;
   border-radius: 36px 0 0 36px;
   padding: clamp(28px, 4vw, 48px);
+  min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   align-content: center;
   gap: 22px;
@@ -1760,8 +1768,12 @@ button {
 }
 
 @media (max-width: 720px) {
+  #authModal.auth-gate .auth-gate-shell {
+    display: block;
+  }
+
   #authModal.auth-gate .auth-gate-brand-panel {
-    padding: 26px 20px 18px;
+    display: none;
   }
 
   #authModal.auth-gate .auth-gate-benefits {
@@ -1769,12 +1781,18 @@ button {
   }
 
   #authModal.auth-gate .auth-gate-card {
-    padding: 24px 18px 28px;
-    border-radius: 28px 28px 0 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 22px 16px calc(28px + env(safe-area-inset-bottom));
+    border-radius: 0;
+    align-content: start;
+    box-shadow: none;
   }
 
   #authModal.auth-gate .auth-gate-card-top {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 
   #authModal.auth-gate .auth-tabs {
@@ -1784,6 +1802,22 @@ button {
   #authModal.auth-gate .auth-tab {
     flex: 1 1 0;
     text-align: center;
+  }
+
+  #authModal.auth-gate .auth-gate-title {
+    font-size: clamp(1.9rem, 8vw, 2.4rem);
+  }
+
+  #authModal.auth-gate .auth-gate-subtitle {
+    font-size: 0.96rem;
+  }
+
+  #authModal.auth-gate .auth-lock-notice {
+    white-space: normal;
+  }
+
+  #authModal.auth-gate .auth-gate-footer {
+    align-items: flex-start;
   }
 }
 
@@ -2422,20 +2456,20 @@ footer {
     height: 220px;
   }
 
-  #authModal.auth-gate .auth-gate-brand-panel {
-    padding: 22px 16px 16px;
-  }
-
-  #authModal.auth-gate .auth-gate-brand-copy h2 {
-    font-size: 1.9rem;
-  }
-
   #authModal.auth-gate .auth-gate-card {
-    padding: 20px 14px 24px;
+    padding: 18px 14px calc(24px + env(safe-area-inset-bottom));
   }
 
   #authModal.auth-gate .auth-gate-card-top {
-    gap: 12px;
+    gap: 10px;
+  }
+
+  #authModal.auth-gate .auth-gate-title {
+    font-size: clamp(1.75rem, 9vw, 2.1rem);
+  }
+
+  #authModal.auth-gate .auth-gate-subtitle {
+    font-size: 0.92rem;
   }
 }
 /* --- Premium Features Section --- */
