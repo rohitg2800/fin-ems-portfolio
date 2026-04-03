@@ -84,9 +84,9 @@ app.get('/api/health', async (req, res) => {
 
 app.use('/api/auth', authRoutes);
 
-app.post('/api/checkout/session', async (req, res) => {
+app.post('/api/checkout/session', requireAuth, async (req, res) => {
   try {
-    const payload = await storeService.createCheckoutSession(req.body || {}, getAuthUser(req));
+    const payload = await storeService.createCheckoutSession(req.body || {}, req.user);
     res.json(payload);
   } catch (err) {
     console.error('Create checkout session failed:', err.message);
@@ -94,9 +94,9 @@ app.post('/api/checkout/session', async (req, res) => {
   }
 });
 
-app.get('/api/checkout/session/:id', async (req, res) => {
+app.get('/api/checkout/session/:id', requireAuth, async (req, res) => {
   try {
-    const payload = await storeService.getCheckoutSessionDetails(req.params.id);
+    const payload = await storeService.getCheckoutSessionDetails(req.params.id, req.user);
     res.json(payload);
   } catch (err) {
     console.error('Fetch checkout session failed:', err.message);
@@ -115,20 +115,15 @@ app.get('/api/products', async (req, res) => {
 });
 
 app.post('/api/orders', async (req, res) => {
-  try {
-    const payload = await storeService.createOrder(req.body || {}, getAuthUser(req));
-    res.status(201).json(payload);
-  } catch (err) {
-    console.error('Secure Order Transaction Failed:', err.message);
-    respondWithError(res, err, 'Order processing failed');
-  }
+  res.status(410).json({
+    error: 'Direct order placement is disabled. Use secure checkout instead.'
+  });
 });
 
-app.get('/api/orders/:id/receipt', async (req, res) => {
+app.get('/api/orders/:id/receipt', requireAuth, async (req, res) => {
   try {
     const receipt = await storeService.getReceipt(req.params.id, {
-      authUser: getAuthUser(req),
-      emailHint: req.query.email
+      authUser: req.user
     });
     res.json(receipt);
   } catch (err) {

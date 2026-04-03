@@ -128,8 +128,10 @@
           token
         });
       },
-      getSession(sessionId) {
-        return request(`/checkout/session/${encodeURIComponent(sessionId)}`);
+      getSession(sessionId, token) {
+        return request(`/checkout/session/${encodeURIComponent(sessionId)}`, {
+          token
+        });
       }
     }
   };

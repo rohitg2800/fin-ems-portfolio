@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Success | EMS Luxe Supply</title>
   
-  <meta name="description" content="Thank you for your business with EMS Luxe Supply. Your request has been securely processed.">
+  <meta name="description" content="Thank you for your business with EMS Luxe Supply. Your payment has been securely processed.">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -156,7 +156,7 @@
       </div>
       <h1 class="thank-you-title">Success!</h1>
       <p class="thank-you-text">
-        Your request has been securely processed by EMS Luxe Supply. 
+        Your payment has been securely processed by EMS Luxe Supply. 
         <strong>You will receive a confirmation email shortly.</strong>
       </p>
 
@@ -202,6 +202,7 @@
       const orderIdQuery = params.get('order_id');
       const box = document.getElementById('receiptBox');
       const content = document.getElementById('receiptContent');
+      const authToken = localStorage.getItem('ems_token');
 
       function renderReceipt(receipt) {
         if (!box || !content) return;
@@ -209,7 +210,9 @@
         const totals = receipt.totals || {};
         const items = Array.isArray(receipt.items) ? receipt.items : [];
         const currency = "USD";
-        const status = String(order.status || 'pending').toUpperCase();
+        const status = String(order.status || 'pending')
+          .replace(/_/g, ' ')
+          .toUpperCase();
         const itemsHtml = items.length
           ? `<table style="width:100%; border-collapse: collapse; margin-top: 10px;">
               <thead>
@@ -241,39 +244,74 @@
         box.style.display = 'block';
       }
 
-      function fetchReceipt(orderId, emailHint) {
-        return window.EMSApi.orders.receipt(orderId, { email: emailHint });
+      function clearCompletedCheckoutState() {
+        localStorage.removeItem('ems_store_cart_v1');
+        localStorage.removeItem('ems_last_order');
+      }
+
+      function showReceiptError(error) {
+        if (!content) return;
+        if (error?.status === 401 || error?.status === 403) {
+          content.textContent = 'Please sign in again to view your receipt.';
+          return;
+        }
+        content.textContent = 'Unable to load receipt right now.';
+      }
+
+      function fetchReceipt(orderId) {
+        return window.EMSApi.orders.receipt(orderId, { token: authToken });
       }
 
       const localOrder = JSON.parse(localStorage.getItem('ems_last_order') || 'null');
 
+      if (!authToken) {
+        if (content) {
+          content.textContent = 'Please sign in again to view your receipt.';
+        }
+        return;
+      }
+
       if (sessionId) {
-        window.EMSApi.checkout.getSession(sessionId)
+        window.EMSApi.checkout.getSession(sessionId, authToken)
           .then((data) => {
             const orderId = data?.order?.id;
             if (!orderId) throw new Error('No order id found');
-            return fetchReceipt(orderId, data?.email);
+            if (data?.status === 'paid') {
+              clearCompletedCheckoutState();
+            }
+            return fetchReceipt(orderId);
           })
           .then((receipt) => {
             if (receipt?.error) throw new Error(receipt.error);
             renderReceipt(receipt);
+            clearCompletedCheckoutState();
           })
-          .catch(() => {
-            if (content) content.textContent = 'Unable to load receipt right now.';
+          .catch((error) => {
+            if (orderIdQuery) {
+              return fetchReceipt(orderIdQuery)
+                .then((receipt) => {
+                  if (receipt?.error) throw new Error(receipt.error);
+                  renderReceipt(receipt);
+                  clearCompletedCheckoutState();
+                })
+                .catch(showReceiptError);
+            }
+            showReceiptError(error);
           });
         return;
       }
 
       const fallbackOrderId = orderIdQuery || localOrder?.orderId;
-      if (fallbackOrderId && localOrder?.email) {
-        fetchReceipt(fallbackOrderId, localOrder.email)
+      if (fallbackOrderId) {
+        fetchReceipt(fallbackOrderId)
           .then((receipt) => {
             if (receipt?.error) throw new Error(receipt.error);
             renderReceipt(receipt);
+            if (String(receipt?.order?.status || '').toLowerCase() === 'paid') {
+              clearCompletedCheckoutState();
+            }
           })
-          .catch(() => {
-            if (content) content.textContent = 'Unable to load receipt right now.';
-          });
+          .catch(showReceiptError);
       } else if (content) {
         content.textContent = 'Receipt unavailable. Please contact support with your order details.';
       }

@@ -173,11 +173,10 @@ function createStoreService({ knex, env = process.env }) {
     };
   }
 
-  function canAccessReceipt(order, authUser, emailHint) {
+  function canAccessReceipt(order, authUser) {
     if (authUser?.role === 'admin') return true;
     if (authUser?.id && order.user_id && String(authUser.id) === String(order.user_id)) return true;
     if (authUser?.email && order.email && authUser.email.toLowerCase() === String(order.email).toLowerCase()) return true;
-    if (emailHint && order.email && String(emailHint).toLowerCase() === String(order.email).toLowerCase()) return true;
     return false;
   }
 
@@ -297,10 +296,10 @@ function createStoreService({ knex, env = process.env }) {
     };
   }
 
-  async function getReceipt(orderId, { authUser, emailHint } = {}) {
+  async function getReceipt(orderId, { authUser } = {}) {
     const receipt = await buildOrderReceipt(orderId);
     if (!receipt) throw createHttpError(404, 'Order not found');
-    if (!canAccessReceipt(receipt.order, authUser, emailHint)) {
+    if (!canAccessReceipt(receipt.order, authUser)) {
       throw createHttpError(403, 'Access denied');
     }
     return receipt;
@@ -348,12 +347,15 @@ function createStoreService({ knex, env = process.env }) {
 
   async function getAdminStats(adminUser, req) {
     const totals = await knex('orders')
+      .where({ status: 'paid' })
       .sum({ total_revenue: 'total' })
       .count({ total_orders: 'id' })
       .first();
 
     const topSkus = await knex('order_items')
+      .join('orders', 'order_items.order_id', 'orders.id')
       .leftJoin('products', 'order_items.product_id', 'products.id')
+      .where('orders.status', 'paid')
       .select('order_items.product_id', 'products.name')
       .sum({ units: 'order_items.quantity' })
       .sum({ revenue: knex.raw('order_items.unit_price * order_items.quantity') })
@@ -382,8 +384,12 @@ function createStoreService({ knex, env = process.env }) {
     const { items, name, email, phone, address } = orderInput || {};
     const entries = normalizeItemsMap(items);
 
-    if (!entries.length) {
-      throw createHttpError(400, 'Cart is empty');
+    if (!authUser?.id) {
+      throw createHttpError(401, 'Unauthorized');
+    }
+
+    if (!name || !email || !phone || !address || !entries.length) {
+      throw createHttpError(400, 'Missing checkout details or empty cart');
     }
 
     let orderId;
@@ -407,6 +413,8 @@ function createStoreService({ knex, env = process.env }) {
           unit_price: product.price
         });
 
+        await trx('products').where({ id: productId }).decrement('stock_level', qty);
+
         lineItems.push({
           quantity: qty,
           price_data: {
@@ -425,7 +433,7 @@ function createStoreService({ knex, env = process.env }) {
           phone,
           address,
           total: serverCalculatedTotal,
-          status: 'pending',
+          status: 'pending_payment',
           created_at: knex.fn.now()
         })
         .returning('id');
@@ -446,11 +454,11 @@ function createStoreService({ knex, env = process.env }) {
         payment_method_types: ['card'],
         line_items: lineItems,
         customer_email: email,
-        success_url: `${frontendBaseUrl}/html/thank-you.html?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${frontendBaseUrl}/html/thank-you.html?session_id={CHECKOUT_SESSION_ID}&order_id=${encodeURIComponent(orderId)}`,
         cancel_url: `${frontendBaseUrl}/html/shop.html?status=cancel`,
         metadata: {
           order_id: orderId,
-          user_id: authUser?.id || '',
+          user_id: String(authUser.id),
           name: name || '',
           email: email || '',
           phone: phone || '',
@@ -459,40 +467,67 @@ function createStoreService({ knex, env = process.env }) {
         }
       });
 
-      return { url: session.url };
+      return {
+        url: session.url,
+        orderId
+      };
     } catch (err) {
       if (orderId) {
-        await knex('orders').where({ id: orderId }).del();
-        await knex('order_items').where({ order_id: orderId }).del();
+        await knex.transaction(async (trx) => {
+          const existingOrder = await trx('orders').where({ id: orderId, status: 'pending_payment' }).first();
+          if (!existingOrder) return;
+
+          const reservedItems = await trx('order_items')
+            .where({ order_id: orderId })
+            .select('product_id', 'quantity');
+
+          for (const item of reservedItems) {
+            await trx('products')
+              .where({ id: item.product_id })
+              .increment('stock_level', Number(item.quantity || 0));
+          }
+
+          await trx('orders').where({ id: orderId }).del();
+        });
       }
       throw err;
     }
   }
 
-  async function getCheckoutSessionDetails(sessionId) {
+  async function getCheckoutSessionDetails(sessionId, authUser) {
     if (!stripe) throw createHttpError(500, 'Stripe is not configured');
 
     try {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
       const orderId = session.metadata?.order_id;
       const order = orderId ? await knex('orders').where({ id: orderId }).first() : null;
+      const ownerEmail = order?.email || session.customer_details?.email || session.metadata?.email || null;
+      const ownerId = order?.user_id || session.metadata?.user_id || null;
+
+      if (authUser?.role !== 'admin') {
+        const sameUser = ownerId && String(ownerId) === String(authUser?.id);
+        const sameEmail = authUser?.email && ownerEmail &&
+          authUser.email.toLowerCase() === String(ownerEmail).toLowerCase();
+
+        if (!sameUser && !sameEmail) {
+          throw createHttpError(403, 'Access denied');
+        }
+      }
 
       return {
         status: session.payment_status,
         amount_total: session.amount_total,
         currency: session.currency,
         order,
-        email: order?.email || session.customer_details?.email || session.metadata?.email || null
+        email: ownerEmail
       };
     } catch (err) {
+      if (err.status) throw err;
       throw createHttpError(400, 'Unable to fetch session');
     }
   }
 
   async function handleStripeCheckoutCompleted(session) {
-    const entries = normalizeItemsMap(JSON.parse(session?.metadata?.items || '{}'));
-    if (!entries.length) return;
-
     const name = session.metadata?.name || session.customer_details?.name || null;
     const email = session.customer_details?.email || session.metadata?.email || null;
     const phone = session.metadata?.phone || session.customer_details?.phone || null;
@@ -502,6 +537,32 @@ function createStoreService({ knex, env = process.env }) {
     let finalizedOrderId = null;
 
     await knex.transaction(async (trx) => {
+      if (existingOrderId) {
+        const existing = await trx('orders').where({ id: existingOrderId }).first();
+        if (existing) {
+          if (existing.status === 'paid') {
+            finalizedOrderId = existingOrderId;
+            return;
+          }
+
+          await trx('orders')
+            .where({ id: existingOrderId })
+            .update({
+              status: 'paid',
+              name: name || existing.name,
+              email: email || existing.email,
+              phone: phone || existing.phone,
+              address: address || existing.address,
+              updated_at: knex.fn.now()
+            });
+          finalizedOrderId = existingOrderId;
+          return;
+        }
+      }
+
+      const entries = normalizeItemsMap(JSON.parse(session?.metadata?.items || '{}'));
+      if (!entries.length) return;
+
       let serverCalculatedTotal = 0;
       const orderItemsToInsert = [];
 
@@ -520,47 +581,31 @@ function createStoreService({ knex, env = process.env }) {
         });
       }
 
-      let orderId = existingOrderId;
+      const [newOrder] = await trx('orders')
+        .insert({
+          user_id: userId || null,
+          name,
+          email,
+          phone,
+          address,
+          total: serverCalculatedTotal,
+          status: 'paid',
+          created_at: knex.fn.now()
+        })
+        .returning('id');
 
-      if (existingOrderId) {
-        const existing = await trx('orders').where({ id: existingOrderId }).first();
-        if (existing && existing.status === 'paid') return;
+      const orderId = newOrder.id || newOrder;
+      finalizedOrderId = orderId;
 
-        await trx('orders')
-          .where({ id: existingOrderId })
-          .update({
-            total: serverCalculatedTotal,
-            status: 'paid',
-            name,
-            email,
-            phone,
-            address,
-            updated_at: knex.fn.now()
-          });
-        finalizedOrderId = existingOrderId;
-      } else {
-        const [newOrder] = await trx('orders')
-          .insert({
-            user_id: userId || null,
-            name,
-            email,
-            phone,
-            address,
-            total: serverCalculatedTotal,
-            status: 'paid',
-            created_at: knex.fn.now()
-          })
-          .returning('id');
-        orderId = newOrder.id || newOrder;
-        finalizedOrderId = orderId;
-      }
+      await trx('order_items').insert(
+        orderItemsToInsert.map((item) => ({
+          ...item,
+          order_id: orderId
+        }))
+      );
 
-      await trx('order_items').where({ order_id: orderId }).del();
-      const itemsWithOrderId = orderItemsToInsert.map((item) => ({ ...item, order_id: orderId }));
-      await trx('order_items').insert(itemsWithOrderId);
-
-      for (const { product_id, quantity } of itemsWithOrderId) {
-        await trx('products').where({ id: product_id }).decrement('stock_level', quantity);
+      for (const item of orderItemsToInsert) {
+        await trx('products').where({ id: item.product_id }).decrement('stock_level', item.quantity);
       }
     });
 
@@ -578,9 +623,24 @@ function createStoreService({ knex, env = process.env }) {
     const orderId = session?.metadata?.order_id;
     if (!orderId) return;
 
-    await knex('orders')
-      .where({ id: orderId, status: 'pending' })
-      .update({ status: 'canceled', updated_at: knex.fn.now() });
+    await knex.transaction(async (trx) => {
+      const order = await trx('orders').where({ id: orderId }).first();
+      if (!order || order.status !== 'pending_payment') return;
+
+      const reservedItems = await trx('order_items')
+        .where({ order_id: orderId })
+        .select('product_id', 'quantity');
+
+      for (const item of reservedItems) {
+        await trx('products')
+          .where({ id: item.product_id })
+          .increment('stock_level', Number(item.quantity || 0));
+      }
+
+      await trx('orders')
+        .where({ id: orderId })
+        .update({ status: 'canceled', updated_at: knex.fn.now() });
+    });
   }
 
   async function handleStripeWebhook(rawBody, signature) {

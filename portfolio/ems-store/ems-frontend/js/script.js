@@ -514,7 +514,13 @@ async function submitOrder(event) {
 
   try {
     const token = window.Auth?.getToken?.();
-    const data = await window.EMSApi.orders.create({
+    if (!token) {
+      if (errorEl) errorEl.textContent = "Please log in to continue to secure payment.";
+      window.openAuthModal?.("login");
+      return;
+    }
+
+    const data = await window.EMSApi.checkout.createSession({
       name,
       email,
       phone,
@@ -522,28 +528,26 @@ async function submitOrder(event) {
       items: cart
     }, token);
 
-    localStorage.removeItem(STORAGE_KEY);
-    updateCartBadge();
-    renderCart();
-    $("#checkoutModal")?.classList.remove("active");
     if (errorEl) errorEl.textContent = "";
+    if (!data?.url) {
+      throw new Error("Unable to start secure checkout.");
+    }
 
-    showNotification("Stock confirmed. Order placed. Redirecting...", "success");
     localStorage.setItem("ems_last_order", JSON.stringify({
       orderId: data?.orderId || null,
-      total: Number(data?.secureTotal || 0),
       email,
-      status: "PENDING"
+      status: "PENDING_PAYMENT"
     }));
 
-    const orderId = data?.orderId ? `?order_id=${encodeURIComponent(data.orderId)}` : "";
-    window.location.href = `/html/thank-you.html${orderId}`;
+    showNotification("Redirecting to secure payment...", "success");
+    window.location.href = data.url;
   } catch (err) {
     if (errorEl) {
       if (err.status === 401 || err.status === 403) {
-        errorEl.textContent = "Please log in to complete checkout.";
+        errorEl.textContent = "Please log in to continue to secure payment.";
+        window.openAuthModal?.("login");
       } else {
-        errorEl.textContent = err.message || "Order failed. Please try again.";
+        errorEl.textContent = err.message || "Secure checkout failed. Please try again.";
       }
     }
   } finally {
@@ -718,7 +722,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const checkoutBtn = $("#checkoutBtn");
   if (checkoutBtn) checkoutBtn.innerHTML = '<i class="fa-solid fa-clipboard-check"></i> Review Order';
   const checkoutSubmitBtn = $("#checkoutSubmitBtn");
-  if (checkoutSubmitBtn) checkoutSubmitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Place Order';
+  if (checkoutSubmitBtn) checkoutSubmitBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Continue to Secure Payment';
 
   $("#modalAddToCart")?.addEventListener("click", () => {
     const productId = $("#productModal")?.dataset.productId;
