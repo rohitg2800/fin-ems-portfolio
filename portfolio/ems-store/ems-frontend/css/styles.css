@@ -1622,6 +1622,38 @@ button {
   border-radius: 16px;
 }
 
+#authModal.auth-gate .auth-recovery-btn {
+  justify-self: center;
+  margin-top: -2px;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--gray);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: underline;
+  text-decoration-color: rgba(188, 148, 55, 0.45);
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-smooth), text-decoration-color var(--duration-fast) ease;
+}
+
+#authModal.auth-gate .auth-recovery-btn:hover {
+  color: var(--primary);
+  text-decoration-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] #authModal.auth-gate .auth-recovery-btn {
+  color: rgba(243, 238, 223, 0.78);
+  text-decoration-color: rgba(255, 217, 119, 0.35);
+}
+
+[data-theme="dark"] #authModal.auth-gate .auth-recovery-btn:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
 #authModal.auth-gate .auth-gate-footer {
   display: flex;
   align-items: center;

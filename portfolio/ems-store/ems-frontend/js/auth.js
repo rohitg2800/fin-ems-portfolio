@@ -88,6 +88,9 @@ function renderAuthGate(modal) {
             <input type="password" id="loginPassword" placeholder="Password" required />
           </label>
           <button type="submit" class="btn">Sign In</button>
+          <button type="button" id="forgotCredentialsBtn" class="auth-recovery-btn">
+            Forgot credentials?
+          </button>
         </form>
 
         <form id="signupForm" class="auth-form-content" style="display: none;">
@@ -163,6 +166,7 @@ function setActiveAuthTab(mode) {
   const tabSignup = document.getElementById("tabSignup");
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
+  const forgotCredentialsBtn = document.getElementById("forgotCredentialsBtn");
   const isLogin = mode === "login";
 
   if (tabLogin) {
@@ -317,6 +321,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  forgotCredentialsBtn?.addEventListener("click", () => {
+    window.location.href = "mailto:support@emsluxe.com?subject=EMS%20Luxe%20Customer%20Support";
+  });
 
   if (signupForm) {
     signupForm.addEventListener("submit", async (event) => {
