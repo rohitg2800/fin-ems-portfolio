@@ -1,28 +1,3 @@
-// ems-frontend/js/auth.js
-function resolveAuthBase() {
-  const PROD_API_BASE = "https://fin-ems-backend.onrender.com/api";
-  const FRONTEND_HOSTS = new Set(["fin-ems-frontend.onrender.com"]);
-  if (window.EMS_API_BASE) return window.EMS_API_BASE;
-  const origin = window.location?.origin;
-  if (origin && origin.startsWith("http")) {
-    const host = window.location?.host;
-    if (host && FRONTEND_HOSTS.has(host)) {
-      return PROD_API_BASE;
-    }
-    const isLocal = /localhost|127\.0\.0\.1/.test(origin);
-    const port = window.location?.port;
-    if (isLocal && port && port !== "3000" && port !== "4000") {
-      return "http://localhost:4000/api";
-    }
-    return `${origin}/api`;
-  }
-  return "http://localhost:4000/api";
-}
-
-const AUTH_BASE = resolveAuthBase();
-const AUTH_URL = `${AUTH_BASE}/auth`;
-const ORDERS_URL = `${AUTH_BASE}/orders`;
-
 const Auth = {
   setSession(token, user) {
     localStorage.setItem("ems_token", token);
@@ -47,156 +22,47 @@ const Auth = {
 
 window.Auth = Auth;
 
-// UI Handlers for Auth
-document.addEventListener("DOMContentLoaded", () => {
-  const authModal = document.getElementById("authModal");
+function showOrdersMessage(list, message, color = "var(--muted)") {
+  if (!list) return;
+  list.innerHTML = `<p style="text-align:center; color: ${color};">${message}</p>`;
+}
+
+function setActiveAuthTab(mode) {
   const tabLogin = document.getElementById("tabLogin");
   const tabSignup = document.getElementById("tabSignup");
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
-  const authClose = document.getElementById("authClose");
+  const isLogin = mode === "login";
 
-  // Tab Switching Logic
-  if (tabLogin && tabSignup) {
-    tabLogin.addEventListener("click", () => {
-      tabLogin.classList.add("active");
-      tabLogin.style.color = "var(--text)";
-      tabLogin.style.borderBottom = "2px solid var(--primary)";
-      
-      tabSignup.classList.remove("active");
-      tabSignup.style.color = "var(--text-muted)";
-      tabSignup.style.borderBottom = "none";
-      
-      loginForm.style.display = "block";
-      signupForm.style.display = "none";
-    });
-
-    tabSignup.addEventListener("click", () => {
-      tabSignup.classList.add("active");
-      tabSignup.style.color = "var(--text)";
-      tabSignup.style.borderBottom = "2px solid var(--primary)";
-      
-      tabLogin.classList.remove("active");
-      tabLogin.style.color = "var(--text-muted)";
-      tabLogin.style.borderBottom = "none";
-      
-      signupForm.style.display = "block";
-      loginForm.style.display = "none";
-    });
+  if (tabLogin) {
+    tabLogin.classList.toggle("active", isLogin);
+    tabLogin.style.color = isLogin ? "var(--text)" : "var(--text-muted)";
+    tabLogin.style.borderBottom = isLogin ? "2px solid var(--primary)" : "none";
   }
 
-  // Close Modal
-  if (authClose) {
-    authClose.addEventListener("click", () => {
-      authModal.classList.remove("active");
-    });
+  if (tabSignup) {
+    tabSignup.classList.toggle("active", !isLogin);
+    tabSignup.style.color = !isLogin ? "var(--text)" : "var(--text-muted)";
+    tabSignup.style.borderBottom = !isLogin ? "2px solid var(--primary)" : "none";
   }
 
-  // Render auth actions in the nav (if present)
-  const authNav = document.getElementById("authNavSection");
-  if (authNav) {
-    const user = Auth.getUser();
-    if (user) {
-      authNav.innerHTML = `
-        <button class="btn secondary" type="button" onclick="openOrderHistory()">My Orders</button>
-        <button class="btn alt" type="button" onclick="Auth.logout()">Logout</button>
-      `;
-    } else {
-      authNav.innerHTML = `
-        <button class="btn secondary" type="button" onclick="openAuthModal()">Login / Register</button>
-      `;
-    }
-  }
+  if (loginForm) loginForm.style.display = isLogin ? "block" : "none";
+  if (signupForm) signupForm.style.display = isLogin ? "none" : "block";
+}
 
-  // Handle Login Submit
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      const btn = loginForm.querySelector("button");
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
-
-      try {
-        const res = await fetch(`${AUTH_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          Auth.setSession(data.token, data.user);
-          window.location.reload(); // Refresh to update Nav Bar
-        } else {
-          alert(data.message || "Login failed");
-        }
-      } catch (err) {
-        alert("Server unreachable");
-      } finally {
-        btn.innerHTML = 'Sign In';
-      }
-    });
-  }
-
-  // Handle Signup Submit
-  if (signupForm) {
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const username = document.getElementById("signupName").value;
-      const email = document.getElementById("signupEmail").value;
-      const password = document.getElementById("signupPassword").value;
-      const btn = signupForm.querySelector("button");
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
-
-      try {
-        const res = await fetch(`${AUTH_URL}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          alert("Registered successfully. Please log in to continue.");
-          const loginTab = document.getElementById("tabLogin");
-          const signupTab = document.getElementById("tabSignup");
-          const loginFormEl = document.getElementById("loginForm");
-          const signupFormEl = document.getElementById("signupForm");
-          if (loginTab && signupTab && loginFormEl && signupFormEl) {
-            loginTab.classList.add("active");
-            signupTab.classList.remove("active");
-            signupFormEl.style.display = "none";
-            loginFormEl.style.display = "block";
-          }
-          const loginEmailInput = document.getElementById("loginEmail");
-          const loginPasswordInput = document.getElementById("loginPassword");
-          if (loginEmailInput) loginEmailInput.value = email;
-          if (loginPasswordInput) loginPasswordInput.value = password;
-        } else {
-          alert(data.message || "Registration failed");
-        }
-      } catch (err) {
-        alert("Server unreachable");
-      } finally {
-        btn.innerHTML = 'Create Account';
-      }
-    });
-  }
-});
-
-// Global functions to open modals from HTML onclick attributes
-window.openAuthModal = function() {
-  document.getElementById("authModal").classList.add("active");
+window.openAuthModal = function openAuthModal() {
+  document.getElementById("authModal")?.classList.add("active");
 };
 
-window.openOrderHistory = async function() {
+window.openOrderHistory = async function openOrderHistory() {
   const modal = document.getElementById("ordersModal");
   const list = document.getElementById("ordersList");
   const token = Auth.getToken();
 
+  if (!modal || !list) return;
+
   if (!token) {
-    list.innerHTML = '<p style="text-align:center; color: var(--muted);">Please log in to view your order history.</p>';
+    showOrdersMessage(list, "Please log in to view your order history.");
     modal.classList.add("active");
     return;
   }
@@ -205,41 +71,124 @@ window.openOrderHistory = async function() {
   list.innerHTML = '<p class="loading-text" style="text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching your history...</p>';
 
   try {
-    // Note: You must add JWT verification to this route in your backend later
-    const res = await fetch(ORDERS_URL, {
-      headers: { "Authorization": `Bearer ${token}` }
-    });
-    if (!res.ok) {
-      if (res.status === 401 || res.status === 403) {
-        list.innerHTML = '<p style="text-align:center; color: var(--muted);">Session expired. Please log in again.</p>';
-        return;
-      }
-      throw new Error("Failed to fetch orders");
-    }
-    const orders = await res.json();
+    const orders = await window.EMSApi.orders.list(token);
 
-    if (orders.length === 0) {
-      list.innerHTML = '<p style="text-align:center; color: var(--muted);">No previous orders found.</p>';
+    if (!orders.length) {
+      showOrdersMessage(list, "No previous orders found.");
       return;
     }
 
-    list.innerHTML = orders.map(o => `
+    list.innerHTML = orders.map((order) => `
       <div style="border: 1px solid var(--border); padding: 15px; border-radius: 12px; margin-bottom: 10px; background: var(--bg-soft);">
         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-          <strong>Order #${o.id || o.orderId}</strong>
-          <span style="color: var(--primary); font-weight: bold;">$${parseFloat(o.total).toFixed(2)}</span>
+          <strong>Order #${order.id || order.orderId}</strong>
+          <span style="color: var(--primary); font-weight: bold;">$${parseFloat(order.total || 0).toFixed(2)}</span>
         </div>
         <div style="font-size: 0.85rem; color: var(--muted);">
-          Placed on: ${new Date(o.created_at || o.date).toLocaleDateString()}
+          Placed on: ${new Date(order.created_at || order.date).toLocaleDateString()}
         </div>
       </div>
     `).join("");
-
   } catch (err) {
-    list.innerHTML = '<p style="text-align:center; color: red;">Failed to load history.</p>';
+    if (err.status === 401 || err.status === 403) {
+      showOrdersMessage(list, "Session expired. Please log in again.");
+      return;
+    }
+
+    showOrdersMessage(list, "Failed to load history.", "red");
   }
 };
 
-document.getElementById("ordersClose")?.addEventListener("click", () => {
-  document.getElementById("ordersModal").classList.remove("active");
+document.addEventListener("DOMContentLoaded", () => {
+  const authModal = document.getElementById("authModal");
+  const authClose = document.getElementById("authClose");
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const authNav = document.getElementById("authNavSection");
+
+  document.getElementById("tabLogin")?.addEventListener("click", () => {
+    setActiveAuthTab("login");
+  });
+
+  document.getElementById("tabSignup")?.addEventListener("click", () => {
+    setActiveAuthTab("signup");
+  });
+
+  authClose?.addEventListener("click", () => {
+    authModal?.classList.remove("active");
+  });
+
+  if (authNav) {
+    const user = Auth.getUser();
+    authNav.innerHTML = user ? `
+      <button class="btn secondary" type="button" onclick="openOrderHistory()">My Orders</button>
+      <button class="btn alt" type="button" onclick="Auth.logout()">Logout</button>
+    ` : `
+      <button class="btn secondary" type="button" onclick="openAuthModal()">Login / Register</button>
+    `;
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("loginEmail")?.value;
+      const password = document.getElementById("loginPassword")?.value;
+      const button = loginForm.querySelector("button");
+      const originalLabel = button?.innerHTML || "Sign In";
+      if (button) button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        const data = await window.EMSApi.auth.login({ email, password });
+        if (data?.success) {
+          Auth.setSession(data.token, data.user);
+          window.location.reload();
+          return;
+        }
+
+        alert(data?.message || "Login failed");
+      } catch (err) {
+        alert(err.message || "Server unreachable");
+      } finally {
+        if (button) button.innerHTML = originalLabel;
+      }
+    });
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const username = document.getElementById("signupName")?.value;
+      const email = document.getElementById("signupEmail")?.value;
+      const password = document.getElementById("signupPassword")?.value;
+      const button = signupForm.querySelector("button");
+      const originalLabel = button?.innerHTML || "Create Account";
+      if (button) button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
+
+      try {
+        const data = await window.EMSApi.auth.register({ username, email, password });
+
+        if (data?.success) {
+          alert("Registered successfully. Please log in to continue.");
+          setActiveAuthTab("login");
+          const loginEmailInput = document.getElementById("loginEmail");
+          const loginPasswordInput = document.getElementById("loginPassword");
+          if (loginEmailInput) loginEmailInput.value = email;
+          if (loginPasswordInput) loginPasswordInput.value = password;
+          return;
+        }
+
+        alert(data?.message || "Registration failed");
+      } catch (err) {
+        alert(err.message || "Server unreachable");
+      } finally {
+        if (button) button.innerHTML = originalLabel;
+      }
+    });
+  }
+
+  document.getElementById("ordersClose")?.addEventListener("click", () => {
+    document.getElementById("ordersModal")?.classList.remove("active");
+  });
 });

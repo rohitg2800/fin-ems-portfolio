@@ -1,7 +1,7 @@
 {
-  "name": "ems",
+  "name": "ems-luxe-store-api",
   "version": "1.0.0",
-  "description": "Employee Management System API",
+  "description": "Emergency Medical Supply store API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

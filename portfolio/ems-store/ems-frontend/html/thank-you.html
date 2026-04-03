@@ -183,6 +183,7 @@
     </div>
   </footer>
 
+  <script src="../js/api.js"></script>
   <script src="../js/script.js"></script>
   
   <script>
@@ -199,9 +200,6 @@
       const params = new URLSearchParams(window.location.search);
       const sessionId = params.get('session_id');
       const orderIdQuery = params.get('order_id');
-      const apiBase = (window.location.host === 'fin-ems-frontend.onrender.com')
-        ? 'https://fin-ems-backend.onrender.com'
-        : '';
       const box = document.getElementById('receiptBox');
       const content = document.getElementById('receiptContent');
 
@@ -244,15 +242,13 @@
       }
 
       function fetchReceipt(orderId, emailHint) {
-        const emailQuery = emailHint ? `?email=${encodeURIComponent(emailHint)}` : '';
-        return fetch(`${apiBase}/api/orders/${orderId}/receipt${emailQuery}`).then(r => r.json());
+        return window.EMSApi.orders.receipt(orderId, { email: emailHint });
       }
 
       const localOrder = JSON.parse(localStorage.getItem('ems_last_order') || 'null');
 
       if (sessionId) {
-        fetch(`${apiBase}/api/checkout/session/${sessionId}`)
-          .then(r => r.json())
+        window.EMSApi.checkout.getSession(sessionId)
           .then((data) => {
             const orderId = data?.order?.id;
             if (!orderId) throw new Error('No order id found');
