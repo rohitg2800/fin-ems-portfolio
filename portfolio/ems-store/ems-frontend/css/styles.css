@@ -1620,8 +1620,45 @@ button {
   background: rgba(255, 255, 255, 0.88);
 }
 
+#authModal.auth-gate .auth-field-password input {
+  padding-right: 54px;
+}
+
+#authModal.auth-gate .auth-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(188, 148, 55, 0.12);
+  color: var(--primary);
+  cursor: pointer;
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-smooth);
+}
+
+#authModal.auth-gate .auth-password-toggle:hover {
+  background: rgba(188, 148, 55, 0.2);
+  transform: translateY(-50%) scale(1.03);
+}
+
+#authModal.auth-gate .auth-password-toggle:focus-visible {
+  outline: 2px solid rgba(188, 148, 55, 0.38);
+  outline-offset: 2px;
+}
+
 [data-theme="dark"] #authModal.auth-gate .auth-field input {
   background: rgba(10, 9, 7, 0.88);
+}
+
+[data-theme="dark"] #authModal.auth-gate .auth-password-toggle {
+  background: rgba(255, 217, 119, 0.12);
+  color: var(--accent);
 }
 
 #authModal.auth-gate .auth-card .btn {
@@ -1722,10 +1759,15 @@ button {
   align-items: center;
 }
 
-.auth-field i {
+.auth-field > i {
   position: absolute;
   left: 14px;
   color: var(--accent);
+}
+
+.auth-password-toggle i {
+  position: static;
+  color: inherit;
 }
 
 .auth-field input {
@@ -1738,8 +1780,44 @@ button {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.auth-field-password input {
+  padding-right: 52px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(188, 148, 55, 0.12);
+  color: var(--primary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.auth-password-toggle:hover {
+  background: rgba(188, 148, 55, 0.2);
+}
+
+.auth-password-toggle:focus-visible {
+  outline: 2px solid rgba(188, 148, 55, 0.38);
+  outline-offset: 2px;
+}
+
 [data-theme="dark"] .auth-field input {
   background: #0f0c09;
+}
+
+[data-theme="dark"] .auth-password-toggle {
+  background: rgba(255, 217, 119, 0.12);
+  color: var(--accent);
 }
 
 .auth-field input:focus {

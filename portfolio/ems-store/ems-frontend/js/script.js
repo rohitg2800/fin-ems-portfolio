@@ -67,22 +67,34 @@ function renderGridState(container, message) {
   `;
 }
 
-function matchesSearch(product, query) {
-  if (!query) return true;
+function normalizeSearchText(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-  const normalizedQuery = query.trim().toLowerCase();
+function matchesSearch(product, query) {
+  const normalizedQuery = normalizeSearchText(query);
   if (!normalizedQuery) return true;
 
-  const haystack = [
+  const haystack = normalizeSearchText([
     product.name,
     product.category,
     product.sku,
-    product.description
-  ]
-    .join(" ")
-    .toLowerCase();
+    product.description,
+    ...(Array.isArray(product.bullets) ? product.bullets : [])
+  ].join(" "));
 
-  return haystack.includes(normalizedQuery);
+  return normalizedQuery
+    .split(" ")
+    .every((term) => haystack.includes(term));
+}
+
+function applySearchQuery(value = "") {
+  activeSearchQuery = value.trim();
+  renderGrids(activeCategory);
 }
 
 function productCardHTML(product) {
@@ -144,7 +156,7 @@ function renderGrids(filter = "All") {
       renderGridState(unified, {
         title: activeSearchQuery ? "No search matches" : "No matching gear",
         body: activeSearchQuery
-          ? `No products matched "${activeSearchQuery}". Try another keyword or category.`
+          ? `No products matched "${activeSearchQuery}". Try another keyword, or clear the search to see all items again.`
           : "Try another category to explore more products."
       });
     } else {
@@ -665,13 +677,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   shopSearchForm?.addEventListener("submit", (event) => {
     event.preventDefault();
-    activeSearchQuery = shopSearchInput?.value?.trim() || "";
-    renderGrids(activeCategory);
+    applySearchQuery(shopSearchInput?.value || "");
+  });
+
+  shopSearchInput?.addEventListener("input", (event) => {
+    const nextValue = event.target?.value || "";
+    if (!nextValue.trim()) {
+      applySearchQuery("");
+    }
   });
 
   shopSearchInput?.addEventListener("search", () => {
-    activeSearchQuery = shopSearchInput.value.trim();
-    renderGrids(activeCategory);
+    applySearchQuery(shopSearchInput.value || "");
   });
 
   $("#modalClose")?.addEventListener("click", () => {

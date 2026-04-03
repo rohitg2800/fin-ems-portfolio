@@ -83,9 +83,19 @@ function renderAuthGate(modal) {
             <i class="fa-solid fa-envelope"></i>
             <input type="email" id="loginEmail" placeholder="Email Address" required />
           </label>
-          <label class="auth-field">
+          <label class="auth-field auth-field-password">
             <i class="fa-solid fa-lock"></i>
             <input type="password" id="loginPassword" placeholder="Password" required />
+            <button
+              type="button"
+              class="auth-password-toggle"
+              data-password-toggle="loginPassword"
+              aria-label="Show password"
+              aria-pressed="false"
+              title="Show password"
+            >
+              <i class="fa-regular fa-eye"></i>
+            </button>
           </label>
           <button type="submit" class="btn">Sign In</button>
           <button type="button" id="forgotCredentialsBtn" class="auth-recovery-btn">
@@ -102,9 +112,19 @@ function renderAuthGate(modal) {
             <i class="fa-solid fa-envelope"></i>
             <input type="email" id="signupEmail" placeholder="Email Address" required />
           </label>
-          <label class="auth-field">
+          <label class="auth-field auth-field-password">
             <i class="fa-solid fa-lock"></i>
             <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+            <button
+              type="button"
+              class="auth-password-toggle"
+              data-password-toggle="signupPassword"
+              aria-label="Show password"
+              aria-pressed="false"
+              title="Show password"
+            >
+              <i class="fa-regular fa-eye"></i>
+            </button>
           </label>
           <button type="submit" class="btn">Create Account</button>
         </form>
@@ -159,6 +179,39 @@ function focusAuthField(mode) {
     : document.getElementById("loginEmail");
 
   field?.focus();
+}
+
+function setupPasswordToggles() {
+  document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    if (button.dataset.toggleBound === "true") return;
+
+    button.dataset.toggleBound = "true";
+    button.addEventListener("click", () => {
+      const inputId = button.dataset.passwordToggle;
+      const input = inputId ? document.getElementById(inputId) : null;
+      const icon = button.querySelector("i");
+
+      if (!input) return;
+
+      const revealPassword = input.type === "password";
+      input.type = revealPassword ? "text" : "password";
+      button.setAttribute("aria-pressed", String(revealPassword));
+      button.setAttribute("aria-label", revealPassword ? "Hide password" : "Show password");
+      button.setAttribute("title", revealPassword ? "Hide password" : "Show password");
+
+      if (icon) {
+        icon.classList.toggle("fa-eye", !revealPassword);
+        icon.classList.toggle("fa-eye-slash", revealPassword);
+      }
+
+      input.focus({ preventScroll: true });
+
+      if (typeof input.setSelectionRange === "function") {
+        const cursorPosition = input.value.length;
+        input.setSelectionRange(cursorPosition, cursorPosition);
+      }
+    });
+  });
 }
 
 function setActiveAuthTab(mode) {
@@ -259,6 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (authModal) {
     renderAuthGate(authModal);
+    setupPasswordToggles();
   }
 
   const loginForm = document.getElementById("loginForm");
