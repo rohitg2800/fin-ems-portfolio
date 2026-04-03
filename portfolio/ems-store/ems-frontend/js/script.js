@@ -11,6 +11,7 @@ const DEFAULT_BULLETS = [
 let PRODUCTS = [];
 let PRODUCT_MAP = {};
 let activeCategory = "All";
+let activeSearchQuery = "";
 let lastChangedProductId = null;
 let productsLoaded = false;
 let productLoadFailed = false;
@@ -66,6 +67,24 @@ function renderGridState(container, message) {
   `;
 }
 
+function matchesSearch(product, query) {
+  if (!query) return true;
+
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return true;
+
+  const haystack = [
+    product.name,
+    product.category,
+    product.sku,
+    product.description
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return haystack.includes(normalizedQuery);
+}
+
 function productCardHTML(product) {
   const isOutOfStock = product.stock_level <= 0;
   return `
@@ -113,17 +132,20 @@ function renderGrids(filter = "All") {
     return;
   }
 
-  const filtered = filter === "All"
-    ? PRODUCTS
-    : PRODUCTS.filter((product) => product.category === filter);
+  const filtered = PRODUCTS.filter((product) => {
+    const categoryMatch = filter === "All" || product.category === filter;
+    return categoryMatch && matchesSearch(product, activeSearchQuery);
+  });
   const homeProducts = PRODUCTS.slice(0, 6);
   const stethProducts = PRODUCTS.filter((product) => product.category === "Stethoscopes");
 
   if (unified) {
     if (!filtered.length) {
       renderGridState(unified, {
-        title: "No matching gear",
-        body: "Try another category to explore more products."
+        title: activeSearchQuery ? "No search matches" : "No matching gear",
+        body: activeSearchQuery
+          ? `No products matched "${activeSearchQuery}". Try another keyword or category.`
+          : "Try another category to explore more products."
       });
     } else {
       unified.innerHTML = filtered.map(productCardHTML).join("");
@@ -614,6 +636,8 @@ window.openProductModal = openProductModal;
 document.addEventListener("DOMContentLoaded", async () => {
   const needsCatalogData = Boolean($("#unifiedShopGrid") || $("#productGrid") || $("#stethGrid"));
   const needsCartUi = Boolean($("#cartItems") || $("#checkoutForm") || $("#cartBtn"));
+  const shopSearchForm = $("#shopSearchForm");
+  const shopSearchInput = $("#shopSearchInput");
 
   initTheme();
   initMobileMenu();
@@ -637,6 +661,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       event.target.classList.add("active");
       renderGrids(event.target.dataset.category);
     });
+  });
+
+  shopSearchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    activeSearchQuery = shopSearchInput?.value?.trim() || "";
+    renderGrids(activeCategory);
+  });
+
+  shopSearchInput?.addEventListener("search", () => {
+    activeSearchQuery = shopSearchInput.value.trim();
+    renderGrids(activeCategory);
   });
 
   $("#modalClose")?.addEventListener("click", () => {

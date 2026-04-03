@@ -21,11 +21,141 @@ const Auth = {
 };
 
 window.Auth = Auth;
-const FIRST_VISIT_AUTH_PROMPT_KEY = "ems_first_visit_auth_prompt_seen_v1";
+
+let authGateLocked = false;
+
+function renderAuthGate(modal) {
+  if (!modal || modal.dataset.authGateMounted === "true") return;
+
+  modal.dataset.authGateMounted = "true";
+  modal.classList.add("auth-gate");
+  modal.innerHTML = `
+    <div class="auth-gate-shell">
+      <section class="auth-gate-brand-panel">
+        <div class="auth-gate-brand-mark">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="auth-gate-brand-copy">
+          <div class="auth-gate-kicker">EMS Luxe Supply</div>
+          <h2>Secure Access for Emergency Medical Supply Orders</h2>
+          <p>
+            Create your customer account to unlock the storefront, then sign in to browse
+            live stock, place orders, and review your receipt history.
+          </p>
+        </div>
+        <div class="auth-gate-benefits">
+          <div class="auth-gate-benefit">
+            <strong>Live Inventory</strong>
+            <span>See current stock availability before you order.</span>
+          </div>
+          <div class="auth-gate-benefit">
+            <strong>Fast Reorders</strong>
+            <span>Keep your customer profile and order history in one place.</span>
+          </div>
+          <div class="auth-gate-benefit">
+            <strong>Storefront Access</strong>
+            <span>Login is required before browsing the site.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="modal-card auth-card auth-gate-card">
+        <div class="auth-gate-card-top">
+          <div>
+            <div class="auth-gate-kicker">Customer Access</div>
+            <h3 class="auth-gate-title">Enter the Storefront</h3>
+            <p class="auth-gate-subtitle">
+              New visitor? Register first. Once your account is created, switch to login and continue.
+            </p>
+          </div>
+          <div id="authLockNotice" class="auth-lock-notice">Access required</div>
+        </div>
+
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active" type="button">Login</button>
+          <button id="tabSignup" class="auth-tab" type="button">Register</button>
+        </div>
+
+        <div id="authStatusMessage" class="auth-status-message" hidden></div>
+
+        <form id="loginForm" class="auth-form-content">
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required />
+          </label>
+          <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <form id="signupForm" class="auth-form-content" style="display: none;">
+          <label class="auth-field">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signupName" placeholder="Full Name" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="Email Address" required />
+          </label>
+          <label class="auth-field">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create Password (Min 8 chars)" required />
+          </label>
+          <button type="submit" class="btn">Create Account</button>
+        </form>
+
+        <div class="auth-gate-footer">
+          <span class="auth-gate-footer-dot"></span>
+          <span>You must sign in before you can browse the emergency medical supply catalog.</span>
+        </div>
+      </section>
+    </div>
+  `;
+}
 
 function showOrdersMessage(list, message, color = "var(--muted)") {
   if (!list) return;
   list.innerHTML = `<p style="text-align:center; color: ${color};">${message}</p>`;
+}
+
+function setAuthMessage(message, tone = "info") {
+  const messageEl = document.getElementById("authStatusMessage");
+  if (!messageEl) return;
+
+  if (!message) {
+    messageEl.hidden = true;
+    messageEl.textContent = "";
+    messageEl.dataset.tone = "";
+    return;
+  }
+
+  messageEl.hidden = false;
+  messageEl.dataset.tone = tone;
+  messageEl.textContent = message;
+}
+
+function setAuthGateLock(locked) {
+  authGateLocked = locked;
+  const modal = document.getElementById("authModal");
+  const notice = document.getElementById("authLockNotice");
+
+  if (modal) {
+    modal.classList.toggle("auth-gate-locked", locked);
+  }
+
+  if (notice) {
+    notice.textContent = locked ? "Access required" : "Customer account";
+  }
+}
+
+function focusAuthField(mode) {
+  const field = mode === "signup"
+    ? document.getElementById("signupName")
+    : document.getElementById("loginEmail");
+
+  field?.focus();
 }
 
 function setActiveAuthTab(mode) {
@@ -47,23 +177,32 @@ function setActiveAuthTab(mode) {
     tabSignup.style.borderBottom = !isLogin ? "2px solid var(--primary)" : "none";
   }
 
-  if (loginForm) loginForm.style.display = isLogin ? "block" : "none";
-  if (signupForm) signupForm.style.display = isLogin ? "none" : "block";
+  if (loginForm) loginForm.style.display = isLogin ? "grid" : "none";
+  if (signupForm) signupForm.style.display = isLogin ? "none" : "grid";
+
+  setAuthMessage("");
+  focusAuthField(mode);
 }
 
 function closeAuthModal() {
+  if (authGateLocked && !Auth.getUser()) return;
+
   document.getElementById("authModal")?.classList.remove("active");
   document.body.classList.remove("no-scroll");
 }
 
-function showAuthModal(mode = "login") {
+function showAuthModal(mode = "login", options = {}) {
+  const modal = document.getElementById("authModal");
+  if (!modal) return;
+
+  setAuthGateLock(Boolean(options.locked));
   setActiveAuthTab(mode);
-  document.getElementById("authModal")?.classList.add("active");
+  modal.classList.add("active");
   document.body.classList.add("no-scroll");
 }
 
 window.openAuthModal = function openAuthModal(mode = "login") {
-  showAuthModal(mode);
+  showAuthModal(mode, { locked: !Auth.getUser() });
 };
 
 window.openOrderHistory = async function openOrderHistory() {
@@ -74,8 +213,7 @@ window.openOrderHistory = async function openOrderHistory() {
   if (!modal || !list) return;
 
   if (!token) {
-    showOrdersMessage(list, "Please log in to view your order history.");
-    modal.classList.add("active");
+    showAuthModal("login", { locked: true });
     return;
   }
 
@@ -103,7 +241,7 @@ window.openOrderHistory = async function openOrderHistory() {
     `).join("");
   } catch (err) {
     if (err.status === 401 || err.status === 403) {
-      showOrdersMessage(list, "Session expired. Please log in again.");
+      showAuthModal("login", { locked: true });
       return;
     }
 
@@ -113,10 +251,14 @@ window.openOrderHistory = async function openOrderHistory() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const authModal = document.getElementById("authModal");
-  const authClose = document.getElementById("authClose");
+  const authNav = document.getElementById("authNavSection");
+
+  if (authModal) {
+    renderAuthGate(authModal);
+  }
+
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
-  const authNav = document.getElementById("authNavSection");
 
   document.getElementById("tabLogin")?.addEventListener("click", () => {
     setActiveAuthTab("login");
@@ -126,29 +268,18 @@ document.addEventListener("DOMContentLoaded", () => {
     setActiveAuthTab("signup");
   });
 
-  authClose?.addEventListener("click", () => {
-    closeAuthModal();
-  });
-
-  authModal?.addEventListener("click", (event) => {
-    if (event.target === authModal) {
-      closeAuthModal();
-    }
-  });
-
   if (authNav) {
     const user = Auth.getUser();
     authNav.innerHTML = user ? `
       <button class="btn secondary" type="button" onclick="openOrderHistory()">My Orders</button>
       <button class="btn alt" type="button" onclick="Auth.logout()">Logout</button>
     ` : `
-      <button class="btn secondary" type="button" onclick="openAuthModal()">Login / Register</button>
+      <button class="btn secondary" type="button" onclick="openAuthModal('signup')">Login / Register</button>
     `;
   }
 
-  if (authModal && !Auth.getUser() && !localStorage.getItem(FIRST_VISIT_AUTH_PROMPT_KEY)) {
-    localStorage.setItem(FIRST_VISIT_AUTH_PROMPT_KEY, "true");
-    showAuthModal("signup");
+  if (authModal && !Auth.getUser()) {
+    showAuthModal("signup", { locked: true });
   }
 
   if (loginForm) {
@@ -159,22 +290,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("loginPassword")?.value;
       const button = loginForm.querySelector("button");
       const originalLabel = button?.innerHTML || "Sign In";
-      if (button) button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+      setAuthMessage("");
+
+      if (button) {
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+      }
 
       try {
         const data = await window.EMSApi.auth.login({ email, password });
         if (data?.success) {
           Auth.setSession(data.token, data.user);
+          setAuthGateLock(false);
+          setAuthMessage("Login successful. Opening the storefront...", "success");
           closeAuthModal();
           window.location.reload();
           return;
         }
 
-        alert(data?.message || "Login failed");
+        setAuthMessage(data?.message || "Login failed.", "error");
       } catch (err) {
-        alert(err.message || "Server unreachable");
+        setAuthMessage(err.message || "Server unreachable", "error");
       } finally {
-        if (button) button.innerHTML = originalLabel;
+        if (button) {
+          button.innerHTML = originalLabel;
+        }
       }
     });
   }
@@ -188,14 +327,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("signupPassword")?.value;
       const button = signupForm.querySelector("button");
       const originalLabel = button?.innerHTML || "Create Account";
-      if (button) button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
+      setAuthMessage("");
+
+      if (button) {
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
+      }
 
       try {
         const data = await window.EMSApi.auth.register({ username, email, password });
 
         if (data?.success) {
-          alert("Registered successfully. Please log in to continue.");
           setActiveAuthTab("login");
+          setAuthMessage("Account created. Sign in now to unlock the storefront.", "success");
+
           const loginEmailInput = document.getElementById("loginEmail");
           const loginPasswordInput = document.getElementById("loginPassword");
           if (loginEmailInput) loginEmailInput.value = email;
@@ -203,11 +347,13 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        alert(data?.message || "Registration failed");
+        setAuthMessage(data?.message || "Registration failed.", "error");
       } catch (err) {
-        alert(err.message || "Server unreachable");
+        setAuthMessage(err.message || "Server unreachable", "error");
       } finally {
-        if (button) button.innerHTML = originalLabel;
+        if (button) {
+          button.innerHTML = originalLabel;
+        }
       }
     });
   }

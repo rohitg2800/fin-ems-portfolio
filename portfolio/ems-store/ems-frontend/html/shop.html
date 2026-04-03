@@ -18,6 +18,60 @@
       flex-wrap: wrap;
       margin: 40px 0;
     }
+    .shop-search {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .shop-search-form {
+      width: min(720px, 100%);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(87, 36, 3, 0.12);
+      box-shadow: 0 16px 40px rgba(87, 36, 3, 0.08);
+      backdrop-filter: blur(8px);
+    }
+    .shop-search-input-wrap {
+      position: relative;
+      flex: 1;
+    }
+    .shop-search-input-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      opacity: 0.8;
+    }
+    .shop-search-input {
+      width: 100%;
+      padding: 14px 16px 14px 46px;
+      border-radius: 16px;
+      border: 1px solid rgba(87, 36, 3, 0.14);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text-color);
+      font-size: 0.98rem;
+    }
+    .shop-search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(188, 148, 55, 0.16);
+    }
+    .shop-search-btn {
+      white-space: nowrap;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(87, 36, 3, 0.16);
+    }
     .cat-btn {
       padding: 10px 24px;
       border: 2px solid var(--primary);
@@ -35,6 +89,28 @@
     }
     [data-theme="dark"] .cat-btn { color: var(--text); border-color: var(--accent); }
     [data-theme="dark"] .cat-btn.active, [data-theme="dark"] .cat-btn:hover { background: var(--accent); color: #111; }
+    [data-theme="dark"] .shop-search-form {
+      background: rgba(18, 14, 10, 0.82);
+      border-color: rgba(255, 217, 119, 0.12);
+    }
+    [data-theme="dark"] .shop-search-input {
+      background: rgba(10, 9, 7, 0.9);
+      border-color: rgba(255, 217, 119, 0.12);
+      color: var(--text);
+    }
+    [data-theme="dark"] .shop-search-btn {
+      background: linear-gradient(135deg, var(--accent), #f5c758);
+      color: #111;
+    }
+    @media (max-width: 640px) {
+      .shop-search-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .shop-search-btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 
@@ -81,6 +157,23 @@
 
     <section>
       <div class="container">
+        <div class="shop-search">
+          <form id="shopSearchForm" class="shop-search-form">
+            <label class="shop-search-input-wrap" for="shopSearchInput">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+                id="shopSearchInput"
+                class="shop-search-input"
+                type="search"
+                placeholder="Search by item name, SKU, category, or keyword"
+              />
+            </label>
+            <button type="submit" class="shop-search-btn">
+              <i class="fa-solid fa-search"></i> Search Items
+            </button>
+          </form>
+        </div>
+
        <div class="shop-filters" id="categoryFilters">
           <button class="cat-btn active" data-category="All">All Gear</button>
           <button class="cat-btn" data-category="Stethoscopes">Stethoscopes</button>
