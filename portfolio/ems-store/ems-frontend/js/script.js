@@ -67,6 +67,7 @@ function renderGridState(container, message) {
 }
 
 function productCardHTML(product) {
+  const isOutOfStock = product.stock_level <= 0;
   return `
     <article class="card">
       <div class="card-top">
@@ -78,11 +79,13 @@ function productCardHTML(product) {
         <p class="card-text">${safeText(product.description.substring(0, 75))}...</p>
         <div class="price-row">
           <div class="price">${money(product.price)}</div>
-          <div class="sku-small">Stock: ${product.stock_level}</div>
+          <div class="sku-small">${isOutOfStock ? "Out of stock" : `Stock: ${product.stock_level}`}</div>
         </div>
         <div class="card-actions">
           <button type="button" class="btn secondary" onclick="openProductModal('${product.id}')">Details</button>
-          <button type="button" class="btn" onclick="addToCart('${product.id}', 1)">Add</button>
+          <button type="button" class="btn" onclick="addToCart('${product.id}', 1)" title="${isOutOfStock ? "Item unavailable" : "Add to cart"}">
+            ${isOutOfStock ? "Unavailable" : "Add"}
+          </button>
         </div>
       </div>
     </article>
@@ -228,6 +231,39 @@ function filterCartToKnownProducts(cart) {
   );
 }
 
+function getCartQuantity(productId) {
+  const cart = loadCart();
+  return parseInt(cart[productId], 10) || 0;
+}
+
+function getCartAvailability(productId, quantity = 1) {
+  const product = PRODUCT_MAP[productId];
+
+  if (!productsLoaded || !product) {
+    return {
+      allowed: false,
+      message: "This item isn't available right now."
+    };
+  }
+
+  if (product.stock_level <= 0) {
+    return {
+      allowed: false,
+      message: "This item isn't available right now."
+    };
+  }
+
+  const nextQuantity = getCartQuantity(productId) + quantity;
+  if (nextQuantity > product.stock_level) {
+    return {
+      allowed: false,
+      message: `Only ${product.stock_level} item${product.stock_level === 1 ? "" : "s"} available in stock.`
+    };
+  }
+
+  return { allowed: true };
+}
+
 function updateCartBadge(options = {}) {
   const shouldClean = options.cleanUnknown && productsLoaded;
   const cart = shouldClean ? filterCartToKnownProducts(loadCart()) : loadCart();
@@ -242,8 +278,9 @@ function updateCartBadge(options = {}) {
 }
 
 function addToCart(productId, quantity = 1) {
-  if (productsLoaded && !PRODUCT_MAP[productId]) {
-    showNotification("This product is not available right now.", "danger");
+  const availability = getCartAvailability(productId, quantity);
+  if (!availability.allowed) {
+    showNotification(availability.message, "danger");
     return;
   }
 
@@ -355,6 +392,13 @@ function renderCart(options = {}) {
 
 function changeCartQty(id, delta) {
   const cart = loadCart();
+  if (delta > 0) {
+    const availability = getCartAvailability(id, delta);
+    if (!availability.allowed) {
+      showNotification(availability.message, "danger");
+      return;
+    }
+  }
   cart[id] = (parseInt(cart[id], 10) || 0) + delta;
   if (cart[id] <= 0) delete cart[id];
   saveCart(cart);
@@ -484,7 +528,9 @@ function openProductModal(id) {
   $("#modalProductDescription").textContent = product.description;
   $("#modalProductPrice").textContent = money(product.price);
   $("#modalProductImage").src = product.image.src;
-  $("#modalProductSku").textContent = product.sku;
+  $("#modalProductSku").textContent = product.stock_level > 0
+    ? `${product.sku} • Stock: ${product.stock_level}`
+    : `${product.sku} • Out of stock`;
 
   const badgeEl = $("#modalProductBadge");
   if (badgeEl) {
@@ -495,6 +541,15 @@ function openProductModal(id) {
   $("#modalProductFeatures").innerHTML = (product.bullets || [])
     .map((bullet) => `<li>${safeText(bullet)}</li>`)
     .join("");
+
+  const modalAddButton = $("#modalAddToCart");
+  if (modalAddButton) {
+    const isOutOfStock = product.stock_level <= 0;
+    modalAddButton.innerHTML = isOutOfStock
+      ? '<i class="fa-solid fa-ban"></i> Item Unavailable'
+      : '<i class="fa-solid fa-cart-plus"></i> Add to Cart';
+    modalAddButton.setAttribute("title", isOutOfStock ? "Item unavailable" : "Add to cart");
+  }
 
   $("#productModal").dataset.productId = id;
   $("#modalBackdrop").classList.add("active");
@@ -614,7 +669,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (checkoutSubmitBtn) checkoutSubmitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Place Order';
 
   $("#modalAddToCart")?.addEventListener("click", () => {
-    addToCart($("#productModal")?.dataset.productId, 1);
+    const productId = $("#productModal")?.dataset.productId;
+    const beforeCount = getCartQuantity(productId);
+    addToCart(productId, 1);
+    const afterCount = getCartQuantity(productId);
+    if (afterCount === beforeCount) return;
     $("#modalBackdrop")?.classList.remove("active");
     document.body.classList.remove("no-scroll");
   });
