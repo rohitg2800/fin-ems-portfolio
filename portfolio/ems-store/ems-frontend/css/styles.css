@@ -385,8 +385,18 @@ button {
   padding: 56px 0;
 }
 
+.hero .container {
+  display: flex;
+  justify-content: center;
+}
+
 .hero-card {
   max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-title {
@@ -403,6 +413,7 @@ button {
   line-height: 1.8;
   max-width: 760px;
   opacity: 0.96;
+  margin: 0 auto;
 }
 
 /* ---------- BUTTONS ---------- */
@@ -501,6 +512,7 @@ button {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 28px;
   margin: 36px 0;
+  justify-items: center;
 }
 
 .card,
@@ -517,6 +529,8 @@ button {
   background: var(--card-bg);
   overflow: hidden;
   transition: 0.35s ease;
+  width: 100%;
+  max-width: 360px;
 }
 
 .card:hover {
@@ -558,6 +572,10 @@ button {
 
 .card-inner {
   padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .card-title {
@@ -586,11 +604,13 @@ button {
 .price-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 12px;
   padding-bottom: 14px;
   margin-bottom: 18px;
   border-bottom: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .price {
@@ -608,6 +628,8 @@ button {
 .card-actions {
   display: flex;
   gap: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
 .card-actions .btn {
@@ -685,11 +707,15 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 24px;
+  justify-items: center;
 }
 
 .benefit-card {
   background: var(--card-bg);
   padding: 22px 20px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
 }
 
 .benefit-card h3 {
@@ -711,6 +737,7 @@ button {
   justify-content: center;
   background: rgba(188, 148, 55, 0.12);
   color: var(--accent);
+  margin: 0 auto;
 }
 
 /* ---------- TRUST ---------- */
@@ -722,6 +749,7 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
+  justify-items: center;
 }
 
 .trust-card {
@@ -729,6 +757,8 @@ button {
   padding: 26px 22px;
   text-align: center;
   transition: 0.3s ease;
+  width: 100%;
+  max-width: 340px;
 }
 
 .trust-card:hover {
