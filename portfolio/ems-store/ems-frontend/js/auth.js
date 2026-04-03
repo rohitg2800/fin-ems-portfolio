@@ -1,3 +1,27 @@
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  }[character]));
+}
+
+function getUserFullName(user) {
+  return String(
+    user?.name ||
+    user?.username ||
+    user?.fullName ||
+    ""
+  ).trim().replace(/\s+/g, " ");
+}
+
+function getUserFirstName(user) {
+  const fullName = getUserFullName(user);
+  return fullName ? fullName.split(" ")[0] : "";
+}
+
 const Auth = {
   setSession(token, user) {
     localStorage.setItem("ems_token", token);
@@ -13,6 +37,14 @@ const Auth = {
     return localStorage.getItem("ems_token");
   },
 
+  getName() {
+    return getUserFullName(this.getUser());
+  },
+
+  getFirstName() {
+    return getUserFirstName(this.getUser());
+  },
+
   logout() {
     localStorage.removeItem("ems_token");
     localStorage.removeItem("ems_user");
@@ -23,6 +55,55 @@ const Auth = {
 window.Auth = Auth;
 
 let authGateLocked = false;
+
+function renderAuthNav(authNav, user = Auth.getUser()) {
+  if (!authNav) return;
+
+  if (!user) {
+    authNav.innerHTML = `
+      <button class="btn secondary" type="button" onclick="openAuthModal('signup')">Login / Register</button>
+    `;
+    return;
+  }
+
+  const firstName = escapeHTML(getUserFirstName(user) || "Account");
+
+  authNav.innerHTML = `
+    <div class="auth-user-pill" aria-label="Signed in user">
+      <i class="fa-solid fa-user" aria-hidden="true"></i>
+      <span>${firstName}</span>
+    </div>
+    <button class="btn secondary" type="button" onclick="openOrderHistory()">My Orders</button>
+    <button class="btn alt" type="button" onclick="Auth.logout()">Logout</button>
+  `;
+}
+
+function renderHeroGreeting(user = Auth.getUser()) {
+  const heroCard = document.querySelector("main .hero .hero-card");
+  if (!heroCard) return;
+
+  const existingGreeting = heroCard.querySelector("[data-user-greeting]");
+  const firstName = getUserFirstName(user);
+
+  if (!firstName) {
+    existingGreeting?.remove();
+    return;
+  }
+
+  const greetingMarkup = `
+    <div class="hero-greeting" data-user-greeting="true">
+      <i class="fa-solid fa-user" aria-hidden="true"></i>
+      <span>Welcome back, ${escapeHTML(firstName)}.</span>
+    </div>
+  `;
+
+  if (existingGreeting) {
+    existingGreeting.outerHTML = greetingMarkup;
+    return;
+  }
+
+  heroCard.insertAdjacentHTML("afterbegin", greetingMarkup);
+}
 
 function renderAuthGate(modal) {
   if (!modal || modal.dataset.authGateMounted === "true") return;
@@ -309,6 +390,7 @@ window.openOrderHistory = async function openOrderHistory() {
 document.addEventListener("DOMContentLoaded", () => {
   const authModal = document.getElementById("authModal");
   const authNav = document.getElementById("authNavSection");
+  const user = Auth.getUser();
 
   if (authModal) {
     renderAuthGate(authModal);
@@ -326,17 +408,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setActiveAuthTab("signup");
   });
 
-  if (authNav) {
-    const user = Auth.getUser();
-    authNav.innerHTML = user ? `
-      <button class="btn secondary" type="button" onclick="openOrderHistory()">My Orders</button>
-      <button class="btn alt" type="button" onclick="Auth.logout()">Logout</button>
-    ` : `
-      <button class="btn secondary" type="button" onclick="openAuthModal('signup')">Login / Register</button>
-    `;
-  }
+  renderAuthNav(authNav, user);
+  renderHeroGreeting(user);
 
-  if (authModal && !Auth.getUser()) {
+  if (authModal && !user) {
     showAuthModal("signup", { locked: true });
   }
 

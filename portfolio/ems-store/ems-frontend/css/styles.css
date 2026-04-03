@@ -273,6 +273,37 @@ button {
   gap: 12px;
 }
 
+.auth-nav-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.auth-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(188, 148, 55, 0.28);
+  background: rgba(188, 148, 55, 0.12);
+  color: var(--header-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.auth-user-pill i {
+  color: var(--accent);
+}
+
+[data-theme="dark"] .auth-user-pill {
+  border-color: rgba(255, 217, 119, 0.25);
+  background: rgba(255, 217, 119, 0.08);
+  color: var(--text-color);
+}
+
 .nav a {
   display: inline-flex;
   align-items: center;
@@ -316,6 +347,11 @@ button {
   flex-direction: column;
   gap: 12px;
   margin-top: 6px;
+}
+
+.nav-open .auth-user-pill {
+  width: 100%;
+  justify-content: center;
 }
 
 .nav-open .auth-nav-wrapper .btn {
@@ -423,6 +459,26 @@ button {
   max-width: 760px;
   opacity: 0.96;
   margin: 0 auto;
+}
+
+.hero-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff8ea;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  backdrop-filter: blur(8px);
+}
+
+.hero-greeting i {
+  color: var(--accent-hover);
 }
 
 /* ---------- BUTTONS ---------- */
