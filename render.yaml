@@ -15,9 +15,13 @@ services:
       - key: PORT
         value: 10000
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: ems-luxe-db
+          property: connectionString
       - key: DB_SSL
-        value: false
+        value: "true"
+      - key: DATABASE_SSL
+        value: "true"
       - key: JWT_SECRET
         sync: false
       - key: ADMIN_NAME
@@ -30,3 +34,9 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+
+databases:
+  - name: ems-luxe-db
+    plan: free
+    databaseName: ems_luxe
+    user: ems_luxe
