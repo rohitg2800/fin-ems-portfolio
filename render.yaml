@@ -14,7 +14,7 @@ services:
     plan: free
     rootDir: portfolio/ems-store/ems-backend
     buildCommand: npm install
-    startCommand: npm run migrate && node server.js
+    startCommand: npm start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
