@@ -13,6 +13,7 @@ const RETRY_DELAY_MS = 3000;
 
 async function waitForDb() {
   const connectionString = process.env.DATABASE_URL;
+  const useSSL = (process.env.DB_SSL || process.env.DATABASE_SSL || '').toLowerCase() === 'true';
 
   if (!connectionString) {
     console.error('[wait-for-db] ERROR: DATABASE_URL is not set!');
@@ -20,11 +21,12 @@ async function waitForDb() {
   }
 
   console.log('[wait-for-db] Waiting for PostgreSQL to be ready...');
+  console.log(`[wait-for-db] Database SSL enabled: ${useSSL}`);
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     const client = new Client({
       connectionString,
-      ssl: false,
+      ssl: useSSL ? { rejectUnauthorized: false } : false,
       connectionTimeoutMillis: 5000
     });
 
