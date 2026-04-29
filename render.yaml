@@ -1,11 +1,3 @@
-databases:
-  - name: fin-ems-db
-    databaseName: fin_ems
-    user: fin_ems_user
-    region: oregon
-    plan: free
-    ipAllowList: []
-
 services:
   - type: web
     name: fin-ems-backend
@@ -23,9 +15,7 @@ services:
       - key: PORT
         value: 10000
       - key: DATABASE_URL
-        fromDatabase:
-          name: fin-ems-db
-          property: connectionString
+        sync: false
       - key: DB_SSL
         value: false
       - key: JWT_SECRET
@@ -40,16 +30,3 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
-
-  - type: web
-    name: fin-ems-frontend
-    runtime: static
-    region: oregon
-    plan: free
-    rootDir: portfolio/ems-store/ems-frontend
-    staticPublishPath: .
-    autoDeploy: true
-    routes:
-      - type: rewrite
-        source: /api/*
-        destination: https://fin-ems-backend.onrender.com/api/*
