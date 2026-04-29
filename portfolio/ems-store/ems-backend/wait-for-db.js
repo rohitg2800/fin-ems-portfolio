@@ -21,9 +21,11 @@ async function waitForDb() {
   }
 
   let host = 'unknown';
+  let looksLikeUrl = false;
   try {
     const parsed = new URL(connectionString);
     host = parsed.hostname || host;
+    looksLikeUrl = parsed.protocol === 'postgres:' || parsed.protocol === 'postgresql:';
   } catch (err) {
     host = connectionString.split('@').pop()?.split(':')[0] || host;
   }
@@ -35,6 +37,11 @@ async function waitForDb() {
   console.log(`[wait-for-db] DB host: ${host}`);
   console.log(`[wait-for-db] DB SSL enabled: ${useSSL}`);
   console.log(`[wait-for-db] DB connection string: ${redactedConnectionString}`);
+
+  if (!looksLikeUrl) {
+    console.warn('[wait-for-db] WARNING: DATABASE_URL does not look like a full Postgres connection string.');
+    console.warn('[wait-for-db] Expected format: postgres://user:password@host:port/database');
+  }
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     const client = new Client({
