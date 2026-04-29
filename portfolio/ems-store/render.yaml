@@ -17,6 +17,8 @@ services:
           property: connectionString
       - key: DB_SSL
         value: "true"
+      - key: DATABASE_SSL
+        value: "true"
 
 databases:
   - name: ems-luxe-db
