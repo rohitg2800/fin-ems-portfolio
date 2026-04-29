@@ -4,7 +4,7 @@
   "description": "Emergency Medical Supply store API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node wait-for-db.js",
     "dev": "nodemon server.js",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make",
